@@ -15,17 +15,11 @@ class Roles extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 20),
-                Center(
-                  child: Image.asset('assets/images/logo.png', height: 200, width: 200), 
-                ),
-                const SizedBox(height: 50),
-                
-                Column(
-                children: const [
-                ButtonGlobal6(),
-                SizedBox(height: 10),
-                ButtonGlobal7()
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: const [
+                  ButtonGlobal6(),
+                  ButtonGlobal7()
               ]
               ),
               ],

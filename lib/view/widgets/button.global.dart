@@ -233,11 +233,11 @@ class ButtonGlobal6 extends StatelessWidget {
       },
       child: Container(
         alignment: Alignment.center,
-        height: 40,
-        width: 70,
+        height: 750,
+        width: 190,
         padding: const EdgeInsets.symmetric(horizontal: 1),
         decoration: BoxDecoration(
-          color: GlobalColors.mainColor,
+          color: GlobalColors.volunColor,
           borderRadius: BorderRadius.circular(6),
           boxShadow: [
             BoxShadow(
@@ -247,10 +247,12 @@ class ButtonGlobal6 extends StatelessWidget {
           ]
         ),
         child: const Text(
-          'Volunteer',
+          "I'd like to volunteer",
+          textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.w600,
+            fontSize: 35
           ),
         ),
       ),
@@ -276,11 +278,11 @@ class ButtonGlobal7 extends StatelessWidget {
       },
       child: Container(
         alignment: Alignment.center,
-        height: 40,
-        width: 70,
+        height: 750,
+        width: 190,
         padding: const EdgeInsets.symmetric(horizontal: 1),
         decoration: BoxDecoration(
-          color: GlobalColors.mainColor,
+          color: GlobalColors.disaColor,
           borderRadius: BorderRadius.circular(6),
           boxShadow: [
             BoxShadow(
@@ -290,10 +292,12 @@ class ButtonGlobal7 extends StatelessWidget {
           ]
         ),
         child: const Text(
-          'Disabled',
+          'I need visual assistance',
+          textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.w600,
+            fontSize: 35
           ),
         ),
       ),
