@@ -18,8 +18,8 @@ class Roles extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: const [
-                  ButtonGlobal6(),
-                  ButtonGlobal7()
+                  ButtonVolun(),
+                  ButtonDisa()
               ]
               ),
               ],
@@ -27,7 +27,6 @@ class Roles extends StatelessWidget {
           ),
         ),
       ),
-  
     );
   }
 }

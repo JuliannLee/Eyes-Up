@@ -26,7 +26,7 @@ class SplashView extends StatelessWidget {
             child: Text(
               'Eyes Up',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 30,
                 fontWeight: FontWeight.bold,
                 color: Colors.white
               ),

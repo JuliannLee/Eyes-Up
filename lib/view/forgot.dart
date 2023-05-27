@@ -45,7 +45,7 @@ class ForgetView extends StatelessWidget {
                 const SizedBox(height: 10),
 
                 const SizedBox(height: 10),
-                const ButtonGlobal3(),
+                const ButtonVerif(),
               ],
             ),
           ),

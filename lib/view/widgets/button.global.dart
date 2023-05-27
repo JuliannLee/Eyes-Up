@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:p01/utils/global.colors.dart';
 import 'package:p01/view/login.dart';
 import 'package:p01/view/pickroles.dart';
+import 'package:p01/view/vc.dart';
 import '../bottomnav.dart';
 
-class ButtonGlobal extends StatelessWidget {
-  const ButtonGlobal({ Key? key }) : super(key: key);
+
+class ButtonSign extends StatelessWidget {
+  const ButtonSign({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +49,8 @@ class ButtonGlobal extends StatelessWidget {
   }
 }
 
-class ButtonGlobal2 extends StatelessWidget {
-  const ButtonGlobal2({ Key? key }) : super(key: key);
+class ButtonRegis extends StatelessWidget {
+  const ButtonRegis({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -88,8 +90,8 @@ class ButtonGlobal2 extends StatelessWidget {
   }
 }
 
-class ButtonGlobal3 extends StatelessWidget {
-  const ButtonGlobal3({ Key? key }) : super(key: key);
+class ButtonVerif extends StatelessWidget {
+  const ButtonVerif({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -129,94 +131,8 @@ class ButtonGlobal3 extends StatelessWidget {
   }
 }
 
-class ButtonGlobal4 extends StatelessWidget {
-  const ButtonGlobal4({ Key? key }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return const MyHomePageV();
-            },
-          ),
-        );
-      },
-      child: Container(
-        alignment: Alignment.center,
-        height: 40,
-        width: 70,
-        padding: const EdgeInsets.symmetric(horizontal: 1),
-        decoration: BoxDecoration(
-          color: GlobalColors.buttColor,
-          borderRadius: BorderRadius.circular(6),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-            )
-          ]
-        ),
-        child: const Text(
-          'Cancel',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class ButtonGlobal5 extends StatelessWidget {
-  const ButtonGlobal5({ Key? key }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return const MyHomePageV();
-            },
-          ),
-        );
-      },
-      child: Container(
-        alignment: Alignment.center,
-        height: 40,
-        width: 70,
-        padding: const EdgeInsets.symmetric(horizontal: 1),
-        decoration: BoxDecoration(
-          color: GlobalColors.mainColor,
-          borderRadius: BorderRadius.circular(6),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-            )
-          ]
-        ),
-        child: const Text(
-          'Save',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class ButtonGlobal6 extends StatelessWidget {
-  const ButtonGlobal6({ Key? key }) : super(key: key);
+class ButtonVolun extends StatelessWidget {
+  const ButtonVolun({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -260,8 +176,8 @@ class ButtonGlobal6 extends StatelessWidget {
   }
 }
 
-class ButtonGlobal7 extends StatelessWidget {
-  const ButtonGlobal7({ Key? key }) : super(key: key);
+class ButtonDisa extends StatelessWidget {
+  const ButtonDisa({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -300,6 +216,31 @@ class ButtonGlobal7 extends StatelessWidget {
             fontSize: 35
           ),
         ),
+      ),
+    );
+  }
+}
+
+class ButtonVC extends StatelessWidget {
+  const ButtonVC({ Key? key }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return RawMaterialButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return const VCscreen();
+            },
+          ),
+        );
+      },
+      shape: const CircleBorder(),
+      child: Image.asset('assets/images/telpon.png',
+      height: 280,
+      width: 280,
       ),
     );
   }

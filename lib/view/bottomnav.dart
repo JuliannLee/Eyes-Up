@@ -45,8 +45,20 @@ class _MyHomePageVState extends State<MyHomePageV> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Eyes Up'),
           backgroundColor: GlobalColors.mainColor,
+          title: Row(
+            children: [
+              Image.asset('assets/images/logo.png',
+              fit: BoxFit.contain,
+              height: 50,
+              width: 50,
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: const Text('Eyes Up'),
+              )
+            ],
+          ),
         ),
         body: body,
         bottomNavigationBar: BottomNavigationBar(
@@ -56,7 +68,7 @@ class _MyHomePageVState extends State<MyHomePageV> {
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.group),
+              icon: Icon(Icons.public),
               label: 'Community',
             ),
             BottomNavigationBarItem(
@@ -115,8 +127,20 @@ class _MyHomePageDState extends State<MyHomePageD> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Eyes Up'),
           backgroundColor: GlobalColors.mainColor,
+          title: Row(
+            children: [
+              Image.asset('assets/images/logo.png',
+              fit: BoxFit.contain,
+              height: 50,
+              width: 50,
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: const Text('Eyes Up'),
+              )
+            ],
+          ),
         ),
         body: body,
         bottomNavigationBar: BottomNavigationBar(
@@ -126,7 +150,7 @@ class _MyHomePageDState extends State<MyHomePageD> {
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.group),
+              icon: Icon(Icons.public),
               label: 'Community',
             ),
             BottomNavigationBarItem(

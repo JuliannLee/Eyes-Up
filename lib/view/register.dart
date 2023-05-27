@@ -58,7 +58,7 @@ class RegisterView extends StatelessWidget {
                 const SizedBox(height: 10),
 
                 const SizedBox(height: 10),
-                const ButtonGlobal2(),
+                const ButtonRegis(),
                 const SizedBox(height: 25),
                 const SocialLogin2(),
               ],
