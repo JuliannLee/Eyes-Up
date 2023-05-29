@@ -58,7 +58,7 @@ class ButtonGlobal2 extends StatelessWidget {
           context, 
           MaterialPageRoute(
             builder: (context){
-            return LoginView();
+            return const LoginView();
             },
           ),
         );
@@ -99,7 +99,7 @@ class ButtonGlobal3 extends StatelessWidget {
           context, 
           MaterialPageRoute(
             builder: (context){
-            return LoginView();
+            return const LoginView();
             },
           ),
         );
