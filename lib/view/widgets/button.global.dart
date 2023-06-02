@@ -221,8 +221,8 @@ class ButtonDisa extends StatelessWidget {
   }
 }
 
-class ButtonVC extends StatelessWidget {
-  const ButtonVC({ Key? key }) : super(key: key);
+class ButtonVCdisa extends StatelessWidget {
+  const ButtonVCdisa({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -232,7 +232,7 @@ class ButtonVC extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return const VCscreen();
+              return const VCscreenDisa();
             },
           ),
         );
@@ -241,6 +241,32 @@ class ButtonVC extends StatelessWidget {
       child: Image.asset('assets/images/telpon.png',
       height: 280,
       width: 280,
+      ),
+    );
+  }
+}
+
+class ButtonVCvolun extends StatelessWidget {
+  const ButtonVCvolun({ Key? key }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return RawMaterialButton(
+      padding: const EdgeInsets.symmetric(vertical: 170),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return const VCscreenVolun();
+            },
+          ),
+        );
+      },
+      shape: const CircleBorder(),
+      child: Image.asset('assets/images/search.png',
+      height: 255,
+      width: 255,
       ),
     );
   }

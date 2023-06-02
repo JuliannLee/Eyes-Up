@@ -8,6 +8,7 @@ class HomeDisa extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
       return Scaffold(
+      backgroundColor: const Color(0xFFF0EFF4),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Container(
@@ -19,7 +20,7 @@ class HomeDisa extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
-                  ButtonVC()
+                  ButtonVCdisa()
               ]
               ),
               ],
