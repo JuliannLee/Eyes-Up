@@ -149,8 +149,8 @@ class ButtonVolun extends StatelessWidget {
       },
       child: Container(
         alignment: Alignment.center,
-        height: 750,
-        width: 190,
+        height: 695,
+        width: 180,
         padding: const EdgeInsets.symmetric(horizontal: 1),
         decoration: BoxDecoration(
           color: GlobalColors.volunColor,
@@ -168,7 +168,7 @@ class ButtonVolun extends StatelessWidget {
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.w600,
-            fontSize: 35
+            fontSize: 32
           ),
         ),
       ),
@@ -194,8 +194,8 @@ class ButtonDisa extends StatelessWidget {
       },
       child: Container(
         alignment: Alignment.center,
-        height: 750,
-        width: 190,
+        height: 695,
+        width: 180,
         padding: const EdgeInsets.symmetric(horizontal: 1),
         decoration: BoxDecoration(
           color: GlobalColors.disaColor,
@@ -213,7 +213,7 @@ class ButtonDisa extends StatelessWidget {
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.w600,
-            fontSize: 35
+            fontSize: 32
           ),
         ),
       ),

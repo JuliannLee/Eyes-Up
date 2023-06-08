@@ -63,7 +63,7 @@ class _VCscreenDisaState extends State<VCscreenDisa> {
                 });
               },
               child:
-                  button(Icons.flip_camera_ios_outlined, Alignment.centerLeft),
+                  buttonFlip(Icons.flip_camera_ios_outlined, Alignment.bottomLeft),
             ),
             GestureDetector(
               onTap: () {
@@ -95,12 +95,12 @@ class _VCscreenDisaState extends State<VCscreenDisa> {
     }
   }
 
-  Widget button(IconData icon, Alignment alignment) {
+  Widget buttonFlip(IconData icon, Alignment alignment) {
     return Align(
       alignment: alignment,
       child: Container(
         margin: const EdgeInsets.only(
-          left: 20,
+          left: 75,
           bottom: 20,
         ),
         height: 50,
@@ -187,7 +187,7 @@ class _VCscreenVolunState extends State<VCscreenVolun> {
                 });
               },
               child:
-                  button(Icons.flip_camera_ios_outlined, Alignment.centerLeft),
+                  buttonFlip(Icons.flip_camera_ios_outlined, Alignment.bottomLeft),
             ),
             GestureDetector(
               onTap: () {
@@ -211,6 +211,10 @@ class _VCscreenVolunState extends State<VCscreenVolun> {
                 ],
               ),
             ),
+            GestureDetector(
+              child:
+                  buttonMute(Icons.mic_off, Alignment.bottomRight),
+            ),
           ],
         ),
       );
@@ -219,12 +223,43 @@ class _VCscreenVolunState extends State<VCscreenVolun> {
     }
   }
 
-  Widget button(IconData icon, Alignment alignment) {
+  Widget buttonFlip(IconData icon, Alignment alignment) {
     return Align(
       alignment: alignment,
       child: Container(
         margin: const EdgeInsets.only(
-          left: 20,
+          left: 75,
+          bottom: 20,
+        ),
+        height: 50,
+        width: 50,
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black26,
+              offset: Offset(2, 2),
+              blurRadius: 10,
+            ),
+          ],
+        ),
+        child: Center(
+          child: Icon(
+            icon,
+            color: Colors.black54,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buttonMute(IconData icon, Alignment alignment) {
+    return Align(
+      alignment: alignment,
+      child: Container(
+        margin: const EdgeInsets.only(
+          right: 75,
           bottom: 20,
         ),
         height: 50,
