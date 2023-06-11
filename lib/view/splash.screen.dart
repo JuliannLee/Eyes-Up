@@ -6,7 +6,7 @@ import 'package:p01/utils/global.colors.dart';
 import 'package:p01/view/login.dart';
 
 class SplashView extends StatelessWidget {
-  const SplashView({ Key? key }) : super(key: key);
+  const SplashView({ Key? key }) : super(key: key); //nyambung dari main
 
   @override
   Widget build(BuildContext context) {
