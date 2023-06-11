@@ -132,7 +132,7 @@ class _GmailViewState extends State<GmailView> {
                           // Add onTap handler for terms of service link if desired
                         ),
                       ],
-                    ),
+                    ), 
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black,

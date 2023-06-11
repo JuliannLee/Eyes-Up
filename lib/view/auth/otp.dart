@@ -17,7 +17,7 @@ class _otpScreen extends State<otpScreen> {
   final TextEditingController _fieldThree = TextEditingController();
   final TextEditingController _fieldFour = TextEditingController();
 
-  // This is the entered code
+  // This is the entered code 
   // It will be displayed in a Text widget
   String? _otp;
 
