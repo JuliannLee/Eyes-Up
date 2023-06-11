@@ -38,8 +38,8 @@ class _GmailViewState extends State<GmailView> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
-              width: 800,
-              height: 680,
+              width: 750,
+              height: 630,
               color: Colors.white,
               child: Column(
                 children: <Widget>[
@@ -52,7 +52,7 @@ class _GmailViewState extends State<GmailView> {
 
                     ),
                   ),
-                  const Text("Choose Account",style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold),),
+                  const Text("Choose Account",style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),
                   const Text("To Continue to Eyes Up",style: TextStyle(fontSize: 20),),
                   Expanded(
                     child: ListView.separated(
@@ -105,7 +105,6 @@ class _GmailViewState extends State<GmailView> {
                       },
                     ),
                   ),
-                  const SizedBox(height: 10),
                   const Text.rich(
                     TextSpan(
                       text:
@@ -139,7 +138,6 @@ class _GmailViewState extends State<GmailView> {
                       color: Colors.black,
                     ),
                   ),
-                  const SizedBox(height: 10),
                 ],
               ),
             ),
