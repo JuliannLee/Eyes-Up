@@ -40,7 +40,7 @@ class _LoginViewState extends State<LoginView> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
+        return const AlertDialog(
           insetPadding: EdgeInsets.zero,
           contentPadding: EdgeInsets.zero,
           clipBehavior: Clip.antiAliasWithSaveLayer,
