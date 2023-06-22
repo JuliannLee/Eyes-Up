@@ -33,6 +33,7 @@ class _GmailViewState extends State<GmailView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -132,7 +133,7 @@ class _GmailViewState extends State<GmailView> {
                           // Add onTap handler for terms of service link if desired
                         ),
                       ],
-                    ), 
+                    ),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black,

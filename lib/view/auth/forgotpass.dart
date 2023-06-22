@@ -26,6 +26,7 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

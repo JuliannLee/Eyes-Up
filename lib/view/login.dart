@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:p01/view/auth/gmail.dart';
+import 'package:audioplayers/audioplayers.dart';
 
-class login extends StatelessWidget {
-  const login({Key? key}) : super(key: key);
+class Login extends StatelessWidget {
+  const Login({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       home: LoginView(),
     );
   }
@@ -17,17 +18,29 @@ class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
 
   @override
-  _loginview createState() => _loginview();
+  _LoginViewState createState() => _LoginViewState();
 }
 
-class _loginview extends State<LoginView> {
-  String istapped = '';
+class _LoginViewState extends State<LoginView> {
+  String isTapped = '';
+  AudioPlayer audioPlayer = AudioPlayer();
+
+  @override
+  void initState() {
+    super.initState();
+    playAudio();
+  }
+
+  void playAudio() async {
+    final player = AudioPlayer();
+    await player.play(DeviceFileSource("assets/audio/login.mp3"));
+  }
 
   void showAccountDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const AlertDialog(
+        return AlertDialog(
           insetPadding: EdgeInsets.zero,
           contentPadding: EdgeInsets.zero,
           clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -38,38 +51,53 @@ class _loginview extends State<LoginView> {
   }
 
   @override
+  void dispose() {
+    audioPlayer.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
+            Text(
               "LOGIN",
               style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 35,
-                  fontWeight: FontWeight.bold),
+                color: Colors.white,
+                fontSize: 35,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            const SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                minimumSize: const Size(3000, 400),
+                minimumSize: Size(300, 400),
                 backgroundColor: Colors.blue.shade800,
-                padding:const EdgeInsets.all(10),
-                textStyle: const TextStyle(fontSize: 14, color: Colors.white)
+                padding: EdgeInsets.all(10),
+                textStyle: TextStyle(fontSize: 14, color: Colors.white),
               ),
               onPressed: () {
                 showAccountDialog(context);
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const <Widget>[
-                  FaIcon(FontAwesomeIcons.envelope,size: 50,),
-                  Text(" | ",style: TextStyle(fontSize: 60)),
+                children: <Widget>[
+                  FaIcon(
+                    FontAwesomeIcons.envelope,
+                    size: 50,
+                  ),
+                  Text(" | ", style: TextStyle(fontSize: 60)),
                   Text(
                     "PRESS HERE",
-                    style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
