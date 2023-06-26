@@ -66,7 +66,9 @@ class HomeVolun extends StatelessWidget {
             child: Text(
               'Click the button to start helping!',
               style: TextStyle(
-                  color: Color(0xFF707D93),fontSize: 17, fontWeight: FontWeight.w600),
+                  color: Color(0xFF707D93),
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600),
             ),
           ),
         ]),

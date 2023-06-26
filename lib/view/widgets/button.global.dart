@@ -60,7 +60,7 @@ class ButtonRegis extends StatelessWidget {
           context, 
           MaterialPageRoute(
             builder: (context){
-            return LoginView();
+            return const LoginView();
             },
           ),
         );
@@ -101,7 +101,7 @@ class ButtonVerif extends StatelessWidget {
           context, 
           MaterialPageRoute(
             builder: (context){
-            return LoginView();
+            return const LoginView();
             },
           ),
         );

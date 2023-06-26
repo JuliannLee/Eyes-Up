@@ -6,12 +6,12 @@ import 'package:p01/utils/global.colors.dart';
 import 'package:p01/view/login.dart';
 
 class SplashView extends StatelessWidget {
-  const SplashView({ Key? key }) : super(key: key); //nyambung dari main
+  const SplashView({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Timer(const Duration(seconds: 1), () {
-      Get.to(LoginView());
+    Timer(const Duration(seconds: 2), () {
+      Get.to(const LoginView());
     });
     return Scaffold(
       backgroundColor: GlobalColors.mainColor,
@@ -26,7 +26,7 @@ class SplashView extends StatelessWidget {
             child: Text(
               'Eyes Up',
               style: TextStyle(
-                fontSize: 30,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.white
               ),

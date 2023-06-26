@@ -32,7 +32,7 @@ class _HomeDisaState extends State<HomeDisa> {
 
   @override
   Widget build(BuildContext context) {
-      return Scaffold(
+    return Scaffold(
       backgroundColor: const Color(0xFFF0EFF4),
       body: SingleChildScrollView(
         child: SafeArea(
@@ -43,11 +43,8 @@ class _HomeDisaState extends State<HomeDisa> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                  ButtonVCdisa()
-              ]
-              ),
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [ButtonVCdisa()]),
               ],
             ),
           ),
