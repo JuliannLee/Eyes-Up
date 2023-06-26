@@ -114,7 +114,7 @@ class _MyHomePageDState extends State<MyHomePageD> {
     Widget body = _widgetOptions.elementAt(_selectedIndex);
     switch (_selectedIndex) {
       case 0:
-        body = HomeDisa();
+        body = const HomeDisa();
         break;
       case 1:
         body = Community();
