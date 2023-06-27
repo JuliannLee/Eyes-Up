@@ -4,10 +4,10 @@ import 'package:p01/view/home.disa.dart';
 import 'package:p01/view/setting.dart';
 import 'package:p01/view/community.dart';
 import 'home.volun.dart';
-
+import 'package:audioplayers/audioplayers.dart';
 
 class MyHomePageV extends StatefulWidget {
-  const MyHomePageV({super.key});
+  const MyHomePageV({Key? key}) : super(key: key);
 
   @override
   State<MyHomePageV> createState() => _MyHomePageVState();
@@ -48,10 +48,11 @@ class _MyHomePageVState extends State<MyHomePageV> {
           backgroundColor: GlobalColors.mainColor,
           title: Row(
             children: [
-              Image.asset('assets/images/logo.png',
-              fit: BoxFit.contain,
-              height: 50,
-              width: 50,
+              Image.asset(
+                'assets/images/logo.png',
+                fit: BoxFit.contain,
+                height: 50,
+                width: 50,
               ),
               Container(
                 padding: const EdgeInsets.all(8),
@@ -79,9 +80,9 @@ class _MyHomePageVState extends State<MyHomePageV> {
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,
           selectedItemColor:
-              Colors.black, // ubah warna ikon yang dipilih menjadi hitam
+              Colors.black, // change the selected icon color to black
           unselectedItemColor: Colors.black.withOpacity(
-              0.6), // ubah warna ikon yang tidak dipilih menjadi hitam transparan
+              0.6), // change the unselected icon color to transparent black
         ),
       ),
     );
@@ -89,7 +90,7 @@ class _MyHomePageVState extends State<MyHomePageV> {
 }
 
 class MyHomePageD extends StatefulWidget {
-  const MyHomePageD({super.key});
+  const MyHomePageD({Key? key}) : super(key: key);
 
   @override
   State<MyHomePageD> createState() => _MyHomePageDState();
@@ -103,10 +104,36 @@ class _MyHomePageDState extends State<MyHomePageD> {
     Text('Setting'),
   ];
 
-  void _onItemTapped(int index) {
+  late AudioPlayer audioPlayer;
+  bool isAudioPlaying = false;
+
+  @override
+  void initState() {
+    super.initState();
+    audioPlayer = AudioPlayer();
+  }
+
+  void _onItemTapped(int index) async {
     setState(() {
       _selectedIndex = index;
     });
+
+    if (index == 0) {
+      await audioPlayer.play(AssetSource('audio/disabled.mp3'));
+      isAudioPlaying = true;
+    } else {
+      // Stop audio when other pages are selected
+      if (isAudioPlaying) {
+        await audioPlayer.stop();
+        isAudioPlaying = false;
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    audioPlayer.dispose();
+    super.dispose();
   }
 
   @override
@@ -130,10 +157,11 @@ class _MyHomePageDState extends State<MyHomePageD> {
           backgroundColor: GlobalColors.mainColor,
           title: Row(
             children: [
-              Image.asset('assets/images/logo.png',
-              fit: BoxFit.contain,
-              height: 50,
-              width: 50,
+              Image.asset(
+                'assets/images/logo.png',
+                fit: BoxFit.contain,
+                height: 50,
+                width: 50,
               ),
               Container(
                 padding: const EdgeInsets.all(8),
@@ -161,9 +189,9 @@ class _MyHomePageDState extends State<MyHomePageD> {
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,
           selectedItemColor:
-              Colors.black, // ubah warna ikon yang dipilih menjadi hitam
+              Colors.black, // change the selected icon color to black
           unselectedItemColor: Colors.black.withOpacity(
-              0.6), // ubah warna ikon yang tidak dipilih menjadi hitam transparan
+              0.6), // change the unselected icon color to transparent black
         ),
       ),
     );

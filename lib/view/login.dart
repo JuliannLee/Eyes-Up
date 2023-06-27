@@ -18,23 +18,22 @@ class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _LoginViewState createState() => _LoginViewState();
 }
 
 class _LoginViewState extends State<LoginView> {
   String isTapped = '';
-  AudioPlayer audioPlayer = AudioPlayer();
+  late AudioPlayer audioPlayer;
 
   @override
   void initState() {
     super.initState();
+    audioPlayer = AudioPlayer();
     playAudio();
   }
 
-  void playAudio() async {
-    final player = AudioPlayer();
-    await player.play(DeviceFileSource("assets/audio/login.mp3"));
+  Future<void> playAudio() async {
+    await audioPlayer.play(AssetSource("audio/login.mp3"));
   }
 
   void showAccountDialog(BuildContext context) {
@@ -53,6 +52,7 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   void dispose() {
+    audioPlayer.stop();
     audioPlayer.dispose();
     super.dispose();
   }
@@ -83,6 +83,7 @@ class _LoginViewState extends State<LoginView> {
                 textStyle: const TextStyle(fontSize: 14, color: Colors.white),
               ),
               onPressed: () {
+                audioPlayer.stop(); // Stop audio before switching to another page
                 showAccountDialog(context);
               },
               child: Row(

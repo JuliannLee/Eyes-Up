@@ -6,12 +6,12 @@ class Roles extends StatefulWidget {
   const Roles({Key? key}) : super(key: key);
 
   @override
-// ignore: library_private_types_in_public_api
   _RolesState createState() => _RolesState();
 }
 
 class _RolesState extends State<Roles> {
   final audioPlayer = AudioPlayer();
+  bool isAudioPlaying = false;
 
   @override
   void initState() {
@@ -20,11 +20,25 @@ class _RolesState extends State<Roles> {
   }
 
   void playAudio() async {
-    await audioPlayer.play(AssetSource('assets/audio/pickroles.mp3'));
+    await audioPlayer.play(AssetSource('audio/pickroles.mp3'));
+    setState(() {
+      isAudioPlaying = true;
+    });
+  }
+
+  void stopAudio() {
+    if (isAudioPlaying) {
+      audioPlayer.stop();
+      audioPlayer.dispose();
+      setState(() {
+        isAudioPlaying = false;
+      });
+    }
   }
 
   @override
   void dispose() {
+    stopAudio();
     super.dispose();
   }
 
@@ -40,8 +54,12 @@ class _RolesState extends State<Roles> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: const [ButtonVolun(), ButtonDisa()]),
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ButtonVolun(stopAudio: stopAudio),
+                    ButtonDisa(stopAudio: stopAudio),
+                  ],
+                ),
               ],
             ),
           ),

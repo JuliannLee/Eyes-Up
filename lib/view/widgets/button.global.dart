@@ -132,12 +132,15 @@ class ButtonVerif extends StatelessWidget {
 }
 
 class ButtonVolun extends StatelessWidget {
-  const ButtonVolun({ Key? key }) : super(key: key);
+  final VoidCallback stopAudio;
+
+  const ButtonVolun({Key? key, required this.stopAudio}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        stopAudio(); // Stop the audio before navigating
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -177,12 +180,15 @@ class ButtonVolun extends StatelessWidget {
 }
 
 class ButtonDisa extends StatelessWidget {
-  const ButtonDisa({ Key? key }) : super(key: key);
+  final VoidCallback stopAudio;
+
+  const ButtonDisa({Key? key, required this.stopAudio}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        stopAudio(); // Stop the audio before navigating
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -258,7 +264,7 @@ class ButtonVCvolun extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return const VCscreenVolun();
+              return const VCscreenDisa();
             },
           ),
         );
