@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:language_picker/language_picker.dart';
+import 'package:language_picker/languages.dart';
 
 class Setting extends StatefulWidget {
   const Setting({super.key});
@@ -8,17 +10,29 @@ class Setting extends StatefulWidget {
 }
 
 class _SettingState extends State<Setting> {
-  String dropdownValue = "English";
+  Language _selectedDropdownLanguage = Languages.english;
+
+  Widget _buildDropdownItem(Language language) {
+    return Row(
+      children: <Widget>[
+        SizedBox(
+          width: 8,
+        ),
+        Text("${language.name} (${language.isoCode})"),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Container(
                   height: 195,
@@ -62,34 +76,25 @@ class _SettingState extends State<Setting> {
                         ),
                       ),
                       ListTile(
-                          title: Text(
-                            "Primary Language",
-                            style: TextStyle(fontSize: 16),
+                        title: Text("Select Language"),
+                        trailing: Container(
+                          width: 250,
+                          child: LanguagePickerDropdown(
+                            initialValue: Languages.english,
+                            itemBuilder: _buildDropdownItem,
+                            onValuePicked: (Language language) {
+                              _selectedDropdownLanguage = language;
+                              print(_selectedDropdownLanguage.name);
+                              print(_selectedDropdownLanguage.isoCode);
+                            },
                           ),
-                          trailing: DropdownButton<String>(
-                              value: dropdownValue,
-                              items: <String>[
-                                'English',
-                                'Bahasa Indonesia'
-                              ].map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(
-                                    value,
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  dropdownValue = newValue!;
-                                });
-                              })),
+                        ),
+                      )
                     ],
                   ),
                 ),
                 Container(
-                  height: 300,
+                  height: 200,
                   child: Column(children: [
                     ListTile(
                       title: Text(
@@ -119,6 +124,32 @@ class _SettingState extends State<Setting> {
                       ),
                     ),
                   ]),
+                ),
+                SizedBox(
+                  height: 50,
+                ),
+                Container(
+                  height: 110,
+                  alignment: Alignment.center,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text('Version 1.0'),
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shadowColor: Colors.blueGrey,
+                            elevation: 3,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0)),
+                            minimumSize: Size(100, 60),
+                          ),
+                          onPressed: () {},
+                          child: Text("Log Out")),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 50,
                 )
               ],
             ),

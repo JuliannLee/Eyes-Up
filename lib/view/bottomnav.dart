@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:p01/utils/global.colors.dart';
 import 'package:p01/view/home.disa.dart';
 import 'package:p01/view/setting.dart';
 import 'package:p01/view/community.dart';
 import 'home.volun.dart';
+import 'package:p01/utils/global.colors.dart';
 
 class MyHomePageV extends StatefulWidget {
   const MyHomePageV({super.key});
@@ -45,19 +45,9 @@ class _MyHomePageVState extends State<MyHomePageV> {
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: GlobalColors.mainColor,
-          title: Row(
-            children: [
-              Image.asset(
-                'assets/images/logo.png',
-                fit: BoxFit.contain,
-                height: 50,
-                width: 50,
-              ),
-              Container(
-                padding: const EdgeInsets.all(8),
-                child: const Text('Eyes Up'),
-              )
-            ],
+          title: Container(
+            padding: const EdgeInsets.all(8),
+            child: const Text('Eyes Up'),
           ),
         ),
         body: body,
@@ -128,19 +118,9 @@ class _MyHomePageDState extends State<MyHomePageD> {
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: GlobalColors.mainColor,
-          title: Row(
-            children: [
-              Image.asset(
-                'assets/images/logo.png',
-                fit: BoxFit.contain,
-                height: 50,
-                width: 50,
-              ),
-              Container(
-                padding: const EdgeInsets.all(8),
-                child: const Text('Eyes Up'),
-              )
-            ],
+          title: Container(
+            padding: const EdgeInsets.all(8),
+            child: const Text('Eyes Up'),
           ),
         ),
         body: body,
