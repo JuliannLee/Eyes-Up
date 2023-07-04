@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:p01/utils/global.colors.dart';
 import 'package:language_picker/language_picker.dart';
 import 'package:language_picker/languages.dart';
 
@@ -26,7 +27,13 @@ class _SettingState extends State<Setting> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
+      appBar: AppBar(
+        backgroundColor: GlobalColors.mainColor,
+        title: Container(
+          padding: const EdgeInsets.all(8),
+          child: const Text('Settings'),
+        ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(

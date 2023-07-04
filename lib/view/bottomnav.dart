@@ -3,7 +3,6 @@ import 'package:p01/view/home.disa.dart';
 import 'package:p01/view/setting.dart';
 import 'package:p01/view/community.dart';
 import 'home.volun.dart';
-import 'package:p01/utils/global.colors.dart';
 
 class MyHomePageV extends StatefulWidget {
   const MyHomePageV({super.key});
@@ -43,13 +42,6 @@ class _MyHomePageVState extends State<MyHomePageV> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: GlobalColors.mainColor,
-          title: Container(
-            padding: const EdgeInsets.all(8),
-            child: const Text('Eyes Up'),
-          ),
-        ),
         body: body,
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
@@ -116,13 +108,6 @@ class _MyHomePageDState extends State<MyHomePageD> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: GlobalColors.mainColor,
-          title: Container(
-            padding: const EdgeInsets.all(8),
-            child: const Text('Eyes Up'),
-          ),
-        ),
         body: body,
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
