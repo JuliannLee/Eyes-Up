@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:p01/utils/global.colors.dart';
 import 'package:language_picker/language_picker.dart';
 import 'package:language_picker/languages.dart';
+import 'package:p01/view/editprofile.dart';
+import 'package:p01/view/login.dart';
 
 class Setting extends StatefulWidget {
   const Setting({super.key});
@@ -16,7 +18,7 @@ class _SettingState extends State<Setting> {
   Widget _buildDropdownItem(Language language) {
     return Row(
       children: <Widget>[
-        SizedBox(
+        const SizedBox(
           width: 8,
         ),
         Text("${language.name} (${language.isoCode})"),
@@ -45,25 +47,30 @@ class _SettingState extends State<Setting> {
                   height: 195,
                   child: Column(
                     children: [
-                      ListTile(
+                      const ListTile(
                         title: Text(
                           "Profile",
                           style: TextStyle(color: Colors.blue, fontSize: 22),
                         ),
                       ),
                       ListTile(
-                        title: Text(
-                          "Personal Details",
-                          style: TextStyle(fontSize: 16),
-                        ),
+                        title: InkWell(
+                            child: Text(
+                              "Personal Details",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => EditProfile()))),
                       ),
-                      ListTile(
+                      const ListTile(
                         title: Text(
                           "Notifications",
                           style: TextStyle(fontSize: 16),
                         ),
                       ),
-                      ListTile(
+                      const ListTile(
                         title: Text(
                           "Change Themes",
                           style: TextStyle(fontSize: 16),
@@ -76,14 +83,14 @@ class _SettingState extends State<Setting> {
                   height: 100,
                   child: Column(
                     children: [
-                      ListTile(
+                      const ListTile(
                         title: Text(
                           "Languages",
                           style: TextStyle(color: Colors.blue, fontSize: 22),
                         ),
                       ),
                       ListTile(
-                        title: Text("Select Language"),
+                        title: const Text("Select Language"),
                         trailing: Container(
                           width: 250,
                           child: LanguagePickerDropdown(
@@ -102,7 +109,7 @@ class _SettingState extends State<Setting> {
                 ),
                 Container(
                   height: 200,
-                  child: Column(children: [
+                  child: const Column(children: [
                     ListTile(
                       title: Text(
                         "Support and Feedback",
@@ -132,7 +139,7 @@ class _SettingState extends State<Setting> {
                     ),
                   ]),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 50,
                 ),
                 Container(
@@ -141,21 +148,29 @@ class _SettingState extends State<Setting> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text('Version 1.0'),
+                      const Text('Version 1.0'),
                       ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             shadowColor: Colors.blueGrey,
                             elevation: 3,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8.0)),
-                            minimumSize: Size(100, 60),
+                            minimumSize: const Size(110, 50),
                           ),
-                          onPressed: () {},
-                          child: Text("Log Out")),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: ((context) => LoginView())));
+                          },
+                          child: const Text(
+                            "Log Out",
+                            style: TextStyle(fontSize: 18),
+                          )),
                     ],
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 50,
                 )
               ],
