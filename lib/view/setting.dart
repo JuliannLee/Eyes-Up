@@ -4,6 +4,7 @@ import 'package:language_picker/language_picker.dart';
 import 'package:language_picker/languages.dart';
 import 'package:p01/view/editprofile.dart';
 import 'package:p01/view/login.dart';
+import 'package:p01/view/about.dart';
 
 class Setting extends StatefulWidget {
   const Setting({super.key});
@@ -55,25 +56,39 @@ class _SettingState extends State<Setting> {
                       ),
                       ListTile(
                         title: InkWell(
-                            child: Text(
-                              "Personal Details",
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => EditProfile()))),
+                          child: Text(
+                            "Personal Details",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditProfile()),
+                          ),
+                        ),
+                        leading: Icon(
+                          Icons.person,
+                          size: 25,
+                        ),
                       ),
                       const ListTile(
                         title: Text(
                           "Notifications",
                           style: TextStyle(fontSize: 16),
                         ),
+                        leading: Icon(
+                          Icons.notifications,
+                          size: 25,
+                        ),
                       ),
                       const ListTile(
                         title: Text(
                           "Change Themes",
                           style: TextStyle(fontSize: 16),
+                        ),
+                        leading: Icon(
+                          Icons.light_mode,
+                          size: 25,
                         ),
                       ),
                     ],
@@ -103,13 +118,17 @@ class _SettingState extends State<Setting> {
                             },
                           ),
                         ),
+                        leading: Icon(
+                          Icons.language,
+                          size: 25,
+                        ),
                       )
                     ],
                   ),
                 ),
                 Container(
-                  height: 200,
-                  child: const Column(children: [
+                  height: 250,
+                  child: Column(children: [
                     ListTile(
                       title: Text(
                         "Support and Feedback",
@@ -134,6 +153,22 @@ class _SettingState extends State<Setting> {
                       title: Text("Send Us Feedback"),
                       leading: Icon(
                         Icons.feedback,
+                        size: 25,
+                      ),
+                    ),
+                    ListTile(
+                      title: InkWell(
+                        child: Text(
+                          "About Us",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => AboutUs()),
+                        ),
+                      ),
+                      leading: Icon(
+                        Icons.info,
                         size: 25,
                       ),
                     ),
