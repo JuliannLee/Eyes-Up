@@ -3,10 +3,7 @@ import 'package:p01/view/home.disa.dart';
 import 'package:p01/view/setting.dart';
 import 'package:p01/view/community.dart';
 import 'home.volun.dart';
-<<<<<<< HEAD
 import 'package:audioplayers/audioplayers.dart';
-=======
->>>>>>> b069e44fd8dddbd0b9da220a4a7e1c89a20a82c1
 
 class MyHomePageV extends StatefulWidget {
   const MyHomePageV({Key? key}) : super(key: key);
@@ -46,26 +43,6 @@ class _MyHomePageVState extends State<MyHomePageV> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-<<<<<<< HEAD
-        appBar: AppBar(
-          backgroundColor: GlobalColors.mainColor,
-          title: Row(
-            children: [
-              Image.asset(
-                'assets/images/logo.png',
-                fit: BoxFit.contain,
-                height: 50,
-                width: 50,
-              ),
-              Container(
-                padding: const EdgeInsets.all(8),
-                child: const Text('Eyes Up'),
-              )
-            ],
-          ),
-        ),
-=======
->>>>>>> b069e44fd8dddbd0b9da220a4a7e1c89a20a82c1
         body: body,
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
@@ -158,26 +135,6 @@ class _MyHomePageDState extends State<MyHomePageD> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-<<<<<<< HEAD
-        appBar: AppBar(
-          backgroundColor: GlobalColors.mainColor,
-          title: Row(
-            children: [
-              Image.asset(
-                'assets/images/logo.png',
-                fit: BoxFit.contain,
-                height: 50,
-                width: 50,
-              ),
-              Container(
-                padding: const EdgeInsets.all(8),
-                child: const Text('Eyes Up'),
-              )
-            ],
-          ),
-        ),
-=======
->>>>>>> b069e44fd8dddbd0b9da220a4a7e1c89a20a82c1
         body: body,
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
