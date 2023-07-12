@@ -21,20 +21,20 @@ class AboutUs extends StatelessWidget {
             children: [
               Container(
                 width: double.infinity,
-                padding: EdgeInsets.all(8),
+                padding: const EdgeInsets.all(8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Eyes Up',
                       style: TextStyle(
                           fontSize: 32,
                           color: Colors.black,
                           fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     Image.asset(
@@ -42,13 +42,13 @@ class AboutUs extends StatelessWidget {
                       width: 100,
                       height: 100,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     Container(
                         width: 500,
-                        padding: EdgeInsets.all(8),
-                        child: Text(
+                        padding: const EdgeInsets.all(8),
+                        child: const Text(
                           """
         Selamat datang di Eyes Up! Kami adalah aplikasi revolusioner yang bertujuan untuk memberikan bantuan kepada orang tunanetra dengan cara menghubungkan mereka dengan sukarelawan yang dengan senang hati berperan sebagai alat visual mereka.
 
@@ -72,14 +72,14 @@ class AboutUs extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 80,
               ),
-              Text(
+              const Text(
                 "Eyes Up est.2023",
                 style: TextStyle(fontSize: 13, color: Colors.grey),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
             ],

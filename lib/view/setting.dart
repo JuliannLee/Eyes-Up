@@ -44,58 +44,56 @@ class _SettingState extends State<Setting> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Container(
-                  height: 195,
-                  child: Column(
-                    children: [
-                      const ListTile(
-                        title: Text(
-                          "Profile",
-                          style: TextStyle(color: Colors.blue, fontSize: 22),
-                        ),
+                Column(
+                  children: [
+                    const ListTile(
+                      title: Text(
+                        "Profile",
+                        style: TextStyle(color: Colors.blue, fontSize: 22),
                       ),
-                      ListTile(
-                        title: InkWell(
-                          child: Text(
-                            "Personal Details",
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => EditProfile()),
-                          ),
-                        ),
-                        leading: Icon(
-                          Icons.person,
-                          size: 25,
-                        ),
-                      ),
-                      const ListTile(
-                        title: Text(
-                          "Notifications",
+                    ),
+                    ListTile(
+                      title: InkWell(
+                        child: const Text(
+                          "Personal Details",
                           style: TextStyle(fontSize: 16),
                         ),
-                        leading: Icon(
-                          Icons.notifications,
-                          size: 25,
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const EditProfile()),
                         ),
                       ),
-                      const ListTile(
-                        title: Text(
-                          "Change Themes",
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        leading: Icon(
-                          Icons.light_mode,
-                          size: 25,
-                        ),
+                      leading: const Icon(
+                        Icons.person,
+                        size: 25,
                       ),
-                    ],
-                  ),
+                    ),
+                    const ListTile(
+                      title: Text(
+                        "Notifications",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      leading: Icon(
+                        Icons.notifications,
+                        size: 25,
+                      ),
+                    ),
+                    const ListTile(
+                      title: Text(
+                        "Change Themes",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      leading: Icon(
+                        Icons.light_mode,
+                        size: 25,
+                      ),
+                    ),
+                  ],
                 ),
+                // ignore: avoid_unnecessary_containers
                 Container(
-                  height: 100,
+                  // height: 100,
                   child: Column(
                     children: [
                       const ListTile(
@@ -106,19 +104,21 @@ class _SettingState extends State<Setting> {
                       ),
                       ListTile(
                         title: const Text("Select Language"),
-                        trailing: Container(
-                          width: 250,
+                        trailing: SizedBox(
+                          width: 120,
                           child: LanguagePickerDropdown(
                             initialValue: Languages.english,
                             itemBuilder: _buildDropdownItem,
                             onValuePicked: (Language language) {
                               _selectedDropdownLanguage = language;
+                              // ignore: avoid_print
                               print(_selectedDropdownLanguage.name);
+                              // ignore: avoid_print
                               print(_selectedDropdownLanguage.isoCode);
                             },
                           ),
                         ),
-                        leading: Icon(
+                        leading: const Icon(
                           Icons.language,
                           size: 25,
                         ),
@@ -126,54 +126,51 @@ class _SettingState extends State<Setting> {
                     ],
                   ),
                 ),
-                Container(
-                  height: 250,
-                  child: Column(children: [
-                    ListTile(
-                      title: Text(
-                        "Support and Feedback",
-                        style: TextStyle(color: Colors.blue, fontSize: 22),
+                Column(children: [
+                  const ListTile(
+                    title: Text(
+                      "Support and Feedback",
+                      style: TextStyle(color: Colors.blue, fontSize: 22),
+                    ),
+                  ),
+                  const ListTile(
+                    title: Text("Terms & Privacy Policy"),
+                    leading: Icon(
+                      Icons.question_mark,
+                      size: 25,
+                    ),
+                  ),
+                  const ListTile(
+                    title: Text("FAQ"),
+                    leading: Icon(
+                      Icons.chat_sharp,
+                      size: 25,
+                    ),
+                  ),
+                  const ListTile(
+                    title: Text("Send Us Feedback"),
+                    leading: Icon(
+                      Icons.feedback,
+                      size: 25,
+                    ),
+                  ),
+                  ListTile(
+                    title: InkWell(
+                      child: const Text(
+                        "About Us",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const AboutUs()),
                       ),
                     ),
-                    ListTile(
-                      title: Text("Terms & Privacy Policy"),
-                      leading: Icon(
-                        Icons.question_mark,
-                        size: 25,
-                      ),
+                    leading: const Icon(
+                      Icons.info,
+                      size: 25,
                     ),
-                    ListTile(
-                      title: Text("FAQ"),
-                      leading: Icon(
-                        Icons.chat_sharp,
-                        size: 25,
-                      ),
-                    ),
-                    ListTile(
-                      title: Text("Send Us Feedback"),
-                      leading: Icon(
-                        Icons.feedback,
-                        size: 25,
-                      ),
-                    ),
-                    ListTile(
-                      title: InkWell(
-                        child: Text(
-                          "About Us",
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => AboutUs()),
-                        ),
-                      ),
-                      leading: Icon(
-                        Icons.info,
-                        size: 25,
-                      ),
-                    ),
-                  ]),
-                ),
+                  ),
+                ]),
                 const SizedBox(
                   height: 50,
                 ),
@@ -196,7 +193,7 @@ class _SettingState extends State<Setting> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: ((context) => LoginView())));
+                                    builder: ((context) => const LoginView())));
                           },
                           child: const Text(
                             "Log Out",

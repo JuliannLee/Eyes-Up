@@ -23,38 +23,38 @@ class _EditProfileState extends State<EditProfile> {
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(45),
-            child: Container(
+            child: SizedBox(
               width: double.infinity,
               child:
                   Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
                       labelText: "First Name",
                       hintText: "John"),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
                       labelText: "Last Name",
                       hintText: "Doe"),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
                       labelText: "Email",
                       hintText: "eyesup@gmail.com"),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 60,
                 ),
                 ElevatedButton(

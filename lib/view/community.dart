@@ -35,7 +35,7 @@ class Community extends StatelessWidget {
                             Container(
                               width: double.infinity,
                               height: 200,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 image: DecorationImage(
                                   image: AssetImage('assets/images/thumb1.png'),
                                   fit: BoxFit.cover,
@@ -46,9 +46,9 @@ class Community extends StatelessWidget {
                               alignment: Alignment.centerLeft,
                               width: double.infinity,
                               height: 45,
-                              color: Color.fromARGB(161, 217, 217, 217),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                              color: const Color.fromARGB(161, 217, 217, 217),
+                              child: const Padding(
+                                padding: EdgeInsets.all(8.0),
                                 child: Text(
                                   overflow: TextOverflow.ellipsis,
                                   'Acara Volunteer di Kabupaten Deli Serdang',
@@ -63,10 +63,10 @@ class Community extends StatelessWidget {
                           ],
                         )),
                     ListTile(
-                      leading: Container(
+                      leading: SizedBox(
                         width: 100,
                         child: Row(
-                          children: [
+                          children: const [
                             Icon(
                               Icons.favorite,
                               color: Colors.red,
@@ -82,11 +82,11 @@ class Community extends StatelessWidget {
                           ],
                         ),
                       ),
-                      trailing: Container(
+                      trailing: SizedBox(
                           width: 155,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
+                            children: const [
                               Text("posted 2 hours ago"),
                               Icon(Icons.access_time)
                             ],
@@ -112,7 +112,7 @@ class Community extends StatelessWidget {
                             Container(
                               width: double.infinity,
                               height: 200,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 image: DecorationImage(
                                   image: AssetImage('assets/images/thumb2.png'),
                                   fit: BoxFit.cover,
@@ -123,9 +123,9 @@ class Community extends StatelessWidget {
                               alignment: Alignment.centerLeft,
                               width: double.infinity,
                               height: 45,
-                              color: Color.fromARGB(161, 217, 217, 217),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                              color: const Color.fromARGB(161, 217, 217, 217),
+                              child: const Padding(
+                                padding: EdgeInsets.all(8.0),
                                 child: Text(
                                   overflow: TextOverflow.ellipsis,
                                   'Acara Volunteer di Kabupaten Deli Serdang',
@@ -140,10 +140,10 @@ class Community extends StatelessWidget {
                           ],
                         )),
                     ListTile(
-                      leading: Container(
+                      leading: SizedBox(
                         width: 100,
                         child: Row(
-                          children: [
+                          children: const [
                             Icon(Icons.favorite),
                             SizedBox(
                               width: 5,
@@ -156,11 +156,11 @@ class Community extends StatelessWidget {
                           ],
                         ),
                       ),
-                      trailing: Container(
+                      trailing: SizedBox(
                           width: 155,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
+                            children: const [
                               Text("posted 1 day ago"),
                               Icon(Icons.access_time)
                             ],
@@ -186,7 +186,7 @@ class Community extends StatelessWidget {
                             Container(
                               width: double.infinity,
                               height: 200,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 image: DecorationImage(
                                   image: AssetImage('assets/images/thumb3.png'),
                                   fit: BoxFit.cover,
@@ -197,9 +197,9 @@ class Community extends StatelessWidget {
                               alignment: Alignment.centerLeft,
                               width: double.infinity,
                               height: 45,
-                              color: Color.fromARGB(161, 217, 217, 217),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                              color: const Color.fromARGB(161, 217, 217, 217),
+                              child: const Padding(
+                                padding: EdgeInsets.all(8.0),
                                 child: Text(
                                   overflow: TextOverflow.ellipsis,
                                   'Acara Amal di Dallas, Amerika',
@@ -214,10 +214,10 @@ class Community extends StatelessWidget {
                           ],
                         )),
                     ListTile(
-                      leading: Container(
+                      leading: SizedBox(
                         width: 100,
                         child: Row(
-                          children: [
+                          children: const [
                             Icon(Icons.favorite),
                             SizedBox(
                               width: 5,
@@ -230,11 +230,11 @@ class Community extends StatelessWidget {
                           ],
                         ),
                       ),
-                      trailing: Container(
+                      trailing: SizedBox(
                           width: 155,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
+                            children: const [
                               Text("posted 1 day ago"),
                               Icon(Icons.access_time)
                             ],

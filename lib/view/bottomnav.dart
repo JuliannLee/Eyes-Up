@@ -37,7 +37,7 @@ class _MyHomePageVState extends State<MyHomePageV> {
         body = Community();
         break;
       case 2:
-        body = Setting();
+        body = const Setting();
         break;
     }
     return MaterialApp(
@@ -129,7 +129,7 @@ class _MyHomePageDState extends State<MyHomePageD> {
         body = Community();
         break;
       case 2:
-        body = Setting();
+        body = const Setting();
         break;
     }
     return MaterialApp(
