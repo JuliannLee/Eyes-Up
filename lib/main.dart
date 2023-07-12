@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:p01/view/splash.screen.dart';
+
 void main() {
   runApp(const App());
 }

@@ -1,11 +1,15 @@
 // ignore: unnecessary_import
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:p01/view/widgets/button.global.dart';
+=======
+>>>>>>> b069e44fd8dddbd0b9da220a4a7e1c89a20a82c1
 
 // ignore: use_key_in_widget_constructors
 class HomeVolun extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     return Scaffold(
       backgroundColor: const Color(0xFFF0EFF4),
       body: Center(
@@ -74,5 +78,8 @@ class HomeVolun extends StatelessWidget {
         ]),
       ),
     );
+=======
+    return const Scaffold(body: Text('halaman home volunteer'));
+>>>>>>> b069e44fd8dddbd0b9da220a4a7e1c89a20a82c1
   }
 }
