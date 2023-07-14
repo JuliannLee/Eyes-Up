@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:p01/utils/global.colors.dart';
 import 'package:p01/view/home.disa.dart';
 import 'package:p01/view/setting.dart';
 import 'package:p01/view/community.dart';
@@ -37,12 +38,29 @@ class _MyHomePageVState extends State<MyHomePageV> {
         body = Community();
         break;
       case 2:
-        body = const Setting();
+        body = Setting();
         break;
     }
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        appBar: AppBar(
+          backgroundColor: GlobalColors.mainColor,
+          title: Row(
+            children: [
+              Image.asset(
+                'assets/images/logo.png',
+                fit: BoxFit.contain,
+                height: 50,
+                width: 50,
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: const Text('Eyes Up'),
+              )
+            ],
+          ),
+        ),
         body: body,
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
@@ -129,12 +147,29 @@ class _MyHomePageDState extends State<MyHomePageD> {
         body = Community();
         break;
       case 2:
-        body = const Setting();
+        body = Setting();
         break;
     }
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        appBar: AppBar(
+          backgroundColor: GlobalColors.mainColor,
+          title: Row(
+            children: [
+              Image.asset(
+                'assets/images/logo.png',
+                fit: BoxFit.contain,
+                height: 50,
+                width: 50,
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: const Text('Eyes Up'),
+              )
+            ],
+          ),
+        ),
         body: body,
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
