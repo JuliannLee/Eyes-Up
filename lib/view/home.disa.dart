@@ -23,7 +23,7 @@ class _HomeDisaState extends State<HomeDisa> {
   }
 
   void playAudio() async {
-    await audioPlayer.play(AssetSource('assets/audio/disabled.mp3'));
+    await audioPlayer.play(AssetSource('audio/disabled.mp3'));
   }
 
   @override
