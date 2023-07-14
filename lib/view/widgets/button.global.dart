@@ -7,9 +7,8 @@ import 'package:p01/view/pickroles.dart';
 import 'package:p01/view/vc.dart';
 import '../bottomnav.dart';
 
-
 class ButtonSign extends StatelessWidget {
-  const ButtonSign({ Key? key }) : super(key: key);
+  const ButtonSign({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,15 +27,14 @@ class ButtonSign extends StatelessWidget {
         alignment: Alignment.center,
         height: 55,
         decoration: BoxDecoration(
-          color: GlobalColors.mainColor,
-          borderRadius: BorderRadius.circular(6),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-            )
-          ]
-        ),
+            color: GlobalColors.mainColor,
+            borderRadius: BorderRadius.circular(6),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+              )
+            ]),
         child: const Text(
           'Sign In',
           style: TextStyle(
@@ -50,17 +48,17 @@ class ButtonSign extends StatelessWidget {
 }
 
 class ButtonRegis extends StatelessWidget {
-  const ButtonRegis({ Key? key }) : super(key: key);
+  const ButtonRegis({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
         Navigator.push(
-          context, 
+          context,
           MaterialPageRoute(
-            builder: (context){
-            return const LoginView();
+            builder: (context) {
+              return const LoginView();
             },
           ),
         );
@@ -69,15 +67,14 @@ class ButtonRegis extends StatelessWidget {
         alignment: Alignment.center,
         height: 55,
         decoration: BoxDecoration(
-          color: GlobalColors.mainColor,
-          borderRadius: BorderRadius.circular(6),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-            )
-          ]
-        ),
+            color: GlobalColors.mainColor,
+            borderRadius: BorderRadius.circular(6),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+              )
+            ]),
         child: const Text(
           'Register',
           style: TextStyle(
@@ -91,17 +88,17 @@ class ButtonRegis extends StatelessWidget {
 }
 
 class ButtonVerif extends StatelessWidget {
-  const ButtonVerif({ Key? key }) : super(key: key);
+  const ButtonVerif({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
         Navigator.push(
-          context, 
+          context,
           MaterialPageRoute(
-            builder: (context){
-            return const LoginView();
+            builder: (context) {
+              return const LoginView();
             },
           ),
         );
@@ -110,15 +107,14 @@ class ButtonVerif extends StatelessWidget {
         alignment: Alignment.center,
         height: 55,
         decoration: BoxDecoration(
-          color: GlobalColors.mainColor,
-          borderRadius: BorderRadius.circular(6),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-            )
-          ]
-        ),
+            color: GlobalColors.mainColor,
+            borderRadius: BorderRadius.circular(6),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+              )
+            ]),
         child: const Text(
           'Send Verification Link',
           style: TextStyle(
@@ -156,23 +152,19 @@ class ButtonVolun extends StatelessWidget {
         width: 180,
         padding: const EdgeInsets.symmetric(horizontal: 1),
         decoration: BoxDecoration(
-          color: GlobalColors.volunColor,
-          borderRadius: BorderRadius.circular(6),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-            )
-          ]
-        ),
+            color: GlobalColors.volunColor,
+            borderRadius: BorderRadius.circular(6),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+              )
+            ]),
         child: const Text(
           "I'd like to volunteer",
           textAlign: TextAlign.center,
           style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-            fontSize: 32
-          ),
+              color: Colors.white, fontWeight: FontWeight.w600, fontSize: 32),
         ),
       ),
     );
@@ -204,23 +196,19 @@ class ButtonDisa extends StatelessWidget {
         width: 180,
         padding: const EdgeInsets.symmetric(horizontal: 1),
         decoration: BoxDecoration(
-          color: GlobalColors.disaColor,
-          borderRadius: BorderRadius.circular(6),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-            )
-          ]
-        ),
+            color: GlobalColors.disaColor,
+            borderRadius: BorderRadius.circular(6),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+              )
+            ]),
         child: const Text(
           'I need visual assistance',
           textAlign: TextAlign.center,
           style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-            fontSize: 32
-          ),
+              color: Colors.white, fontWeight: FontWeight.w600, fontSize: 32),
         ),
       ),
     );
@@ -228,7 +216,7 @@ class ButtonDisa extends StatelessWidget {
 }
 
 class ButtonVCdisa extends StatelessWidget {
-  const ButtonVCdisa({ Key? key }) : super(key: key);
+  const ButtonVCdisa({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -244,16 +232,17 @@ class ButtonVCdisa extends StatelessWidget {
         );
       },
       shape: const CircleBorder(),
-      child: Image.asset('assets/images/telpon.png',
-      height: 280,
-      width: 280,
+      child: Image.asset(
+        'assets/images/telpon.png',
+        height: 280,
+        width: 280,
       ),
     );
   }
 }
 
 class ButtonVCvolun extends StatelessWidget {
-  const ButtonVCvolun({ Key? key }) : super(key: key);
+  const ButtonVCvolun({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -270,9 +259,10 @@ class ButtonVCvolun extends StatelessWidget {
         );
       },
       shape: const CircleBorder(),
-      child: Image.asset('assets/images/search.png',
-      height: 255,
-      width: 255,
+      child: Image.asset(
+        'assets/images/search.png',
+        height: 255,
+        width: 255,
       ),
     );
   }

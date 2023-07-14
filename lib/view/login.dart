@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:p01/view/auth/gmail.dart';
@@ -18,7 +20,6 @@ class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _LoginViewState createState() => _LoginViewState();
 }
 
@@ -84,7 +85,8 @@ class _LoginViewState extends State<LoginView> {
                 textStyle: const TextStyle(fontSize: 14, color: Colors.white),
               ),
               onPressed: () {
-                audioPlayer.stop(); // Stop audio before switching to another page
+                audioPlayer
+                    .stop(); // Stop audio before switching to another page
                 showAccountDialog(context);
               },
               child: Row(
