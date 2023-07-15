@@ -105,7 +105,7 @@ class _SettingState extends State<Setting> {
                       ListTile(
                         title: const Text("Select Language"),
                         trailing: SizedBox(
-                          width: 120,
+                          width: 221,
                           child: LanguagePickerDropdown(
                             initialValue: Languages.english,
                             itemBuilder: _buildDropdownItem,

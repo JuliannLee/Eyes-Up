@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:p01/view/widgets/button.global.dart';
 import 'package:audioplayers/audioplayers.dart';
 
+
 class Roles extends StatefulWidget {
   const Roles({Key? key}) : super(key: key);
 
@@ -13,7 +14,7 @@ class Roles extends StatefulWidget {
 
 class _RolesState extends State<Roles> {
   final audioPlayer = AudioPlayer();
-  bool isAudioPlaying = false;
+  bool isAudioPlaying = true;
 
   @override
   void initState() {
@@ -23,15 +24,11 @@ class _RolesState extends State<Roles> {
 
   void playAudio() async {
     await audioPlayer.play(AssetSource('audio/pickroles.mp3'));
-    setState(() {
-      isAudioPlaying = true;
-    });
   }
 
   void stopAudio() {
     if (isAudioPlaying) {
       audioPlayer.stop();
-      audioPlayer.dispose();
       setState(() {
         isAudioPlaying = false;
       });

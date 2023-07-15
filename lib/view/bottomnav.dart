@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:p01/utils/global.colors.dart';
 import 'package:p01/view/home.disa.dart';
 import 'package:p01/view/setting.dart';
 import 'package:p01/view/community.dart';
@@ -38,7 +37,7 @@ class _MyHomePageVState extends State<MyHomePageV> {
         body = Community();
         break;
       case 2:
-        body = Setting();
+        body = const Setting();
         break;
     }
     return MaterialApp(
@@ -130,7 +129,7 @@ class _MyHomePageDState extends State<MyHomePageD> {
         body = Community();
         break;
       case 2:
-        body = Setting();
+        body = const Setting();
         break;
     }
     return MaterialApp(
