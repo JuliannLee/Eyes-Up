@@ -19,10 +19,9 @@ class _SettingState extends State<Setting> {
   Widget _buildDropdownItem(Language language) {
     return Row(
       children: <Widget>[
-        const SizedBox(
-          width: 8,
-        ),
-        Text("${language.name} (${language.isoCode})"),
+        Flexible(
+          child: Text("${language.name} (${language.isoCode})"),
+        )
       ],
     );
   }
@@ -40,7 +39,7 @@ class _SettingState extends State<Setting> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(top: 8, bottom: 8),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -93,7 +92,7 @@ class _SettingState extends State<Setting> {
                 ),
                 // ignore: avoid_unnecessary_containers
                 Container(
-                  // height: 100,
+                  // height: 150,
                   child: Column(
                     children: [
                       const ListTile(
@@ -103,9 +102,10 @@ class _SettingState extends State<Setting> {
                         ),
                       ),
                       ListTile(
-                        title: const Text("Select Language"),
+                        title: const Text("Select Language",
+                            style: TextStyle(fontSize: 16)),
                         trailing: SizedBox(
-                          width: 221,
+                          width: 150,
                           child: LanguagePickerDropdown(
                             initialValue: Languages.english,
                             itemBuilder: _buildDropdownItem,
@@ -162,7 +162,8 @@ class _SettingState extends State<Setting> {
                       ),
                       onTap: () => Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const AboutUs()),
+                        MaterialPageRoute(
+                            builder: (context) => const AboutUs()),
                       ),
                     ),
                     leading: const Icon(
