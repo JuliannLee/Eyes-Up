@@ -258,7 +258,6 @@ class ButtonVCvolun extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RawMaterialButton(
-      padding: const EdgeInsets.symmetric(vertical: 170),
       onPressed: () {
         Navigator.push(
           context,

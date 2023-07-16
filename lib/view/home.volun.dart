@@ -10,84 +10,87 @@ class HomeVolun extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF0EFF4),
       appBar: AppBar(
-          backgroundColor: GlobalColors.mainColor,
-          title: Row(
-            children: [
-              Image.asset('assets/images/logo.png',
+        backgroundColor: GlobalColors.mainColor,
+        title: Row(
+          children: [
+            Image.asset(
+              'assets/images/logo.png',
               fit: BoxFit.contain,
               height: 50,
               width: 50,
-              ),
-              Container(
-                padding: const EdgeInsets.all(8),
-                child: const Text('Eyes Up'),
-              )
-            ],
+            ),
+            Container(
+              padding: const EdgeInsets.all(8),
+              child: const Text('Eyes Up'),
+            )
+          ],
+        ),
+      ),
+      body: Stack(children: <Widget>[
+        Positioned(
+          left: 75,
+          top: 20,
+          width: 250,
+          height: 95,
+          child: Container(
+            width: 250,
+            height: 95,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+            ),
           ),
         ),
-      body: Center(
-        child: Stack(children: [
-          Positioned(
-            left: 0.0,
-            top: 0.0,
-            width: 255,
-            height: 100,
-            child: Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-              ),
-            ),
-          ),
-          const Positioned(
-              top: 15,
-              left: 68,
-              child: Text(
-                'Albert Suhargo',
-                style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500),
-              )),
-          const Positioned(
-              top: 45,
-              left: 53.0,
-              child: Text(
-                'member since Apr 2023',
-                style: TextStyle(fontSize: 14, color: Colors.black),
-              )),
-          const Positioned(
-              top: 72,
-              left: 93.0,
-              child: Text(
-                'Indonesia',
-                style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.white,
-                    backgroundColor: Color(0xFF0E4189)),
-              )),
-          const Positioned(
-              top: 120,
-              left: 28.0,
-              child: Text(
-                'You will receive a notification \nwhen someone needs your help.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 14,
-                    color: Color(0xFF0E4189),
-                    fontWeight: FontWeight.w500),
-              )),
-          const ButtonVCvolun(),
-          const Positioned(
-            top: 435,
-            left: 13,
+        const Positioned(
+          left: 140,
+          top: 30,
             child: Text(
-              'Click the button to start helping!',
-              style: TextStyle(
-                  color: Color(0xFF707D93),fontSize: 17, fontWeight: FontWeight.w600),
-            ),
+          'Albert Suhargo',
+          style: TextStyle(
+              fontSize: 18, color: Colors.black, fontWeight: FontWeight.w500),
+        )),
+        const Positioned(
+          left: 125,
+          top: 55,
+            child: Text(
+          'member since Apr 2023',
+          style: TextStyle(fontSize: 14, color: Colors.black),
+        )),
+        const Positioned(
+          left: 170,
+          top: 80,
+            child: Text(
+          'Indonesia',
+          style: TextStyle(
+              fontSize: 14,
+              color: Colors.white,
+              backgroundColor: Color(0xFF0E4189)),
+        )),
+        const Positioned(
+          left: 100,
+          top: 130,
+            child: Text(
+          'You will receive a notification \nwhen someone needs your help.',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontSize: 14,
+              color: Color(0xFF0E4189),
+              fontWeight: FontWeight.w500),
+        )),
+        const Center(
+          child: ButtonVCvolun(),
+        ),
+        const Positioned(
+          left: 75,
+          top: 450,
+          child: Text(
+            'Click the button to start helping!',
+            style: TextStyle(
+                color: Color(0xFF707D93),
+                fontSize: 17,
+                fontWeight: FontWeight.w600),
           ),
-        ]),
-      ),
+        ),
+      ]),
     );
   }
 }
