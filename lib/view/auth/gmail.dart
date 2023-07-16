@@ -3,6 +3,8 @@ import 'package:p01/view/pickroles.dart';
 import 'package:random_string/random_string.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:p01/view/auth/addaccount.dart';
+import 'package:provider/provider.dart';
+import 'package:p01/providers/prov.dart';
 
 class Gmail extends StatelessWidget {
   const Gmail({Key? key}) : super(key: key);
@@ -28,10 +30,11 @@ class _GmailViewState extends State<GmailView> {
   final allIconData = [
     MaterialCommunityIcons.account,
   ];
-  final names = List.generate(3, (index) => randomAlpha(10));
-  final emails = List.generate(3, (index) => '${randomAlpha(10)}@gmail.com');
+
   @override
   Widget build(BuildContext context) {
+    final provData = Provider.of<Prov>(context);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Center(
@@ -50,16 +53,21 @@ class _GmailViewState extends State<GmailView> {
                       'assets/images/logo.png',
                       width: 180,
                       height: 180,
-
                     ),
                   ),
-                  const Text("Choose Account",style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),
-                  const Text("To Continue to Eyes Up",style: TextStyle(fontSize: 20),),
+                  const Text(
+                    "Choose Account",
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  ),
+                  const Text(
+                    "To Continue to Eyes Up",
+                    style: TextStyle(fontSize: 20),
+                  ),
                   Expanded(
                     child: ListView.separated(
-                      itemCount: emails.length + 1,
-                      separatorBuilder:
-                          (BuildContext context, int index) => const Divider(
+                      itemCount: provData.data.length + 1,
+                      separatorBuilder: (BuildContext context, int index) =>
+                          const Divider(
                         color: Colors.black,
                         height: 1,
                         thickness: 0.3,
@@ -67,20 +75,28 @@ class _GmailViewState extends State<GmailView> {
                         endIndent: 5,
                       ),
                       itemBuilder: (BuildContext context, int index) {
-                        if (index < emails.length) {
+                        if (index < provData.data.length) {
                           return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const Roles(),
-                                ),
-                              );
-                            },
-                            child: _listItem(context, index),
-                          );
-                        }
-                        else {
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const Roles(),
+                                  ),
+                                );
+                              },
+                              child: Column(
+                                children: [
+                                  ListTile(
+                                    title: Text(provData.data[index]["Name"]),
+                                    subtitle:
+                                        Text(provData.data[index]["Email"]),
+                                    leading:
+                                        Icon(MaterialCommunityIcons.account,size: 40,),
+                                  ),
+                                ],
+                              ));
+                        } else {
                           return ListTile(
                             leading: const Icon(
                               Icons.add,
@@ -94,7 +110,7 @@ class _GmailViewState extends State<GmailView> {
                               ),
                             ),
                             onTap: () {
-                               Navigator.push(
+                              Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => const AddAccount(),
@@ -146,50 +162,6 @@ class _GmailViewState extends State<GmailView> {
         ),
       ),
       backgroundColor: const Color.fromARGB(255, 218, 217, 217),
-    );
-  }
-
-  Widget _listItem(BuildContext context, int i) {
-    final iconData = allIconData[i % allIconData.length];
-
-    return MouseRegion(
-      onEnter: (_) {
-        setState(() {
-          isTapped = i;
-        });
-      },
-      onExit: (_) {
-        setState(() {
-          isTapped = null;
-        });
-      },
-      child: ListTile(
-        leading: Icon(
-          iconData,
-          size: 40,
-        ),
-        title: Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Text(
-                  names[i],
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: isTapped == i ? Colors.yellow : Colors.black,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-        subtitle: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text(emails[i]),
-          ],
-        ),
-      ),
     );
   }
 }

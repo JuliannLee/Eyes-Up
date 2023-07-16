@@ -11,6 +11,8 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
+    // Fixed email value
+    final String fixedEmail = 'eyesup@gmail.com';
     return Scaffold(
       appBar: AppBar(
         backgroundColor: GlobalColors.mainColor,
@@ -25,44 +27,51 @@ class _EditProfileState extends State<EditProfile> {
             padding: const EdgeInsets.all(45),
             child: SizedBox(
               width: double.infinity,
-              child:
-                  Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-                const SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
                       labelText: "First Name",
-                      hintText: "John"),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
+                      hintText: "John",
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
                       labelText: "Last Name",
-                      hintText: "Doe"),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
+                      hintText: "Doe",
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
                       labelText: "Email",
-                      hintText: "eyesup@gmail.com"),
-                ),
-                const SizedBox(
-                  height: 60,
-                ),
-                ElevatedButton(
+                      hintText: "YourEyes@gmail.com",
+                    ),
+                    initialValue: fixedEmail,
+                    enabled: false, // Set the enabled property to false
+                  ),
+                  const SizedBox(
+                    height: 60,
+                  ),
+                  ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       shadowColor: Colors.blueGrey,
                       elevation: 3,
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0)),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
                       minimumSize: const Size(110, 50),
                     ),
                     onPressed: () {
@@ -71,8 +80,10 @@ class _EditProfileState extends State<EditProfile> {
                     child: const Text(
                       "Update Profile",
                       style: TextStyle(fontSize: 18),
-                    )),
-              ]),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:p01/view/auth/addaccount.dart';
 import 'package:p01/view/auth/gmail.dart';
+// import 'package:p01/view/auth/gmail.dart';
+import 'package:provider/provider.dart';
+import 'package:p01/providers/prov.dart';
 
 class Register extends StatelessWidget {
   const Register({Key? key}) : super(key: key);
@@ -27,11 +30,11 @@ class _RegisterEmailState extends State<RegisterEmail> {
   final TextEditingController _passwordController = TextEditingController();
 
   bool _hidden = true;
-void _toggle() {
-  setState(() {
-    _hidden = !_hidden;
-  });
-}
+  void _toggle() {
+    setState(() {
+      _hidden = !_hidden;
+    });
+  }
 
   // ignore: unused_field
   late String _pass;
@@ -48,9 +51,10 @@ void _toggle() {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
+    final provData = Provider.of<Prov>(context);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Center(
@@ -110,7 +114,6 @@ void _toggle() {
                               hintStyle: TextStyle(
                                 color: Colors.grey,
                               ),
-                              suffixText: '@gmail.com', // Added suffixText for "@gmail.com"
                             ),
                             validator: (value) {
                               if (value!.isEmpty) {
@@ -132,7 +135,9 @@ void _toggle() {
                             controller: _passwordController,
                             decoration: InputDecoration(
                               suffixIcon: IconButton(
-                                icon: Icon(_hidden ? Icons.visibility_off : Icons.visibility),
+                                icon: Icon(_hidden
+                                    ? Icons.visibility_off
+                                    : Icons.visibility),
                                 onPressed: _toggle,
                               ),
                               labelText: 'Password',
@@ -144,64 +149,76 @@ void _toggle() {
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return 'Please enter your password';
-                              }
-                              else if(value.length<6){
+                              } else if (value.length < 6) {
                                 return 'Password is too short';
-                              }
-                              else {
+                              } else {
                                 null;
                               }
                             },
-                            onChanged:(value) => {
-                              if (value.isEmpty) {
-                              setState(() {
-                                _strength = 0;
-                              })
-                            } else if (value.length < 6) {
-                              setState(() {
-                                _strength = 1 / 4;
-                                _displayText = 'Your password is too short';
-                              })
-                            } else if (value.length < 8) {
-                              setState(() {
-                                _strength = 2 / 4;
-                                _displayText = 'Your password is acceptable but not strong';
-                              })
-                            } else {
-                              if (!letterReg.hasMatch(value) || !numReg.hasMatch(value)) {
-                                setState(() {
-                                  // Password length >= 8
-                                  // But doesn't contain both letter and digit characters
-                                  _strength = 3 / 4;
-                                  _displayText = 'Your password is strong';
-                                })
-                              } else {
-                                // Password length >= 8
-                                // Password contains both letter and digit characters
-                                setState(() {
-                                  _strength = 1;
-                                  _displayText = 'Your password is great';
-                                })
-                                }}
-                              },
+                            onChanged: (value) => {
+                              if (value.isEmpty)
+                                {
+                                  setState(() {
+                                    _strength = 0;
+                                  })
+                                }
+                              else if (value.length < 6)
+                                {
+                                  setState(() {
+                                    _strength = 1 / 4;
+                                    _displayText = 'Your password is too short';
+                                  })
+                                }
+                              else if (value.length < 8)
+                                {
+                                  setState(() {
+                                    _strength = 2 / 4;
+                                    _displayText =
+                                        'Your password is acceptable but not strong';
+                                  })
+                                }
+                              else
+                                {
+                                  if (!letterReg.hasMatch(value) ||
+                                      !numReg.hasMatch(value))
+                                    {
+                                      setState(() {
+                                        // Password length >= 8
+                                        // But doesn't contain both letter and digit characters
+                                        _strength = 3 / 4;
+                                        _displayText =
+                                            'Your password is strong';
+                                      })
+                                    }
+                                  else
+                                    {
+                                      // Password length >= 8
+                                      // Password contains both letter and digit characters
+                                      setState(() {
+                                        _strength = 1;
+                                        _displayText = 'Your password is great';
+                                      })
+                                    }
+                                }
+                            },
                           ),
                           const SizedBox(height: 20),
                           LinearProgressIndicator(
-                        value: _strength,
-                        backgroundColor: Colors.grey[300],
-                        color: _strength <= 1 / 4
-                            ? Colors.red
-                            : _strength == 2 / 4
-                            ? Colors.yellow
-                            : _strength == 3 / 4
-                            ? Colors.blue
-                            : Colors.green,
-                        minHeight: 15,
-                      ),
-                      Text(
-                        _displayText,
-                        style: const TextStyle(fontSize: 18),
-                      ),
+                            value: _strength,
+                            backgroundColor: Colors.grey[300],
+                            color: _strength <= 1 / 4
+                                ? Colors.red
+                                : _strength == 2 / 4
+                                    ? Colors.yellow
+                                    : _strength == 3 / 4
+                                        ? Colors.blue
+                                        : Colors.green,
+                            minHeight: 15,
+                          ),
+                          Text(
+                            _displayText,
+                            style: const TextStyle(fontSize: 18),
+                          ),
                         ],
                       ),
                     ),
@@ -214,9 +231,8 @@ void _toggle() {
                         TextSpan(
                           text: 'Learn more',
                           style: TextStyle(
-                            color: Colors.lightBlue,
-                            fontWeight: FontWeight.bold
-                          ),
+                              color: Colors.lightBlue,
+                              fontWeight: FontWeight.bold),
                           // Add onTap handler for privacy policy link if desired
                         ),
                       ],
@@ -237,11 +253,11 @@ void _toggle() {
                           child: ElevatedButton(
                             onPressed: () {
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const AddAccount(),
-                                  ),
-                                );
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const AddAccount(),
+                                ),
+                              );
                             },
                             child: const Text('Already Have account?'),
                           ),
@@ -256,12 +272,12 @@ void _toggle() {
                               if (_formKey.currentState!.validate()) {
                                 _formKey.currentState!.save();
                                 // Access the form field values
-                                // ignore: unused_local_variable
                                 final name = _nameController.text;
-                                // ignore: unused_local_variable
                                 final email = _emailController.text;
-                                // Perform further actions with the data
-                                // Navigate to another page or perform further actions
+                                provData.AddData = {
+                                "Name": _nameController.text,
+                                "Email": _emailController.text,
+                              };
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(

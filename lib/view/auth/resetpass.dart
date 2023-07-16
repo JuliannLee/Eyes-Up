@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:p01/view/auth/addaccount.dart';
-
 // ignore: camel_case_types
 class resetPassword extends StatefulWidget {
   const resetPassword({Key? key}) : super(key: key);
@@ -15,10 +14,16 @@ class _resetPasswordState extends State<resetPassword> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordConfirmController = TextEditingController();
 
-  bool _hidden = true;
-void _toggle() {
+  bool _hidden1 = true;
+  bool _hidden2 = true;
+void _toggle1() {
   setState(() {
-    _hidden = !_hidden;
+    _hidden1 = !_hidden1;
+  });
+}
+void _toggle2() {
+  setState(() {
+    _hidden2 = !_hidden2;
   });
 }
 
@@ -31,10 +36,11 @@ late String _pass;
 
   // ignore: prefer_typing_uninitialized_variables
   var confirmPass;
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -71,12 +77,12 @@ late String _pass;
                         children: [
                           TextFormField(
                             obscuringCharacter: '*',
-                            obscureText: _hidden,
+                            obscureText: _hidden1,
                             controller: _passwordController,
                             decoration: InputDecoration(
                               suffixIcon: IconButton(
-                                icon: Icon(_hidden ? Icons.visibility_off : Icons.visibility),
-                                onPressed: _toggle,
+                                icon: Icon(_hidden1 ? Icons.visibility_off : Icons.visibility),
+                                onPressed: _toggle1,
                               ),
                               labelText: 'Password',
                               hintStyle: const TextStyle(
@@ -86,39 +92,11 @@ late String _pass;
                             validator: (value) {
                               confirmPass = value;
                               if (value!.isEmpty) {
-                                return 'Please enter your new Password';
-                              } else if (value.length < 6) {
-                                return 'Password must have 6 characters!';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            obscuringCharacter: '*',
-                            obscureText: _hidden,
-                            controller: _passwordConfirmController,
-                            decoration: InputDecoration(
-                              suffixIcon: IconButton(
-                                icon: Icon(_hidden ? Icons.visibility_off : Icons.visibility),
-                                onPressed: _toggle,
-                              ),
-                              labelText: 'Confirm Password',
-                              hintStyle: const TextStyle(
-                                color: Colors.grey,
-                              ),
-                            ),
-                            // ignore: body_might_complete_normally_nullable
-                            validator: (value) {
-                              if (value!.isEmpty) {
                                 return 'Please enter your password';
                               }
                               else if(value.length<6){
                                 return 'Password is too short';
                               }
-                              else if(value != confirmPass){
-                                  return 'Password doesn\'t match!';
-                                }
                               else {
                                 null;
                               }
@@ -155,6 +133,37 @@ late String _pass;
                                 })
                                 }}
                               },
+                          ),
+                          const SizedBox(height: 10),
+                          TextFormField(
+                            obscuringCharacter: '*',
+                            obscureText: _hidden2,
+                            controller: _passwordConfirmController,
+                            decoration: InputDecoration(
+                              suffixIcon: IconButton(
+                                icon: Icon(_hidden2 ? Icons.visibility_off : Icons.visibility),
+                                onPressed: _toggle2,
+                              ),
+                              labelText: 'Confirm Password',
+                              hintStyle: const TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                            // ignore: body_might_complete_normally_nullable
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter your password';
+                              }
+                              else if(value.length<6){
+                                return 'Password is too short';
+                              }
+                              else if(value != confirmPass){
+                                  return 'Password doesn\'t match!';
+                                }
+                              else {
+                                null;
+                              }
+                            }
                           ),
                           const SizedBox(height: 20),
                           LinearProgressIndicator(
