@@ -209,7 +209,7 @@ class ButtonDisa extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
+              blurRadius: 1,
             )
           ]
         ),

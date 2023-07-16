@@ -136,91 +136,94 @@ class VCscreenVolun extends StatefulWidget {
 
 class _VCscreenVolunState extends State<VCscreenVolun> {
   late List<CameraDescription> cameras;
-  late CameraController cameraController;
+  late Future<void> cameraInitialization2;
+  late CameraController? cameraController2;
 
   int direction = 0;
 
   @override
   void initState() {
-    startCamera(direction);
     super.initState();
+    cameraInitialization2 = initializeCamera();
   }
 
-  void startCamera(int direction) async {
+  Future<void> initializeCamera() async {
     cameras = await availableCameras();
 
-    cameraController = CameraController(
+    cameraController2 = CameraController(
       cameras[direction],
       ResolutionPreset.high,
       enableAudio: false,
     );
 
-    await cameraController.initialize().then((value) {
-      if (!mounted) {
-        return;
-      }
-      setState(() {}); //To refresh widget
-    }).catchError((e) {
-      // ignore: avoid_print
-      print(e);
-    });
+    try {
+      await cameraController2!.initialize();
+    // ignore: empty_catches
+    } catch (e) {
+    }
   }
 
   @override
   void dispose() {
-    cameraController.dispose();
+    cameraController2?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (cameraController.value.isInitialized) {
-      return Scaffold(
-        body: Stack(
-          children: [
-            CameraPreview(cameraController),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  direction = direction == 0 ? 1 : 0;
-                  startCamera(direction);
-                });
-              },
-              child:
-                  buttonFlip(Icons.flip_camera_ios_outlined, Alignment.bottomLeft),
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return const MyHomePageV();
-                    },
+    return FutureBuilder<void>(
+      future: cameraInitialization2,
+      builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+        if (snapshot.connectionState == ConnectionState.done &&
+            cameraController2 != null &&
+            cameraController2!.value.isInitialized) {
+          return Scaffold(
+            body: Stack(
+              children: [
+                CameraPreview(cameraController2!),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      direction = direction == 0 ? 1 : 0;
+                      initializeCamera();
+                    });
+                  },
+                  child: buttonFlip(Icons.flip_camera_ios_outlined, Alignment.bottomLeft),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return const MyHomePageV();
+                        },
+                      ),
+                    );
+                  },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: Image.asset('assets/images/decline.png',
+                          height: 80, width: 80),
+                      ),
+                    ],
                   ),
-                );
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Center(
-                    child: Image.asset('assets/images/decline.png',
-                        height: 80, width: 80),
-                  ),
-                ],
-              ),
+                ),
+                GestureDetector(
+                  child:
+                      buttonMute(Icons.mic_off, Alignment.bottomRight),
+                ),
+              ],
             ),
-            GestureDetector(
-              child:
-                  buttonMute(Icons.mic_off, Alignment.bottomRight),
-            ),
-          ],
-        ),
-      );
-    } else {
-      return const SizedBox();
-    }
+          );
+        } else {
+          return const SizedBox();
+        }
+      },
+    );
   }
 
   Widget buttonFlip(IconData icon, Alignment alignment) {
