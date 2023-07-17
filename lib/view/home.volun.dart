@@ -29,12 +29,12 @@ class HomeVolun extends StatelessWidget {
       body: Stack(children: <Widget>[
         Positioned(
           left: 75,
-          top: 20,
+          top: 10,
           width: 250,
-          height: 95,
+          height: 90,
           child: Container(
             width: 250,
-            height: 95,
+            height: 90,
             decoration: const BoxDecoration(
               color: Colors.white,
             ),
@@ -42,7 +42,7 @@ class HomeVolun extends StatelessWidget {
         ),
         const Positioned(
           left: 140,
-          top: 30,
+          top: 20,
             child: Text(
           'Albert Suhargo',
           style: TextStyle(
@@ -50,14 +50,14 @@ class HomeVolun extends StatelessWidget {
         )),
         const Positioned(
           left: 125,
-          top: 55,
+          top: 45,
             child: Text(
           'member since Apr 2023',
           style: TextStyle(fontSize: 14, color: Colors.black),
         )),
         const Positioned(
           left: 170,
-          top: 80,
+          top: 70,
             child: Text(
           'Indonesia',
           style: TextStyle(
@@ -67,7 +67,7 @@ class HomeVolun extends StatelessWidget {
         )),
         const Positioned(
           left: 100,
-          top: 130,
+          top: 105,
             child: Text(
           'You will receive a notification \nwhen someone needs your help.',
           textAlign: TextAlign.center,
