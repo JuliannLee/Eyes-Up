@@ -79,7 +79,9 @@ class _otpScreen extends State<otpScreen> {
 class OtpInput extends StatelessWidget {
   final TextEditingController controller;
   final bool autoFocus;
-  const OtpInput(this.controller, this.autoFocus, {Key? key}) : super(key: key);
+
+  const OtpInput(this.controller, this.autoFocus, {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -98,6 +100,14 @@ class OtpInput extends StatelessWidget {
             counterText: '',
             hintStyle: TextStyle(color: Colors.black, fontSize: 20.0)),
         onChanged: (value) {
+          if (value.isNotEmpty) {
+            // Check if the entered value is a number from 1 to 9
+            final int? digit = int.tryParse(value);
+            if (digit == null || digit < 0 || digit > 9) {
+              controller.clear(); // Clear the invalid input
+              return;
+            }
+          }
           if (value.length == 1) {
             FocusScope.of(context).nextFocus();
           }

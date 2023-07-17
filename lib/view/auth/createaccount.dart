@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:p01/view/auth/addaccount.dart';
-import 'package:p01/view/auth/gmail.dart';
-// import 'package:p01/view/auth/gmail.dart';
+import 'package:p01/view/login.dart';
 import 'package:provider/provider.dart';
 import 'package:p01/providers/prov.dart';
 
@@ -281,7 +280,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const Gmail(),
+                                    builder: (context) => const Login(),
                                   ),
                                 );
                               }

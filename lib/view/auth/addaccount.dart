@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:p01/view/pickroles.dart';
 import 'package:p01/view/auth/createaccount.dart';
 import 'package:p01/view/auth/forgotpass.dart';
+import 'package:provider/provider.dart';
+import 'package:p01/providers/prov.dart';
 class AddAccount extends StatelessWidget {
   const AddAccount({Key? key}) : super(key: key);
 
@@ -148,20 +150,19 @@ class _LoginEmailState extends State<LoginEmail> {
                       child: Padding(
                         padding: const EdgeInsets.only(right: 10.0),
                         child: ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();
-                              // Navigate to another page or perform further actions
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const Password(),
-                                ),
-                              );
-                            }
-                          },
-                          child: const Text('Continue'),
-                        ),
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  _formKey.currentState!.save();
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => LoginPassword(emailController: _emailController),
+                                    ),
+                                  );
+                                }
+                              },
+                              child: const Text('Continue'),
+                            ),
                       ),
                     ),
                   ],
@@ -186,18 +187,11 @@ class _LoginEmailState extends State<LoginEmail> {
 
 
 
-class Password extends StatelessWidget {
-  const Password({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: LoginPassword(),
-    );
-  }
-}
 class LoginPassword extends StatefulWidget {
-  const LoginPassword({Key? key}) : super(key: key);
+  final TextEditingController emailController;
+
+  const LoginPassword({Key? key, required this.emailController})
+      : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
@@ -216,6 +210,7 @@ void _toggle() {
   
   @override
   Widget build(BuildContext context) {
+    final provData = Provider.of<Prov>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Center(
@@ -328,7 +323,12 @@ void _toggle() {
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
-                            // Navigate to another page or perform further actions
+                            const name = "Testing";
+                            final email = widget.emailController.text;
+                              provData.AddData = {
+                              "Name": name,
+                              "Email": widget.emailController.text,
+                              };
                             Navigator.push(
                               context,
                               MaterialPageRoute(
