@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:p01/utils/global.colors.dart';
 import 'package:p01/view/home.disa.dart';
 import 'package:p01/view/setting.dart';
 import 'package:p01/view/community.dart';
 import 'home.volun.dart';
-
+import 'package:audioplayers/audioplayers.dart';
 
 class MyHomePageV extends StatefulWidget {
-  const MyHomePageV({super.key});
+  const MyHomePageV({Key? key}) : super(key: key);
 
   @override
   State<MyHomePageV> createState() => _MyHomePageVState();
@@ -38,16 +37,12 @@ class _MyHomePageVState extends State<MyHomePageV> {
         body = Community();
         break;
       case 2:
-        body = Setting();
+        body = const Setting();
         break;
     }
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Eyes Up'),
-          backgroundColor: GlobalColors.mainColor,
-        ),
         body: body,
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
@@ -56,7 +51,7 @@ class _MyHomePageVState extends State<MyHomePageV> {
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.group),
+              icon: Icon(Icons.public),
               label: 'Community',
             ),
             BottomNavigationBarItem(
@@ -67,9 +62,9 @@ class _MyHomePageVState extends State<MyHomePageV> {
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,
           selectedItemColor:
-              Colors.black, // ubah warna ikon yang dipilih menjadi hitam
+              Colors.black, // change the selected icon color to black
           unselectedItemColor: Colors.black.withOpacity(
-              0.6), // ubah warna ikon yang tidak dipilih menjadi hitam transparan
+              0.6), // change the unselected icon color to transparent black
         ),
       ),
     );
@@ -77,7 +72,7 @@ class _MyHomePageVState extends State<MyHomePageV> {
 }
 
 class MyHomePageD extends StatefulWidget {
-  const MyHomePageD({super.key});
+  const MyHomePageD({Key? key}) : super(key: key);
 
   @override
   State<MyHomePageD> createState() => _MyHomePageDState();
@@ -91,10 +86,36 @@ class _MyHomePageDState extends State<MyHomePageD> {
     Text('Setting'),
   ];
 
-  void _onItemTapped(int index) {
+  late AudioPlayer audioPlayer;
+  bool isAudioPlaying = false;
+
+  @override
+  void initState() {
+    super.initState();
+    audioPlayer = AudioPlayer();
+  }
+
+  void _onItemTapped(int index) async {
     setState(() {
       _selectedIndex = index;
     });
+
+    if (index == 0) {
+      await audioPlayer.play(AssetSource('audio/disabled.mp3'));
+      isAudioPlaying = true;
+    } else {
+      // Stop audio when other pages are selected
+      if (isAudioPlaying) {
+        await audioPlayer.stop();
+        isAudioPlaying = false;
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    audioPlayer.dispose();
+    super.dispose();
   }
 
   @override
@@ -102,22 +123,18 @@ class _MyHomePageDState extends State<MyHomePageD> {
     Widget body = _widgetOptions.elementAt(_selectedIndex);
     switch (_selectedIndex) {
       case 0:
-        body = HomeDisa();
+        body = const HomeDisa();
         break;
       case 1:
         body = Community();
         break;
       case 2:
-        body = Setting();
+        body = const Setting();
         break;
     }
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Eyes Up'),
-          backgroundColor: GlobalColors.mainColor,
-        ),
         body: body,
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
@@ -126,7 +143,7 @@ class _MyHomePageDState extends State<MyHomePageD> {
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.group),
+              icon: Icon(Icons.public),
               label: 'Community',
             ),
             BottomNavigationBarItem(
@@ -137,9 +154,9 @@ class _MyHomePageDState extends State<MyHomePageD> {
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,
           selectedItemColor:
-              Colors.black, // ubah warna ikon yang dipilih menjadi hitam
+              Colors.black, // change the selected icon color to black
           unselectedItemColor: Colors.black.withOpacity(
-              0.6), // ubah warna ikon yang tidak dipilih menjadi hitam transparan
+              0.6), // change the unselected icon color to transparent black
         ),
       ),
     );

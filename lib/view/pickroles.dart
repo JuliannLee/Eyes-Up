@@ -1,8 +1,45 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:p01/view/widgets/button.global.dart';
+import 'package:audioplayers/audioplayers.dart';
 
-class Roles extends StatelessWidget {
-  const Roles({ Key? key }) : super(key: key);
+
+class Roles extends StatefulWidget {
+  const Roles({Key? key}) : super(key: key);
+
+  @override
+  _RolesState createState() => _RolesState();
+}
+
+class _RolesState extends State<Roles> {
+  final audioPlayer = AudioPlayer();
+  bool isAudioPlaying = true;
+
+  @override
+  void initState() {
+    super.initState();
+    playAudio();
+  }
+
+  void playAudio() async {
+    await audioPlayer.play(AssetSource('audio/pickroles.mp3'));
+  }
+
+  void stopAudio() {
+    if (isAudioPlaying) {
+      audioPlayer.stop();
+      setState(() {
+        isAudioPlaying = false;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    stopAudio();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,25 +52,18 @@ class Roles extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 20),
-                Center(
-                  child: Image.asset('assets/images/logo.png', height: 200, width: 200), 
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ButtonVolun(stopAudio: stopAudio),
+                    ButtonDisa(stopAudio: stopAudio),
+                  ],
                 ),
-                const SizedBox(height: 50),
-                
-                Column(
-                children: const [
-                ButtonGlobal6(),
-                SizedBox(height: 10),
-                ButtonGlobal7()
-              ]
-              ),
               ],
             ),
           ),
         ),
       ),
-  
     );
   }
 }

@@ -1,135 +1,116 @@
-import 'package:flutter/material.dart';
-import 'package:p01/utils/global.colors.dart';
-import 'package:p01/view/forgot.dart';
-import 'package:p01/view/register.dart';
-import 'package:p01/view/widgets/button.global.dart';
-import 'package:p01/view/widgets/social.login.dart';
-import 'package:p01/view/widgets/text.form.global.dart';
+// ignore_for_file: library_private_types_in_public_api
 
-class LoginView extends StatelessWidget {
-  LoginView({ Key? key }) : super(key: key);
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:p01/view/auth/gmail.dart';
+import 'package:audioplayers/audioplayers.dart';
+
+class Login extends StatelessWidget {
+  const Login({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: LoginView(),
+    );
+  }
+}
+
+class LoginView extends StatefulWidget {
+  const LoginView({Key? key}) : super(key: key);
+
+  @override
+  _LoginViewState createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> {
+  String isTapped = '';
+  late AudioPlayer audioPlayer;
+
+  @override
+  void initState() {
+    super.initState();
+    audioPlayer = AudioPlayer();
+    playAudio();
+  }
+
+  Future<void> playAudio() async {
+    await audioPlayer.play(AssetSource("audio/login.mp3"));
+  }
+
+  void showAccountDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const AlertDialog(
+          insetPadding: EdgeInsets.zero,
+          contentPadding: EdgeInsets.zero,
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          content: GmailView(),
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    audioPlayer.stop();
+    audioPlayer.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 20),
-                Center(
-                  child: Image.asset('assets/images/logo.png', height: 200, width: 200), 
-                ),
-                const SizedBox(height: 50),
-                const Text(
-                  'Login to your account',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text(
+              "LOGIN",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 35,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(300, 400),
+                backgroundColor: Colors.blue.shade800,
+                padding: const EdgeInsets.all(10),
+                textStyle: const TextStyle(fontSize: 14, color: Colors.white),
+              ),
+              onPressed: () {
+                audioPlayer
+                    .stop(); // Stop audio before switching to another page
+                showAccountDialog(context);
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const <Widget>[
+                  FaIcon(
+                    FontAwesomeIcons.envelope,
+                    size: 50,
                   ),
-                ),
-                const SizedBox(height: 15),
-
-                //email input
-                TextFormGlobal1(
-                  controller: emailController, 
-                  text: 'Email', 
-                  obscure: false, 
-                  textInputType: TextInputType.emailAddress,
-                ),
-
-                const SizedBox(height: 10),
-
-                //password input
-                TextFormGlobal2(
-                  controller: passwordController, 
-                  text: 'Password', 
-                  textInputType: TextInputType.text, 
-                  obscure: true,
-                ),
-
-                const SizedBox(height: 10),
-
-                Row(
-                children: [
-                const Text(
-                  'Forget your password? ',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context, 
-                      MaterialPageRoute(
-                        builder: (context){
-                          return ForgetView();
-                          },
-                        ),
-                      );
-                    },
-                    child: Text(
-                      'click here',
-                      style: TextStyle(
-                      color: GlobalColors.mainColor
+                  Text(" | ", style: TextStyle(fontSize: 60)),
+                  Text(
+                    "PRESS HERE",
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
-              ]
-              ),
-                const SizedBox(height: 25),
-                const ButtonGlobal(),
-                const SizedBox(height: 25),
-                const SocialLogin(),
-              ],
-            ),
-          ),
-        ),
-      ),
-      bottomNavigationBar: Container(
-        height: 50,
-        color: Colors.white,
-        alignment: Alignment.center,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Don\'t have an account? ',
-              style: TextStyle(
-                color: Colors.black
-              ),
-            ),
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                  context, 
-                  MaterialPageRoute(
-                    builder: (context){
-                      return RegisterView();
-                    },
-                  ),
-                );
-              },
-              child: Text(
-                'Register here',
-                style: TextStyle(
-                  color: GlobalColors.mainColor,
-                ),
+                ],
               ),
             ),
           ],
         ),
       ),
+      backgroundColor: Colors.blue.shade900,
     );
   }
 }

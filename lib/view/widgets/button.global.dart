@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:p01/utils/global.colors.dart';
 import 'package:p01/view/login.dart';
 import 'package:p01/view/pickroles.dart';
+import 'package:p01/view/vc.dart';
 import '../bottomnav.dart';
 
-class ButtonGlobal extends StatelessWidget {
-  const ButtonGlobal({ Key? key }) : super(key: key);
+
+class ButtonSign extends StatelessWidget {
+  const ButtonSign({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +49,8 @@ class ButtonGlobal extends StatelessWidget {
   }
 }
 
-class ButtonGlobal2 extends StatelessWidget {
-  const ButtonGlobal2({ Key? key }) : super(key: key);
+class ButtonRegis extends StatelessWidget {
+  const ButtonRegis({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +60,7 @@ class ButtonGlobal2 extends StatelessWidget {
           context, 
           MaterialPageRoute(
             builder: (context){
-            return LoginView();
+            return const LoginView();
             },
           ),
         );
@@ -88,8 +90,8 @@ class ButtonGlobal2 extends StatelessWidget {
   }
 }
 
-class ButtonGlobal3 extends StatelessWidget {
-  const ButtonGlobal3({ Key? key }) : super(key: key);
+class ButtonVerif extends StatelessWidget {
+  const ButtonVerif({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +101,7 @@ class ButtonGlobal3 extends StatelessWidget {
           context, 
           MaterialPageRoute(
             builder: (context){
-            return LoginView();
+            return const LoginView();
             },
           ),
         );
@@ -129,13 +131,16 @@ class ButtonGlobal3 extends StatelessWidget {
   }
 }
 
-class ButtonGlobal4 extends StatelessWidget {
-  const ButtonGlobal4({ Key? key }) : super(key: key);
+class ButtonVolun extends StatelessWidget {
+  final VoidCallback stopAudio;
+
+  const ButtonVolun({Key? key, required this.stopAudio}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        stopAudio(); // Stop the audio before navigating
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -147,11 +152,11 @@ class ButtonGlobal4 extends StatelessWidget {
       },
       child: Container(
         alignment: Alignment.center,
-        height: 40,
-        width: 70,
+        height: 695,
+        width: 180,
         padding: const EdgeInsets.symmetric(horizontal: 1),
         decoration: BoxDecoration(
-          color: GlobalColors.buttColor,
+          color: GlobalColors.volunColor,
           borderRadius: BorderRadius.circular(6),
           boxShadow: [
             BoxShadow(
@@ -161,10 +166,12 @@ class ButtonGlobal4 extends StatelessWidget {
           ]
         ),
         child: const Text(
-          'Cancel',
+          "I'd like to volunteer",
+          textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.w600,
+            fontSize: 32
           ),
         ),
       ),
@@ -172,99 +179,16 @@ class ButtonGlobal4 extends StatelessWidget {
   }
 }
 
-class ButtonGlobal5 extends StatelessWidget {
-  const ButtonGlobal5({ Key? key }) : super(key: key);
+class ButtonDisa extends StatelessWidget {
+  final VoidCallback stopAudio;
+
+  const ButtonDisa({Key? key, required this.stopAudio}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return const MyHomePageV();
-            },
-          ),
-        );
-      },
-      child: Container(
-        alignment: Alignment.center,
-        height: 40,
-        width: 70,
-        padding: const EdgeInsets.symmetric(horizontal: 1),
-        decoration: BoxDecoration(
-          color: GlobalColors.mainColor,
-          borderRadius: BorderRadius.circular(6),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-            )
-          ]
-        ),
-        child: const Text(
-          'Save',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class ButtonGlobal6 extends StatelessWidget {
-  const ButtonGlobal6({ Key? key }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return const MyHomePageV();
-            },
-          ),
-        );
-      },
-      child: Container(
-        alignment: Alignment.center,
-        height: 40,
-        width: 70,
-        padding: const EdgeInsets.symmetric(horizontal: 1),
-        decoration: BoxDecoration(
-          color: GlobalColors.mainColor,
-          borderRadius: BorderRadius.circular(6),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-            )
-          ]
-        ),
-        child: const Text(
-          'Volunteer',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class ButtonGlobal7 extends StatelessWidget {
-  const ButtonGlobal7({ Key? key }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
+        stopAudio(); // Stop the audio before navigating
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -276,26 +200,78 @@ class ButtonGlobal7 extends StatelessWidget {
       },
       child: Container(
         alignment: Alignment.center,
-        height: 40,
-        width: 70,
+        height: 695,
+        width: 180,
         padding: const EdgeInsets.symmetric(horizontal: 1),
         decoration: BoxDecoration(
-          color: GlobalColors.mainColor,
+          color: GlobalColors.disaColor,
           borderRadius: BorderRadius.circular(6),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
+              blurRadius: 1,
             )
           ]
         ),
         child: const Text(
-          'Disabled',
+          'I need visual assistance',
+          textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.w600,
+            fontSize: 32
           ),
         ),
+      ),
+    );
+  }
+}
+
+class ButtonVCdisa extends StatelessWidget {
+  const ButtonVCdisa({ Key? key }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return RawMaterialButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return const VCscreenDisa();
+            },
+          ),
+        );
+      },
+      shape: const CircleBorder(),
+      child: Image.asset('assets/images/telpon.png',
+      height: 280,
+      width: 280,
+      ),
+    );
+  }
+}
+
+class ButtonVCvolun extends StatelessWidget {
+  const ButtonVCvolun({ Key? key }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return RawMaterialButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return const VCscreenVolun();
+            },
+          ),
+        );
+      },
+      shape: const CircleBorder(),
+      child: Image.asset('assets/images/search.png',
+      height: 255,
+      width: 255,
       ),
     );
   }
