@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:p01/view/pickroles.dart';
-import 'package:random_string/random_string.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:p01/view/auth/addaccount.dart';
 import 'package:provider/provider.dart';
@@ -43,7 +42,7 @@ class _GmailViewState extends State<GmailView> {
           children: <Widget>[
             Container(
               width: 750,
-              height: 630,
+              height: 730,
               color: Colors.white,
               child: Column(
                 children: <Widget>[
@@ -92,7 +91,7 @@ class _GmailViewState extends State<GmailView> {
                                     subtitle:
                                         Text(provData.data[index]["Email"]),
                                     leading:
-                                        Icon(MaterialCommunityIcons.account,size: 40,),
+                                        const Icon(MaterialCommunityIcons.account,size: 40,),
                                   ),
                                 ],
                               ));

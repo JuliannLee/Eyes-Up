@@ -274,8 +274,8 @@ class _RegisterEmailState extends State<RegisterEmail> {
                                 final name = _nameController.text;
                                 final email = _emailController.text;
                                 provData.AddData = {
-                                "Name": _nameController.text,
-                                "Email": _emailController.text,
+                                "Name": name,
+                                "Email": email,
                               };
                                 Navigator.push(
                                   context,

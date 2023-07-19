@@ -12,7 +12,7 @@ class _EditProfileState extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
     // Fixed email value
-    final String fixedEmail = 'eyesup@gmail.com';
+    const String fixedEmail = 'eyesup@gmail.com';
     return Scaffold(
       appBar: AppBar(
         backgroundColor: GlobalColors.mainColor,

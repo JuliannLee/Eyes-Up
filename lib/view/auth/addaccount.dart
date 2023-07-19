@@ -327,7 +327,7 @@ void _toggle() {
                             final email = widget.emailController.text;
                               provData.AddData = {
                               "Name": name,
-                              "Email": widget.emailController.text,
+                              "Email": email,
                               };
                             Navigator.push(
                               context,
