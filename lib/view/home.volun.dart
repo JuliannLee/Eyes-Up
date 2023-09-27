@@ -84,11 +84,11 @@ class HomeVolun extends StatelessWidget {
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 60),
+              children: const [
+                SizedBox(height: 60),
                 ButtonVCvolun(),
-                const SizedBox(height: 20),
-                const Text(
+                SizedBox(height: 20),
+                Text(
                   'Click the button to start helping!',
                   style: TextStyle(
                       color: Color(0xFF707D93),

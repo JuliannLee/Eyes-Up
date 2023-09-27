@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:p01/view/home.disa.dart';
 import 'package:p01/view/setting.dart';
-import 'package:p01/view/community.dart';
+import 'package:p01/view/community.disa.dart';
+import 'package:p01/view/community.volun.dart';
 import 'home.volun.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -34,7 +35,7 @@ class _MyHomePageVState extends State<MyHomePageV> {
         body = HomeVolun();
         break;
       case 1:
-        body = Community();
+        body = CommunityVolu();
         break;
       case 2:
         body = const Setting();
@@ -126,7 +127,7 @@ class _MyHomePageDState extends State<MyHomePageD> {
         body = const HomeDisa();
         break;
       case 1:
-        body = Community();
+        body = CommunityDisa();
         break;
       case 2:
         body = const Setting();

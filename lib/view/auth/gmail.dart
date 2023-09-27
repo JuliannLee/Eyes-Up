@@ -42,7 +42,7 @@ class _GmailViewState extends State<GmailView> {
           children: <Widget>[
             Container(
               width: 750,
-              height: 730,
+              height: 710,
               color: Colors.white,
               child: Column(
                 children: <Widget>[
