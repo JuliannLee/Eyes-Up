@@ -112,6 +112,9 @@ Future<void> loadPostData() async {
       appBar: AppBar(
         title: Text('Community'),
         backgroundColor: Colors.blue,
+        actions: [
+          
+        ],
       ),
       body: posts.isEmpty
       ? Center(
