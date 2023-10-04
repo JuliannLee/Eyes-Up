@@ -112,8 +112,26 @@ Future<void> loadPostData() async {
       appBar: AppBar(
         title: Text('Community'),
         backgroundColor: Colors.blue,
-        actions: [
-          
+         actions: [
+          IconButton(
+            onPressed: () async {
+              final Map<String, dynamic>? returnedPostData = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Posting(),
+                ),
+              );
+
+              if (returnedPostData != null) {
+                setState(() {
+                  posts.add(returnedPostData);
+                });
+                savePostData(); // Save the updated posts list
+                loadPostData(); // Refresh the data
+              }
+            },
+            icon: const Icon(Icons.add),
+          ),
         ],
       ),
       body: posts.isEmpty
@@ -165,18 +183,17 @@ Future<void> loadPostData() async {
                       ),
                       Row(
                         children: [
-                          InkWell(
+                          Padding(padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),child:InkWell(
                             onTap: () {
-                              // Handle love icon tap here
-                              toggleLove(index); // Call the toggleLove method
+                              toggleLove(index); 
                             },
                             child: Icon(
-                              isLoved ? Icons.favorite : Icons.favorite_border, // Toggle icon based on isLoved state
-                              color: isLoved ? Colors.red : Colors.grey, // Toggle color based on isLoved state
+                              isLoved ? Icons.favorite : Icons.favorite_border, 
+                              color: isLoved ? Colors.red : Colors.grey, 
                             ),
-                          ),
-                          SizedBox(width: 8.0),
-                          Text(loveCount.toString()), // Display the love count
+                          ),),
+                          SizedBox(width: 5.0),
+                          Text(loveCount.toString()), 
                           SizedBox(width: 8.0),
                           Icon(
                             Icons.send,
@@ -200,6 +217,7 @@ Future<void> loadPostData() async {
                           padding: const EdgeInsets.fromLTRB(20, 8, 0, 0),
                           child: Align(alignment: Alignment.centerLeft,child:Text(description),)
                         ),
+                        SizedBox(height: 16.0),
                     ],
                   ),
                 ),
@@ -208,27 +226,6 @@ Future<void> loadPostData() async {
             return Container();
           },
         ),
-
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final Map<String, dynamic>? returnedPostData = await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Posting(),
-            ),
-          );
-
-          if (returnedPostData != null) {
-            setState(() {
-              posts.add(returnedPostData);
-            });
-            savePostData(); // Save the updated posts list
-            loadPostData(); // Refresh the data
-          }
-        },
-        child: Icon(Icons.add),
-        backgroundColor: Colors.blue,
-      ),
     );
   }
 }
@@ -244,11 +241,11 @@ class Posting extends StatefulWidget {
 class _PostingState extends State<Posting> {
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  List<File> selectedImages = []; // Store a list of selected images as File
+  List<File> selectedImages = [];
 
   Future<void> _selectImages() async {
     final imagePicker = ImagePicker();
-    final pickedImages = await imagePicker.pickMultiImage(); // No need to specify source
+    final pickedImages = await imagePicker.pickMultiImage();
 
     if (pickedImages != null) {
       setState(() {
@@ -304,25 +301,42 @@ class _PostingState extends State<Posting> {
             TextFormField(
               controller: descriptionController,
               decoration: InputDecoration(labelText: 'Description'),
-              maxLines: 2,
+              maxLines: 1,
             ),
             SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () {
                 final title = titleController.text;
                 final description = descriptionController.text;
-
-                final postMap = {
-                'images': selectedImages.map((image) => image.path).toList(),
-                'title': title,
-                'description': description,
-                };
-                Navigator.pop(context, postMap);
-                 // Pass postMap back to the previous screen
+                if (selectedImages.isNotEmpty && title.isNotEmpty) {
+                  final postMap = {
+                    'images': selectedImages.map((image) => image.path).toList(),
+                    'title': title,
+                    'description': description,
+                  };
+                  Navigator.pop(context, postMap);
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text('Error'),
+                        content: Text('Please select at least one image and provide a title.'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text('OK'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
               },
               child: Text('Create Post'),
             ),
-
           ],
         ),
       ),
