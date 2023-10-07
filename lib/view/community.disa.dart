@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -45,7 +47,7 @@ class _CommunityDisaState extends State<CommunityDisa> {
         Container(
           width: 10,
           height: 10,
-          margin: EdgeInsets.symmetric(horizontal: 4),
+          margin: const EdgeInsets.symmetric(horizontal: 4),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: i == currentIndex ? Colors.blue : Colors.grey,
@@ -89,11 +91,11 @@ class _CommunityDisaState extends State<CommunityDisa> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Community Disa'),
+        title: const Text('Community Disa'),
         backgroundColor: Colors.blue,
       ),
       body: posts.isEmpty
-          ? Center(
+          ? const Center(
               child: Text(
                 'No posts to display',
                 style: TextStyle(
@@ -138,7 +140,7 @@ class _CommunityDisaState extends State<CommunityDisa> {
                               return Image.file(File(imagePath));
                             }).toList(),
                           ),
-                          SizedBox(height: 8.0),
+                          const SizedBox(height: 8.0),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: _buildImageBubbles(
@@ -162,10 +164,10 @@ class _CommunityDisaState extends State<CommunityDisa> {
                                   ),
                                 ),
                               ),
-                              SizedBox(width: 5.0),
+                              const SizedBox(width: 5.0),
                               Text(loveCount.toString()),
-                              SizedBox(width: 8.0),
-                              Icon(
+                              const SizedBox(width: 8.0),
+                              const Icon(
                                 Icons.send,
                                 color: Colors.blue,
                               ),
@@ -178,7 +180,7 @@ class _CommunityDisaState extends State<CommunityDisa> {
                                   alignment: Alignment.centerLeft,
                                   child: Text(
                                     title,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -191,7 +193,7 @@ class _CommunityDisaState extends State<CommunityDisa> {
                                   alignment: Alignment.centerLeft,
                                   child: Text(description),
                                 )),
-                          SizedBox(height: 16.0),
+                          const SizedBox(height: 16.0),
                         ],
                       ),
                     ),

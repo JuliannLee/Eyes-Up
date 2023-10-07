@@ -1,7 +1,8 @@
+// ignore_for_file: library_private_types_in_public_api, unnecessary_null_comparison
+
 import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/routes/default_transitions.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -94,7 +95,7 @@ Future<void> loadPostData() async {
       Container(
         width: 10,
         height: 10,
-        margin: EdgeInsets.symmetric(horizontal: 4),
+        margin: const EdgeInsets.symmetric(horizontal: 4),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: i == currentIndex ? Colors.blue : Colors.grey,
@@ -110,7 +111,7 @@ Future<void> loadPostData() async {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Community'),
+        title: const Text('Community'),
         backgroundColor: Colors.blue,
          actions: [
           IconButton(
@@ -118,7 +119,7 @@ Future<void> loadPostData() async {
               final Map<String, dynamic>? returnedPostData = await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Posting(),
+                  builder: (context) => const Posting(),
                 ),
               );
 
@@ -135,7 +136,7 @@ Future<void> loadPostData() async {
         ],
       ),
       body: posts.isEmpty
-      ? Center(
+      ? const Center(
           child: Text(
             'No posts to display',
             style: TextStyle(
@@ -176,7 +177,7 @@ Future<void> loadPostData() async {
                           return Image.file(File(imagePath));
                         }).toList(),
                       ),
-                      SizedBox(height: 8.0),
+                      const SizedBox(height: 8.0),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: _buildImageBubbles(currentIndexMap[index] ?? 0, images.length), // Use a default value of 0 if currentIndexMap[index] is null
@@ -192,10 +193,10 @@ Future<void> loadPostData() async {
                               color: isLoved ? Colors.red : Colors.grey, 
                             ),
                           ),),
-                          SizedBox(width: 5.0),
+                          const SizedBox(width: 5.0),
                           Text(loveCount.toString()), 
-                          SizedBox(width: 8.0),
-                          Icon(
+                          const SizedBox(width: 8.0),
+                          const Icon(
                             Icons.send,
                             color: Colors.blue,
                           ),
@@ -206,7 +207,7 @@ Future<void> loadPostData() async {
                           padding: const EdgeInsets.fromLTRB(20, 8, 0, 0),
                           child: Align(alignment: Alignment.centerLeft,child:Text(
                             title,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
@@ -217,7 +218,7 @@ Future<void> loadPostData() async {
                           padding: const EdgeInsets.fromLTRB(20, 8, 0, 0),
                           child: Align(alignment: Alignment.centerLeft,child:Text(description),)
                         ),
-                        SizedBox(height: 16.0),
+                        const SizedBox(height: 16.0),
                     ],
                   ),
                 ),
@@ -259,7 +260,7 @@ class _PostingState extends State<Posting> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('Post'),
+        title: const Text('Post'),
         backgroundColor: Colors.blue,
       ),
       body: Padding(
@@ -272,7 +273,7 @@ class _PostingState extends State<Posting> {
             (image) => Container(
               width: 100.0,
               height: 100.0,
-              margin: EdgeInsets.all(8.0),
+              margin: const EdgeInsets.all(8.0),
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.black),
               ),
@@ -289,21 +290,21 @@ class _PostingState extends State<Posting> {
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.black),
               ),
-              child: Icon(Icons.add_a_photo, size: 50.0),
+              child: const Icon(Icons.add_a_photo, size: 50.0),
             ),
           ),
-          SizedBox(height: 16.0),
+          const SizedBox(height: 16.0),
             TextFormField(
               controller: titleController,
-              decoration: InputDecoration(labelText: 'Title'),
+              decoration: const InputDecoration(labelText: 'Title'),
             ),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             TextFormField(
               controller: descriptionController,
-              decoration: InputDecoration(labelText: 'Description'),
+              decoration: const InputDecoration(labelText: 'Description'),
               maxLines: 1,
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () {
                 final title = titleController.text;
@@ -320,14 +321,14 @@ class _PostingState extends State<Posting> {
                     context: context,
                     builder: (context) {
                       return AlertDialog(
-                        title: Text('Error'),
-                        content: Text('Please select at least one image and provide a title.'),
+                        title: const Text('Error'),
+                        content: const Text('Please select at least one image and provide a title.'),
                         actions: [
                           TextButton(
                             onPressed: () {
                               Navigator.pop(context);
                             },
-                            child: Text('OK'),
+                            child: const Text('OK'),
                           ),
                         ],
                       );
@@ -335,7 +336,7 @@ class _PostingState extends State<Posting> {
                   );
                 }
               },
-              child: Text('Create Post'),
+              child: const Text('Create Post'),
             ),
           ],
         ),

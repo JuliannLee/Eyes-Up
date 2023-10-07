@@ -35,7 +35,7 @@ class _MyHomePageVState extends State<MyHomePageV> {
         body = HomeVolun();
         break;
       case 1:
-        body = CommunityVolu();
+        body = const CommunityVolu();
         break;
       case 2:
         body = const Setting();
@@ -127,7 +127,7 @@ class _MyHomePageDState extends State<MyHomePageD> {
         body = const HomeDisa();
         break;
       case 1:
-        body = CommunityDisa();
+        body = const CommunityDisa();
         break;
       case 2:
         body = const Setting();
