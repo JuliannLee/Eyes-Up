@@ -1,37 +1,29 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:p01/view/auth/gmail.dart';
 import 'package:audioplayers/audioplayers.dart';
-
-class Login extends StatelessWidget {
-  const Login({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: LoginView(),
-    );
-  }
-}
+import 'package:p01/view/auth/gmail.dart';
+import 'package:p01/providers/shared.dart';
+import 'package:p01/view/pickroles.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'pickroles.dart';
+import 'package:get/get.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
 
   @override
-  _LoginViewState createState() => _LoginViewState();
+  _LoginState createState() => _LoginState();
 }
 
-class _LoginViewState extends State<LoginView> {
-  String isTapped = '';
+class _LoginState extends State<LoginView> {
   late AudioPlayer audioPlayer;
 
   @override
   void initState() {
-    super.initState();
+    checkLoginStatus(); // Check login status when the widget is initialized
     audioPlayer = AudioPlayer();
     playAudio();
+    super.initState();
   }
 
   Future<void> playAudio() async {
@@ -57,6 +49,23 @@ class _LoginViewState extends State<LoginView> {
     audioPlayer.stop();
     audioPlayer.dispose();
     super.dispose();
+  }
+
+  Future<void> checkLoginStatus() async {
+  final isLoggedIn = await login.isLoggedIn(); // Use the login class to check the login status
+  if (isLoggedIn) {
+    // If the user is already logged in, navigate to the HomeDisa page
+    _navigateToHomeDisa(context);
+  }
+}
+
+
+  void _navigateToHomeDisa(BuildContext context) {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => Roles()),
+      (Route<dynamic> route) => false,
+    );
   }
 
   @override
@@ -85,8 +94,7 @@ class _LoginViewState extends State<LoginView> {
                 textStyle: const TextStyle(fontSize: 14, color: Colors.white),
               ),
               onPressed: () {
-                audioPlayer
-                    .stop(); // Stop audio before switching to another page
+                audioPlayer.stop();
                 showAccountDialog(context);
               },
               child: Row(

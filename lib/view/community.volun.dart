@@ -33,6 +33,13 @@ class _CommunityVoluState extends State<CommunityVolu> {
     savePostData(); // Save the updated posts list
   }
 
+  void deletePost(int postIndex) {
+  setState(() {
+    posts.removeAt(postIndex); // Remove the post at the specified index
+  });
+  savePostData(); // Save the updated posts list
+}
+
   @override
 void initState() {
   super.initState();
@@ -107,6 +114,27 @@ Future<void> loadPostData() async {
   return bubbles;
 }
 
+Future<void> editPost(int postIndex) async {
+  final Map<String, dynamic>? editedPostData = await Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => EditPost(
+        initialTitle: posts[postIndex]['title'],
+        initialDescription: posts[postIndex]['description'],
+      ),
+    ),
+  );
+
+  if (editedPostData != null) {
+    setState(() {
+      // Update the post data with edited values
+      posts[postIndex]['title'] = editedPostData['title'];
+      posts[postIndex]['description'] = editedPostData['description'];
+    });
+    savePostData(); // Save the updated posts list
+  }
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -154,12 +182,37 @@ Future<void> loadPostData() async {
             final description = post['description'];
             final bool isLoved = post['isLoved'] ?? false;
             final int loveCount = post['loveCount'] ?? 0;
+            final GlobalKey popupMenuKey = GlobalKey();
             if (images != null && images is List<String> && images.isNotEmpty) {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Card(
                   child: Column(
-                    children: [
+                    children: [Align(
+                alignment: Alignment.topRight,
+                child: PopupMenuButton<String>(
+                  key: popupMenuKey,
+                  onSelected: (value) {
+                    if (value == 'edit') {
+                      editPost(index);
+                    } else if (value == 'delete') {
+                      deletePost(index);
+                    }
+                  },
+                  itemBuilder: (BuildContext context) {
+                    return <PopupMenuEntry<String>>[
+                      const PopupMenuItem<String>(
+                        value: 'edit',
+                        child: Text('Edit'),
+                      ),
+                      const PopupMenuItem<String>(
+                        value: 'delete',
+                        child: Text('Delete'),
+                      ),
+                    ];
+                  },
+                ),
+              ),
                       CarouselSlider(
                         options: CarouselOptions(
                           height: 200.0,
@@ -344,3 +397,78 @@ class _PostingState extends State<Posting> {
     );
   }
 }
+
+class EditPost extends StatefulWidget {
+  final String? initialTitle;
+  final String? initialDescription;
+
+  const EditPost({Key? key, this.initialTitle, this.initialDescription}) : super(key: key);
+
+  @override
+  _EditPostState createState() => _EditPostState();
+}
+
+class _EditPostState extends State<EditPost> {
+  late TextEditingController titleController;
+  late TextEditingController descriptionController;
+
+  @override
+  void initState() {
+    super.initState();
+    titleController = TextEditingController(text: widget.initialTitle);
+    descriptionController = TextEditingController(text: widget.initialDescription);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Edit Post'),
+        backgroundColor: Colors.blue,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: <Widget>[
+            TextFormField(
+              controller: titleController,
+              decoration: const InputDecoration(labelText: 'Title'),
+            ),
+            const SizedBox(height: 8.0),
+            TextFormField(
+              controller: descriptionController,
+              decoration: const InputDecoration(labelText: 'Description'),
+              maxLines: 1, // Adjust the number of lines as needed
+            ),
+            const SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: () {
+                // Get the edited title and description values
+                final editedTitle = titleController.text;
+                final editedDescription = descriptionController.text;
+
+                // Create a map with the edited values to pass back to the previous screen
+                final editedPostData = {
+                  'title': editedTitle,
+                  'description': editedDescription,
+                };
+
+                // Return the edited data to the previous screen
+                Navigator.pop(context, editedPostData);
+              },
+              child: const Text('Save Changes'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    descriptionController.dispose();
+    super.dispose();
+  }
+}
+

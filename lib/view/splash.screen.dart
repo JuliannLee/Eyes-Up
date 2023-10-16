@@ -26,7 +26,7 @@ class SplashView extends StatelessWidget {
         // Jika bukan pengguna pertama kali, arahkan ke halaman beranda atau yang sesuai
         // Misalnya: Get.to(const HomeScreen());
         await Future.delayed(const Duration(seconds: 2));
-        Get.to(const LoginView());
+        Get.to(() =>const LoginView());
       }
     }
 

@@ -280,7 +280,7 @@ class _RegisterEmailState extends State<RegisterEmail> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const Login(),
+                                    builder: (context) => const LoginView(),
                                   ),
                                 );
                               }

@@ -4,6 +4,7 @@ import 'package:p01/view/auth/createaccount.dart';
 import 'package:p01/view/auth/forgotpass.dart';
 import 'package:provider/provider.dart';
 import 'package:p01/providers/prov.dart';
+import 'package:p01/providers/shared.dart';
 class AddAccount extends StatelessWidget {
   const AddAccount({Key? key}) : super(key: key);
 
