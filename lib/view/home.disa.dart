@@ -38,22 +38,22 @@ class _HomeDisaState extends State<HomeDisa> {
     return Scaffold(
       backgroundColor: const Color(0xFFF0EFF4),
       appBar: AppBar(
-          backgroundColor: GlobalColors.mainColor,
-          title: Row(
-            children: [
-              Image.asset(
-                'assets/images/logo.png',
-                fit: BoxFit.contain,
-                height: 50,
-                width: 50,
-              ),
-              Container(
-                padding: const EdgeInsets.all(8),
-                child: const Text('Eyes Up'),
-              )
-            ],
-          ),
+        backgroundColor: GlobalColors.mainColor,
+        title: Row(
+          children: [
+            Image.asset(
+              'assets/images/logo.png',
+              fit: BoxFit.contain,
+              height: 50,
+              width: 50,
+            ),
+            Container(
+              padding: const EdgeInsets.all(8),
+              child: const Text('Eyes Up'),
+            )
+          ],
         ),
+      ),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Container(
