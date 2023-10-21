@@ -47,6 +47,7 @@ dependencies:
   image_picker: ^0.8.5+3
   carousel_slider: ^4.0.0
   http: 
+  uuid: ^3.0.5
   
   flutter_localizations:
     sdk: flutter

@@ -4,9 +4,6 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:p01/view/auth/gmail.dart';
 import 'package:p01/providers/shared.dart';
 import 'package:p01/view/pickroles.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'pickroles.dart';
-import 'package:get/get.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -16,18 +13,17 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginState extends State<LoginView> {
-  late AudioPlayer audioPlayer;
+ AudioPlayer? audioPlayer;
 
   @override
   void initState() {
-    checkLoginStatus(); // Check login status when the widget is initialized
-    audioPlayer = AudioPlayer();
-    playAudio();
-    super.initState();
-  }
+  super.initState();
+  playAudio();
+  checkLoginStatus();
+}
 
   Future<void> playAudio() async {
-    await audioPlayer.play(AssetSource("audio/login.mp3"));
+    await audioPlayer?.play(AssetSource("audio/login.mp3"));
   }
 
   void showAccountDialog(BuildContext context) {
@@ -46,8 +42,8 @@ class _LoginState extends State<LoginView> {
 
   @override
   void dispose() {
-    audioPlayer.stop();
-    audioPlayer.dispose();
+    audioPlayer?.stop();
+    audioPlayer?.dispose();
     super.dispose();
   }
 
@@ -56,6 +52,10 @@ class _LoginState extends State<LoginView> {
   if (isLoggedIn) {
     // If the user is already logged in, navigate to the HomeDisa page
     _navigateToHomeDisa(context);
+  }
+  else{
+    audioPlayer = AudioPlayer();
+    playAudio();
   }
 }
 
@@ -94,7 +94,7 @@ class _LoginState extends State<LoginView> {
                 textStyle: const TextStyle(fontSize: 14, color: Colors.white),
               ),
               onPressed: () {
-                audioPlayer.stop();
+                audioPlayer?.stop();
                 showAccountDialog(context);
               },
               child: Row(

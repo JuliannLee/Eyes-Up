@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:p01/view/home.disa.dart';
 import 'package:p01/view/setting.dart';
 import 'package:p01/view/community.disa.dart';
-import 'package:p01/view/community.volun.dart';
+import 'package:p01/view/komunitas_volun.dart/community.volun.dart';
 import 'home.volun.dart';
 import 'package:audioplayers/audioplayers.dart';
 

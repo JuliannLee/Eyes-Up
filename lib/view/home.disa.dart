@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:p01/view/widgets/button.global.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:p01/utils/global.colors.dart';
-import 'package:p01/providers/shared.dart';
 class HomeDisa extends StatefulWidget {
   const HomeDisa({Key? key}) : super(key: key);
 
