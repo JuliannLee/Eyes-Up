@@ -1,10 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 class Posting extends StatefulWidget {
-  final int postId; // Add postId parameter
-
-  const Posting({Key? key, required this.postId}) : super(key: key);
+  const Posting({Key? key}) : super(key: key);
 
   @override
   State<Posting> createState() => _PostingState();
@@ -14,6 +13,7 @@ class _PostingState extends State<Posting> {
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   List<File> selectedImages = [];
+  final uuid = Uuid();
 
   Future<void> _selectImages() async {
     final imagePicker = ImagePicker();
@@ -35,34 +35,34 @@ class _PostingState extends State<Posting> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-  children: <Widget>[
-    Row(
-      children: selectedImages
-          .map(
-            (image) => Container(
-              width: 100.0,
-              height: 100.0,
-              margin: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black),
-              ),
-              child: Image.file(image, fit: BoxFit.cover),
+          children: <Widget>[
+            Row(
+              children: selectedImages
+                  .map(
+                    (image) => Container(
+                      width: 100.0,
+                      height: 100.0,
+                      margin: const EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black),
+                      ),
+                      child: Image.file(image, fit: BoxFit.cover),
+                    ),
+                  )
+                  .toList(),
             ),
-          )
-          .toList(),
-          ),
-          InkWell(
-            onTap: _selectImages,
-            child: Container(
-              width: 100.0,
-              height: 100.0,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black),
+            InkWell(
+              onTap: _selectImages,
+              child: Container(
+                width: 100.0,
+                height: 100.0,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black),
+                ),
+                child: const Icon(Icons.add_a_photo, size: 50.0),
               ),
-              child: const Icon(Icons.add_a_photo, size: 50.0),
             ),
-          ),
-          const SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextFormField(
               controller: titleController,
               decoration: const InputDecoration(labelText: 'Title'),
@@ -75,43 +75,41 @@ class _PostingState extends State<Posting> {
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(
-            onPressed: () {
-              final title = titleController.text;
-              final description = descriptionController.text;
-              if (selectedImages.isNotEmpty && title.isNotEmpty) {
-                final postMap = {
-                  'id': widget.postId, // Include the 'id' field
-                  'images': selectedImages.map((image) => image.path).toList(),
-                  'title': title,
-                  'description': description,
-                };
-
-                // Create a List containing a single post Map
-                final postDataList = [postMap];
-
-                Navigator.pop(context, postDataList);
-              } else {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: const Text('Error'),
-                      content: const Text('Please select at least one image and provide a title.'),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('OK'),
-                        ),
-                      ],
-                    );
-                  },
-                );
-              }
-            },
-            child: const Text('Create Post'),
-          ),
+              onPressed: () {
+                final title = titleController.text;
+                final description = descriptionController.text;
+                if (selectedImages.isNotEmpty && title.isNotEmpty) {
+                  final postMap = {
+                    'id': uuid.v4(), // Generate a unique identifier
+                    'images': selectedImages.map((image) => image.path).toList(),
+                    'title': title,
+                    'description': description,
+                    'isLoved': false,
+                    'loveCount': 0,
+                  };
+                  Navigator.pop(context, postMap);
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text('Error'),
+                        content: const Text('Please select at least one image and provide a title.'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
+              },
+              child: const Text('Create Post'),
+            ),
           ],
         ),
       ),

@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'postingvolun.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:http/http.dart' as http;
-import 'package:uuid/uuid.dart';
+import 'editvolun.dart';
 
 
 class CommunityVolu extends StatefulWidget {
@@ -19,44 +19,50 @@ class _CommunityVoluState extends State<CommunityVolu> {
   List<Map<String, dynamic>> postsDataList = [];
   Map<int, int> currentIndexMap = {};
 
-// Future<void> updatePostData(Map<String, dynamic> updatedData) async {
-//   final response = await http.put(
-//     Uri.parse('http://192.168.0.100:8000/data.json/${updatedData['id']}'), // Use the post's ID in the URL
-//     body: json.encode(updatedData),
-//     headers: {'Content-Type': 'application/json'},
-//   );
+void toggleLove(int postIndex) {
+  setState(() {
+    final postingan = postsDataList[postIndex];
+    if (postingan['isLoved'] == null || !postingan['isLoved']) {
+      // If not loved or null, mark as loved and increase the count
+      postingan['isLoved'] = true;
+      postingan['loveCount'] = (postingan['loveCount'] ?? 0) + 1;
+    } else {
+      // If loved, unmark and decrease the count
+      postingan['isLoved'] = false;
+      postingan['loveCount'] = (postingan['loveCount'] ?? 0) - 1;
+    }
 
-//   if (response.statusCode == 200) {
-//     // Data updated successfully
-//   } else {
-//     // Handle the error or show an error message
-//   }
-// }
-
-// void toggleLove(int postIndex) {
-//   setState(() {
-//     final postingan = postsDataList[postIndex];
-//     if (postingan['isLoved'] == null || !postingan['isLoved']) {
-//       // If not loved or null, mark as loved and increase the count
-//       postingan['isLoved'] = true;
-//       postingan['loveCount'] = (postingan['loveCount'] ?? 0) + 1;
-//     } else {
-//       // If loved, unmark and decrease the count
-//       postingan['isLoved'] = false;
-//       postingan['loveCount'] = (postingan['loveCount'] ?? 0) - 1;
-//     }
-
-//     // Call the function to update the data on the server
-//     updatePostData(postingan);
-//   });
-// }
-
+    // Call the function to update the data on the server
+    updatePostData(postingan);
+  });
+}
 
   @override
   void initState() {
     super.initState();
     loadPostData();
   }
+
+  Future<void> savePostData() async {
+  final List<Map<String, dynamic>> dataToSave = posts.map((post) {
+    if (post['image'] != null && post['image'] is File) {
+      post['image'] = (post['image'] as File).path;
+    }
+    return post;
+  }).toList();
+  final jsonData = json.encode(dataToSave);
+  final response = await http.post(
+    Uri.parse('http://192.168.0.100:8000/data.json'),
+    body: jsonData,
+    headers: {'Content-Type': 'application/json'},
+  );
+  posts.clear();
+  if (response.statusCode == 200) {
+    // Data saved successfully
+  } else {
+    // Handle the error or show an error message
+  }
+}
 
   Future<void> loadPostData() async {
     final response = await http.get(Uri.parse('http://192.168.0.100:8000/data.json'));
@@ -79,24 +85,54 @@ class _CommunityVoluState extends State<CommunityVolu> {
     }
   }
 
+Future<void> editPost(int postIndex) async {
+  final Map<String, dynamic>? editedPostData = await Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => EditPost(
+        initialTitle: postsDataList[postIndex]['title'],
+        initialDescription: postsDataList[postIndex]['description'],
+      ),
+    ),
+  );
 
+  if (editedPostData != null) {
+    setState(() {
+      // Update the post data with edited values
+      postsDataList[postIndex]['title'] = editedPostData['title'];
+      postsDataList[postIndex]['description'] = editedPostData['description'];
+    });
+    final postingan = postsDataList[postIndex];
+    updatePostData(postingan); // Save the updated posts list
+  }
+}
 
-  Future<void> savePostData() async {
-  final List<Map<String, dynamic>> dataToSave = posts.map((post) {
-    if (post['image'] != null && post['image'] is File) {
-      post['image'] = (post['image'] as File).path;
-    }
-    return post;
-  }).toList();
-  final jsonData = json.encode(dataToSave);
-  final response = await http.post(
-    Uri.parse('http://192.168.0.100:8000/data.json'),
-    body: jsonData,
+Future<void> updatePostData(Map<String, dynamic> updatedData) async {
+  final response = await http.put(
+    Uri.parse('http://192.168.0.100:8000/data.json/${updatedData['id']}'),
+    body: json.encode(updatedData), // Wrap updatedData in a List
     headers: {'Content-Type': 'application/json'},
   );
-  posts.clear();
+
   if (response.statusCode == 200) {
-    // Data saved successfully
+    // Data updated successfully
+  } else {
+    // Handle the error or show an error message
+  }
+}
+
+Future<void> deletePost(int postIndex) async {
+  final deletedata = postsDataList[postIndex];
+
+  final response = await http.delete(
+    Uri.parse('http://192.168.0.100:8000/data.json/${deletedata['id']}'), // Use the post's ID in the URL
+  );
+
+  if (response.statusCode == 200) {
+    setState(() {
+      postsDataList.removeAt(postIndex);
+    });
+    // You might want to show a success message or update the UI accordingly.
   } else {
     // Handle the error or show an error message
   }
@@ -125,6 +161,7 @@ class _CommunityVoluState extends State<CommunityVolu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('Community'),
         backgroundColor: Colors.blue,
@@ -150,7 +187,7 @@ class _CommunityVoluState extends State<CommunityVolu> {
           ),
         ],
       ),
-      body: postsDataList.isEmpty
+      body:postsDataList.isEmpty
           ? const Center(
               child: Text(
                 'No posts to display',
@@ -179,9 +216,9 @@ class _CommunityVoluState extends State<CommunityVolu> {
                             child: PopupMenuButton<String>(
                               onSelected: (value) {
                                 if (value == 'edit') {
-                                  // editPost(index);
+                                  editPost(index);
                                 } else if (value == 'delete') {
-                                  // deletePost(index);
+                                  deletePost(index);
                                 }
                               },
                               itemBuilder: (BuildContext context) {
@@ -226,7 +263,7 @@ class _CommunityVoluState extends State<CommunityVolu> {
                                 padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
                                 child: InkWell(
                                   onTap: () {
-                                    // toggleLove(index);
+                                    toggleLove(index);
                                   },
                                   child: Icon(
                                     isLoved ? Icons.favorite : Icons.favorite_border,
@@ -276,117 +313,4 @@ class _CommunityVoluState extends State<CommunityVolu> {
   }
 }
 
-class Posting extends StatefulWidget {
-  const Posting({Key? key}) : super(key: key);
 
-  @override
-  State<Posting> createState() => _PostingState();
-}
-
-class _PostingState extends State<Posting> {
-  TextEditingController titleController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
-  List<File> selectedImages = [];
-  final uuid = Uuid();
-
-  Future<void> _selectImages() async {
-    final imagePicker = ImagePicker();
-    final pickedImages = await imagePicker.pickMultiImage();
-
-    setState(() {
-      selectedImages.addAll(pickedImages.map((image) => File(image.path)));
-    });
-    }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: const Text('Post'),
-        backgroundColor: Colors.blue,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: <Widget>[
-            Row(
-              children: selectedImages
-                  .map(
-                    (image) => Container(
-                      width: 100.0,
-                      height: 100.0,
-                      margin: const EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black),
-                      ),
-                      child: Image.file(image, fit: BoxFit.cover),
-                    ),
-                  )
-                  .toList(),
-            ),
-            InkWell(
-              onTap: _selectImages,
-              child: Container(
-                width: 100.0,
-                height: 100.0,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black),
-                ),
-                child: const Icon(Icons.add_a_photo, size: 50.0),
-              ),
-            ),
-            const SizedBox(height: 16.0),
-            TextFormField(
-              controller: titleController,
-              decoration: const InputDecoration(labelText: 'Title'),
-            ),
-            const SizedBox(height: 8.0),
-            TextFormField(
-              controller: descriptionController,
-              decoration: const InputDecoration(labelText: 'Description'),
-              maxLines: 1,
-            ),
-            const SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: () {
-                final title = titleController.text;
-                final description = descriptionController.text;
-                if (selectedImages.isNotEmpty && title.isNotEmpty) {
-                  final postMap = {
-                    'id': uuid.v4(), // Generate a unique identifier
-                    'images': selectedImages.map((image) => image.path).toList(),
-                    'title': title,
-                    'description': description,
-                    'isLoved': false,
-                    'loveCount': 0,
-                  };
-                  Navigator.pop(context, postMap);
-                } else {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: const Text('Error'),
-                        content: const Text('Please select at least one image and provide a title.'),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text('OK'),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                }
-              },
-              child: const Text('Create Post'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
