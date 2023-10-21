@@ -23,25 +23,15 @@ class LoginView extends StatefulWidget {
   _LoginViewState createState() => _LoginViewState();
 }
 
-<<<<<<< Updated upstream
 class _LoginViewState extends State<LoginView> {
   String isTapped = '';
   late AudioPlayer audioPlayer;
-=======
-class _LoginState extends State<LoginView> {
-  AudioPlayer? audioPlayer;
->>>>>>> Stashed changes
 
   @override
   void initState() {
     super.initState();
-<<<<<<< Updated upstream
     audioPlayer = AudioPlayer();
     playAudio();
-=======
-    playAudio();
-    checkLoginStatus();
->>>>>>> Stashed changes
   }
 
   Future<void> playAudio() async {
@@ -69,29 +59,6 @@ class _LoginState extends State<LoginView> {
     super.dispose();
   }
 
-<<<<<<< Updated upstream
-=======
-  Future<void> checkLoginStatus() async {
-    final isLoggedIn = await login
-        .isLoggedIn(); // Use the login class to check the login status
-    if (isLoggedIn) {
-      // If the user is already logged in, navigate to the HomeDisa page
-      _navigateToHomeDisa(context);
-    } else {
-      audioPlayer = AudioPlayer();
-      playAudio();
-    }
-  }
-
-  void _navigateToHomeDisa(BuildContext context) {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => Roles()),
-      (Route<dynamic> route) => false,
-    );
-  }
-
->>>>>>> Stashed changes
   @override
   Widget build(BuildContext context) {
     return Scaffold(
