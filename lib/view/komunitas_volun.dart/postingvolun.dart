@@ -2,7 +2,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
+<<<<<<< HEAD
 
+=======
+>>>>>>> 28fe7902979d7420c7676c0eccdebb7b3157ffd9
 class Posting extends StatefulWidget {
   const Posting({Key? key}) : super(key: key);
 
@@ -23,7 +26,11 @@ class _PostingState extends State<Posting> {
     setState(() {
       selectedImages.addAll(pickedImages.map((image) => File(image.path)));
     });
+<<<<<<< HEAD
   }
+=======
+    }
+>>>>>>> 28fe7902979d7420c7676c0eccdebb7b3157ffd9
 
   @override
   Widget build(BuildContext context) {
@@ -82,8 +89,12 @@ class _PostingState extends State<Posting> {
                 if (selectedImages.isNotEmpty && title.isNotEmpty) {
                   final postMap = {
                     'id': uuid.v4(), // Generate a unique identifier
+<<<<<<< HEAD
                     'images':
                         selectedImages.map((image) => image.path).toList(),
+=======
+                    'images': selectedImages.map((image) => image.path).toList(),
+>>>>>>> 28fe7902979d7420c7676c0eccdebb7b3157ffd9
                     'title': title,
                     'description': description,
                     'isLoved': false,
@@ -96,8 +107,12 @@ class _PostingState extends State<Posting> {
                     builder: (context) {
                       return AlertDialog(
                         title: const Text('Error'),
+<<<<<<< HEAD
                         content: const Text(
                             'Please select at least one image and provide a title.'),
+=======
+                        content: const Text('Please select at least one image and provide a title.'),
+>>>>>>> 28fe7902979d7420c7676c0eccdebb7b3157ffd9
                         actions: [
                           TextButton(
                             onPressed: () {
@@ -118,4 +133,8 @@ class _PostingState extends State<Posting> {
       ),
     );
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 28fe7902979d7420c7676c0eccdebb7b3157ffd9

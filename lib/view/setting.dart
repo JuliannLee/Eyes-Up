@@ -5,7 +5,7 @@ import 'package:language_picker/languages.dart';
 import 'package:p01/view/editprofile.dart';
 import 'package:p01/view/login.dart';
 import 'package:p01/view/about.dart';
-
+import 'package:p01/providers/shared.dart';
 class Setting extends StatefulWidget {
   const Setting({super.key});
 
@@ -191,6 +191,7 @@ class _SettingState extends State<Setting> {
                             minimumSize: const Size(110, 50),
                           ),
                           onPressed: () {
+                            login.setLoggedIn(false);
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(

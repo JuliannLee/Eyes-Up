@@ -44,11 +44,11 @@ dependencies:
   material_design_icons_flutter: ^7.0.7296
   random_string: ^2.3.1
   google_fonts: ^4.0.4
-  audioplayers: ^5.2.0
-  shared_preferences: ^2.2.1
   image_picker: ^0.8.5+3
   carousel_slider: ^4.0.0
-
+  http: 
+  uuid: ^3.0.5
+  
   flutter_localizations:
     sdk: flutter
   intl: any
@@ -56,6 +56,8 @@ dependencies:
   provider: ^6.0.5
   flutter_svg: ^1.1.6
   random_avatar: ^0.0.7
+  audioplayers: ^4.1.0
+  shared_preferences: ^2.2.0
 
 dev_dependencies:
   camera: ^0.10.5+2

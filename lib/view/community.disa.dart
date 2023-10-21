@@ -1,250 +1,207 @@
-// ignore_for_file: use_key_in_widget_constructors
+// ignore_for_file: library_private_types_in_public_api
 
+import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:p01/utils/global.colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
-class CommunityDisa extends StatelessWidget {
+class CommunityDisa extends StatefulWidget {
+  const CommunityDisa({Key? key}) : super(key: key);
+
+  @override
+  _CommunityDisaState createState() => _CommunityDisaState();
+}
+
+class _CommunityDisaState extends State<CommunityDisa> {
+  List<Map<String, dynamic>> posts = [];
+  Map<int, int> currentIndexMap = {}; // Initialize currentIndexMap
+
+  @override
+  void initState() {
+    super.initState();
+    loadPostData();
+  }
+
+  void toggleLove(int postIndex) {
+    setState(() {
+      if (posts[postIndex]['isLoved'] == null || !posts[postIndex]['isLoved']) {
+        // If not loved or null, mark as loved and increase the count
+        posts[postIndex]['isLoved'] = true;
+        posts[postIndex]['loveCount'] =
+            (posts[postIndex]['loveCount'] ?? 0) + 1;
+      } else {
+        // If loved, unmark and decrease the count
+        posts[postIndex]['isLoved'] = false;
+        posts[postIndex]['loveCount'] =
+            (posts[postIndex]['loveCount'] ?? 0) - 1;
+      }
+    });
+  }
+
+  List<Widget> _buildImageBubbles(int currentIndex, int totalImages) {
+    List<Widget> bubbles = [];
+
+    for (int i = 0; i < totalImages; i++) {
+      bubbles.add(
+        Container(
+          width: 10,
+          height: 10,
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: i == currentIndex ? Colors.blue : Colors.grey,
+          ),
+        ),
+      );
+    }
+
+    return bubbles;
+  }
+
+  Future<void> loadPostData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final jsonData = prefs.getString('posts');
+
+    if (jsonData != null) {
+      final List<dynamic> dataList = json.decode(jsonData);
+
+      final List<Map<String, dynamic>> loadedPosts = dataList
+          .map((data) {
+            if (data['images'] is List<dynamic>) {
+              data['images'] = data['images'].cast<String>();
+            }
+            return Map<String, dynamic>.from(data);
+          })
+          .cast<Map<String, dynamic>>()
+          .toList();
+
+      setState(() {
+        posts = loadedPosts;
+
+        // Initialize currentIndex values for each CarouselSlider
+        for (int i = 0; i < posts.length; i++) {
+          currentIndexMap[i] = 0;
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: GlobalColors.mainColor,
-          title: Container(
-            padding: const EdgeInsets.all(8),
-            child: const Text('Community'),
-          ),
-        ),
-        body: SingleChildScrollView(
-            child: SafeArea(
-                child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Card(
-                elevation: 7,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Stack(
-                          alignment: Alignment.bottomLeft,
-                          clipBehavior: Clip.antiAlias,
-                          children: [
-                            Container(
-                              width: double.infinity,
-                              height: 200,
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage('assets/images/thumb1.png'),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              width: double.infinity,
-                              height: 45,
-                              color: const Color.fromARGB(161, 217, 217, 217),
-                              child: const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  overflow: TextOverflow.ellipsis,
-                                  'Acara Volunteer di Kabupaten Deli Serdang',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                      color:
-                                          Color.fromARGB(255, 255, 255, 255)),
-                                ),
-                              ),
-                            )
-                          ],
-                        )),
-                    ListTile(
-                      leading: SizedBox(
-                        width: 100,
-                        child: Row(
-                          children: const [
-                            Icon(
-                              Icons.favorite,
-                              color: Colors.red,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text("25k"),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Icon(Icons.share),
-                          ],
-                        ),
-                      ),
-                      trailing: SizedBox(
-                          width: 155,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: const [
-                              Text("posted 2 hours ago"),
-                              Icon(Icons.access_time)
-                            ],
-                          )),
-                    )
-                  ],
+      appBar: AppBar(
+        title: const Text('Community Disa'),
+        backgroundColor: Colors.blue,
+      ),
+      body: posts.isEmpty
+          ? const Center(
+              child: Text(
+                'No posts to display',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Card(
-                elevation: 7,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Stack(
-                          alignment: Alignment.bottomLeft,
-                          clipBehavior: Clip.antiAlias,
-                          children: [
-                            Container(
-                              width: double.infinity,
-                              height: 200,
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage('assets/images/thumb2.png'),
-                                  fit: BoxFit.cover,
+            )
+          : ListView.builder(
+              itemCount: posts.length,
+              itemBuilder: (context, index) {
+                final post = posts[index];
+                final images = post['images'];
+                final title = post['title'];
+                final description = post['description'];
+                final bool isLoved = post['isLoved'] ?? false;
+                final int loveCount = post['loveCount'] ?? 0;
+                if (images != null &&
+                    images is List<String> &&
+                    images.isNotEmpty) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Card(
+                      child: Column(
+                        children: [
+                          CarouselSlider(
+                            options: CarouselOptions(
+                              height: 200.0,
+                              viewportFraction: 1.0,
+                              enableInfiniteScroll: false,
+                              initialPage: currentIndexMap[index] ??
+                                  0, // Use a default value of 0 if currentIndexMap[index] is null
+                              onPageChanged: (int imageIndex,
+                                  CarouselPageChangedReason reason) {
+                                setState(() {
+                                  // Update the current index for the specific set of images
+                                  currentIndexMap[index] = imageIndex;
+                                });
+                              },
+                            ),
+                            items: images.map((imagePath) {
+                              return Image.file(File(imagePath));
+                            }).toList(),
+                          ),
+                          const SizedBox(height: 8.0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: _buildImageBubbles(
+                                currentIndexMap[index] ?? 0,
+                                images
+                                    .length), // Use a default value of 0 if currentIndexMap[index] is null
+                          ),
+                          Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                                child: InkWell(
+                                  onTap: () {
+                                    toggleLove(index);
+                                  },
+                                  child: Icon(
+                                    isLoved
+                                        ? Icons.favorite
+                                        : Icons.favorite_border,
+                                    color: isLoved ? Colors.red : Colors.grey,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              width: double.infinity,
-                              height: 45,
-                              color: const Color.fromARGB(161, 217, 217, 217),
-                              child: const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  overflow: TextOverflow.ellipsis,
-                                  'Acara Volunteer di Kabupaten Deli Serdang',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                      color:
-                                          Color.fromARGB(255, 255, 255, 255)),
-                                ),
+                              const SizedBox(width: 5.0),
+                              Text(loveCount.toString()),
+                              const SizedBox(width: 8.0),
+                              const Icon(
+                                Icons.send,
+                                color: Colors.blue,
                               ),
-                            )
-                          ],
-                        )),
-                    ListTile(
-                      leading: SizedBox(
-                        width: 100,
-                        child: Row(
-                          children: const [
-                            Icon(Icons.favorite),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text("19k"),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Icon(Icons.share),
-                          ],
-                        ),
-                      ),
-                      trailing: SizedBox(
-                          width: 155,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: const [
-                              Text("posted 1 day ago"),
-                              Icon(Icons.access_time)
                             ],
-                          )),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Card(
-                elevation: 7,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Stack(
-                          alignment: Alignment.bottomLeft,
-                          clipBehavior: Clip.antiAlias,
-                          children: [
-                            Container(
-                              width: double.infinity,
-                              height: 200,
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage('assets/images/thumb3.png'),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              width: double.infinity,
-                              height: 45,
-                              color: const Color.fromARGB(161, 217, 217, 217),
-                              child: const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  overflow: TextOverflow.ellipsis,
-                                  'Acara Amal di Dallas, Amerika',
-                                  style: TextStyle(
+                          ),
+                          if (title != null && title.isNotEmpty)
+                            Padding(
+                                padding: const EdgeInsets.fromLTRB(20, 8, 0, 0),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    title,
+                                    style: const TextStyle(
+                                      fontSize: 18,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                      color:
-                                          Color.fromARGB(255, 255, 255, 255)),
-                                ),
-                              ),
-                            )
-                          ],
-                        )),
-                    ListTile(
-                      leading: SizedBox(
-                        width: 100,
-                        child: Row(
-                          children: const [
-                            Icon(Icons.favorite),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text("18k"),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Icon(Icons.share),
-                          ],
-                        ),
+                                    ),
+                                  ),
+                                )),
+                          if (description != null && description.isNotEmpty)
+                            Padding(
+                                padding: const EdgeInsets.fromLTRB(20, 8, 0, 0),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(description),
+                                )),
+                          const SizedBox(height: 16.0),
+                        ],
                       ),
-                      trailing: SizedBox(
-                          width: 155,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: const [
-                              Text("posted 1 day ago"),
-                              Icon(Icons.access_time)
-                            ],
-                          )),
-                    )
-                  ],
-                ),
-              ),
+                    ),
+                  );
+                }
+                return Container();
+              },
             ),
-          ],
-        ))));
+    );
   }
 }

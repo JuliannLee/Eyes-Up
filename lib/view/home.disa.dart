@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:p01/view/widgets/button.global.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:p01/utils/global.colors.dart';
-
 class HomeDisa extends StatefulWidget {
   const HomeDisa({Key? key}) : super(key: key);
 
@@ -13,7 +12,6 @@ class HomeDisa extends StatefulWidget {
 
 class _HomeDisaState extends State<HomeDisa> {
   final audioPlayer = AudioPlayer();
-
   @override
   void initState() {
     super.initState();
@@ -74,5 +72,4 @@ class _HomeDisaState extends State<HomeDisa> {
     );
   }
 }
-
 bool audioPlayed = false;
