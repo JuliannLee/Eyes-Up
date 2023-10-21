@@ -1,30 +1,26 @@
-<<<<<<< HEAD
 [
   [
     {
-      "id": "5f71b152-1807-423b-8d85-9e8efa519678",
+      "id": "b5c207f0-853d-475f-bd4d-84f8a9b5a433",
       "images": [
-        "/data/user/0/com.example.p01/cache/4c4d0a70-6a72-40ff-9afc-b8a9bdf8ec43/images.jpg"
+        "/data/user/0/com.example.p01/cache/5e7ca321-f868-4894-a506-c06b58dc4ae7/images (2).jpg"
       ],
-      "title": "Neko",
-      "description": "Nyan",
-      "isLoved": true,
-      "loveCount": 1
+      "title": "Dog",
+      "description": "Doggo",
+      "isLoved": false,
+      "loveCount": 0
     }
   ],
   [
     {
-      "id": "e74e8e59-7abd-4038-8424-597442d398bb",
+      "id": "3cc426a8-0a62-41ad-b5b6-3a2bc523dd64",
       "images": [
-        "/data/user/0/com.example.p01/cache/1b0e9041-3cfc-43c4-8372-97fa6fa65892/images (1).jpg"
+        "/data/user/0/com.example.p01/cache/5506f16e-5094-44a6-8913-d749a2414a05/images (2).jpg"
       ],
-      "title": "Pups",
-      "description": "Doggoss",
-      "isLoved": true,
-      "loveCount": 1
+      "title": "dog",
+      "description": "dog",
+      "isLoved": false,
+      "loveCount": 0
     }
   ]
 ]
-=======
-[]
->>>>>>> 28fe7902979d7420c7676c0eccdebb7b3157ffd9

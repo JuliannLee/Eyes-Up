@@ -1,10 +1,8 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:http/http.dart' as http;
 
 class CommunityDisa extends StatefulWidget {
   const CommunityDisa({Key? key}) : super(key: key);
@@ -15,7 +13,26 @@ class CommunityDisa extends StatefulWidget {
 
 class _CommunityDisaState extends State<CommunityDisa> {
   List<Map<String, dynamic>> posts = [];
-  Map<int, int> currentIndexMap = {}; // Initialize currentIndexMap
+  List<Map<String, dynamic>> postsDataList = [];
+  Map<int, int> currentIndexMap = {};
+
+  void toggleLove(int postIndex) {
+    setState(() {
+      final postingan = postsDataList[postIndex];
+      if (postingan['isLoved'] == null || !postingan['isLoved']) {
+        // If not loved or null, mark as loved and increase the count
+        postingan['isLoved'] = true;
+        postingan['loveCount'] = (postingan['loveCount'] ?? 0) + 1;
+      } else {
+        // If loved, unmark and decrease the count
+        postingan['isLoved'] = false;
+        postingan['loveCount'] = (postingan['loveCount'] ?? 0) - 1;
+      }
+
+      // Call the function to update the data on the server
+      updatePostData(postingan);
+    });
+  }
 
   @override
   void initState() {
@@ -23,20 +40,80 @@ class _CommunityDisaState extends State<CommunityDisa> {
     loadPostData();
   }
 
-  void toggleLove(int postIndex) {
-    setState(() {
-      if (posts[postIndex]['isLoved'] == null || !posts[postIndex]['isLoved']) {
-        // If not loved or null, mark as loved and increase the count
-        posts[postIndex]['isLoved'] = true;
-        posts[postIndex]['loveCount'] =
-            (posts[postIndex]['loveCount'] ?? 0) + 1;
-      } else {
-        // If loved, unmark and decrease the count
-        posts[postIndex]['isLoved'] = false;
-        posts[postIndex]['loveCount'] =
-            (posts[postIndex]['loveCount'] ?? 0) - 1;
+  Future<void> savePostData() async {
+    final List<Map<String, dynamic>> dataToSave = posts.map((post) {
+      if (post['image'] != null && post['image'] is File) {
+        post['image'] = (post['image'] as File).path;
       }
-    });
+      return post;
+    }).toList();
+    final jsonData = json.encode(dataToSave);
+    final response = await http.post(
+      Uri.parse(
+          'http://192.168.100.12:8000/data.json'), //harus pakai ip sendiri lewat ipconfig!!
+      body: jsonData,
+      headers: {'Content-Type': 'application/json'},
+    );
+    posts.clear();
+    if (response.statusCode == 200) {
+      print('Data saved successfully');
+    } else {
+      print('Error');
+    }
+  }
+
+  Future<void> loadPostData() async {
+    final response = await http.get(Uri.parse(
+        'http://192.168.100.12:8000/data.json')); //harus pakai ip sendiri lewat ipconfig!!
+    if (response.statusCode == 200) {
+      final List<dynamic> dataList = json.decode(response.body);
+      setState(() {
+        postsDataList.clear();
+        for (var data in dataList) {
+          for (var datas in data) {
+            postsDataList.add(datas);
+          }
+        }
+        for (int i = 0; i < dataList.length; i++) {
+          currentIndexMap[i] = 0;
+        }
+      });
+    } else {
+      print("HTTP request failed with status code: ${response.statusCode}");
+      // Handle the error or show an error message
+    }
+  }
+
+  Future<void> updatePostData(Map<String, dynamic> updatedData) async {
+    final response = await http.put(
+      Uri.parse('http://192.168.100.12:8000/data.json/${updatedData['id']}'),
+      body: json.encode(updatedData), // Wrap updatedData in a List
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      // Data updated successfully
+    } else {
+      // Handle the error or show an error message
+    }
+  }
+
+  Future<void> deletePost(int postIndex) async {
+    final deletedata = postsDataList[postIndex];
+
+    final response = await http.delete(
+      Uri.parse(
+          'http://192.168.100.12:8000/data.json/${deletedata['id']}'), // Use the post's ID in the URL
+    );
+
+    if (response.statusCode == 200) {
+      setState(() {
+        postsDataList.removeAt(postIndex);
+      });
+      // You might want to show a success message or update the UI accordingly.
+    } else {
+      // Handle the error or show an error message
+    }
   }
 
   List<Widget> _buildImageBubbles(int currentIndex, int totalImages) {
@@ -55,46 +132,18 @@ class _CommunityDisaState extends State<CommunityDisa> {
         ),
       );
     }
-
     return bubbles;
-  }
-
-  Future<void> loadPostData() async {
-    final prefs = await SharedPreferences.getInstance();
-    final jsonData = prefs.getString('posts');
-
-    if (jsonData != null) {
-      final List<dynamic> dataList = json.decode(jsonData);
-
-      final List<Map<String, dynamic>> loadedPosts = dataList
-          .map((data) {
-            if (data['images'] is List<dynamic>) {
-              data['images'] = data['images'].cast<String>();
-            }
-            return Map<String, dynamic>.from(data);
-          })
-          .cast<Map<String, dynamic>>()
-          .toList();
-
-      setState(() {
-        posts = loadedPosts;
-
-        // Initialize currentIndex values for each CarouselSlider
-        for (int i = 0; i < posts.length; i++) {
-          currentIndexMap[i] = 0;
-        }
-      });
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('Community Disa'),
+        title: const Text('Community'),
         backgroundColor: Colors.blue,
       ),
-      body: posts.isEmpty
+      body: postsDataList.isEmpty
           ? const Center(
               child: Text(
                 'No posts to display',
@@ -105,101 +154,96 @@ class _CommunityDisaState extends State<CommunityDisa> {
               ),
             )
           : ListView.builder(
-              itemCount: posts.length,
+              itemCount: postsDataList.length,
               itemBuilder: (context, index) {
-                final post = posts[index];
-                final images = post['images'];
-                final title = post['title'];
-                final description = post['description'];
-                final bool isLoved = post['isLoved'] ?? false;
-                final int loveCount = post['loveCount'] ?? 0;
-                if (images != null &&
-                    images is List<String> &&
-                    images.isNotEmpty) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                      child: Column(
-                        children: [
-                          CarouselSlider(
-                            options: CarouselOptions(
-                              height: 200.0,
-                              viewportFraction: 1.0,
-                              enableInfiniteScroll: false,
-                              initialPage: currentIndexMap[index] ??
-                                  0, // Use a default value of 0 if currentIndexMap[index] is null
-                              onPageChanged: (int imageIndex,
-                                  CarouselPageChangedReason reason) {
-                                setState(() {
-                                  // Update the current index for the specific set of images
-                                  currentIndexMap[index] = imageIndex;
-                                });
-                              },
-                            ),
-                            items: images.map((imagePath) {
-                              return Image.file(File(imagePath));
-                            }).toList(),
+                final postingan = postsDataList[index];
+                final images = postingan['images'];
+                final title = postingan['title'];
+                final description = postingan['description'];
+                final bool isLoved = postingan['isLoved'] ?? false;
+                final int loveCount = postingan['loveCount'] ?? 0;
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Card(
+                    child: Column(
+                      children: [
+                        CarouselSlider(
+                          options: CarouselOptions(
+                            height: 200.0,
+                            viewportFraction: 1.0,
+                            enableInfiniteScroll: false,
+                            initialPage: currentIndexMap[index] ??
+                                0, // Use a default value of 0 if currentIndexMap[index] is null
+                            onPageChanged: (int imageIndex,
+                                CarouselPageChangedReason reason) {
+                              setState(() {
+                                // Update the current index for the specific set of images
+                                currentIndexMap[index] = imageIndex;
+                              });
+                            },
                           ),
-                          const SizedBox(height: 8.0),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: _buildImageBubbles(
-                                currentIndexMap[index] ?? 0,
-                                images
-                                    .length), // Use a default value of 0 if currentIndexMap[index] is null
-                          ),
-                          Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-                                child: InkWell(
-                                  onTap: () {
-                                    toggleLove(index);
-                                  },
-                                  child: Icon(
-                                    isLoved
-                                        ? Icons.favorite
-                                        : Icons.favorite_border,
-                                    color: isLoved ? Colors.red : Colors.grey,
-                                  ),
+                          items: images.map<Widget>((imagePath) {
+                            return Image.file(File(imagePath));
+                          }).toList(),
+                        ),
+                        const SizedBox(height: 8.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: _buildImageBubbles(
+                              currentIndexMap[index] ?? 0, images.length),
+                        ),
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                              child: InkWell(
+                                onTap: () {
+                                  toggleLove(index);
+                                },
+                                child: Icon(
+                                  isLoved
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
+                                  color: isLoved ? Colors.red : Colors.grey,
                                 ),
                               ),
-                              const SizedBox(width: 5.0),
-                              Text(loveCount.toString()),
-                              const SizedBox(width: 8.0),
-                              const Icon(
-                                Icons.send,
-                                color: Colors.blue,
+                            ),
+                            const SizedBox(width: 5.0),
+                            Text(loveCount.toString()),
+                            const SizedBox(width: 8.0),
+                            const Icon(
+                              Icons.send,
+                              color: Colors.blue,
+                            ),
+                          ],
+                        ),
+                        if (title != null && title.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 8, 0, 0),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                title,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ],
+                            ),
                           ),
-                          if (title != null && title.isNotEmpty)
-                            Padding(
-                                padding: const EdgeInsets.fromLTRB(20, 8, 0, 0),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    title,
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                )),
-                          if (description != null && description.isNotEmpty)
-                            Padding(
-                                padding: const EdgeInsets.fromLTRB(20, 8, 0, 0),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(description),
-                                )),
-                          const SizedBox(height: 16.0),
-                        ],
-                      ),
+                        if (description != null && description.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 8, 0, 0),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(description),
+                            ),
+                          ),
+                        const SizedBox(height: 16.0),
+                      ],
                     ),
-                  );
-                }
-                return Container();
+                  ),
+                );
               },
             ),
     );
