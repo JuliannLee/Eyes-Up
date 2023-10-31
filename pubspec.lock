@@ -211,6 +211,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.9.3"
+<<<<<<< HEAD
   firebase_auth:
     dependency: "direct main"
     description:
@@ -232,6 +233,8 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.8.6"
+=======
+>>>>>>> dc790608ef4fcce05cca1e357996d47d238be23d
   firebase_core:
     dependency: "direct main"
     description:

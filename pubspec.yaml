@@ -59,7 +59,10 @@ dependencies:
   audioplayers: ^4.1.0
   shared_preferences: ^2.2.0
   firebase_core: ^2.21.0
+<<<<<<< HEAD
   firebase_auth: ^4.12.1
+=======
+>>>>>>> dc790608ef4fcce05cca1e357996d47d238be23d
 
 dev_dependencies:
   camera: ^0.10.5+2
