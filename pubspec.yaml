@@ -58,6 +58,7 @@ dependencies:
   random_avatar: ^0.0.7
   audioplayers: ^4.1.0
   shared_preferences: ^2.2.0
+  firebase_core: ^2.21.0
 
 dev_dependencies:
   camera: ^0.10.5+2

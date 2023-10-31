@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "369037690588",
+    "project_id": "eyes-up-6509a",
+    "storage_bucket": "eyes-up-6509a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:369037690588:android:8f9d7071597a8900a85619",
+        "android_client_info": {
+          "package_name": "com.example.p01"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbu4GRJPHSqNuhMmVVj6xn6k-sWyTmFLU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

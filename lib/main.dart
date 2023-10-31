@@ -4,8 +4,13 @@ import 'package:get/get_navigation/get_navigation.dart';
 import 'package:p01/view/splash.screen.dart';
 import 'package:provider/provider.dart';
 import 'package:p01/providers/prov.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
