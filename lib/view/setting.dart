@@ -6,6 +6,9 @@ import 'package:p01/view/editprofile.dart';
 import 'package:p01/view/login.dart';
 import 'package:p01/view/about.dart';
 import 'package:p01/providers/shared.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
 class Setting extends StatefulWidget {
   const Setting({super.key});
 
@@ -25,6 +28,23 @@ class _SettingState extends State<Setting> {
       ],
     );
   }
+  Future<void> signOut() async {
+  try {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+
+    await auth.signOut(); // Sign out from Firebase
+    await googleSignIn.signOut(); // Sign out from Google Sign-In
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginView()),
+      (Route<dynamic> route) => false,
+    );
+  } catch (e) {
+    print("Error signing out: $e");
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -191,11 +211,7 @@ class _SettingState extends State<Setting> {
                             minimumSize: const Size(110, 50),
                           ),
                           onPressed: () {
-                            login.setLoggedIn(false);
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: ((context) => const LoginView())));
+                            signOut();
                           },
                           child: const Text(
                             "Log Out",

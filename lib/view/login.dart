@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:p01/view/auth/gmail.dart';
-import 'package:p01/providers/shared.dart';
 import 'package:p01/view/pickroles.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'auth/auth.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -13,59 +14,60 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginState extends State<LoginView> {
- AudioPlayer? audioPlayer;
+  AudioPlayer? audioPlayer;
+  final GoogleSignIn googleSignIn = GoogleSignIn();
+  String? userEmail;
+  int? isTapped;
+  late AuthFirebase auth;
+  bool isSigningIn = false; // Add a flag to track sign-in progress
 
   @override
   void initState() {
-  super.initState();
-  playAudio();
-  checkLoginStatus();
-}
+    auth = AuthFirebase();
+    super.initState();
+    playAudio();
+  }
 
   Future<void> playAudio() async {
     await audioPlayer?.play(AssetSource("audio/login.mp3"));
   }
 
-  void showAccountDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return const AlertDialog(
-          insetPadding: EdgeInsets.zero,
-          contentPadding: EdgeInsets.zero,
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          content: GmailView(),
+  Future<String?> signInWithGoogle() async {
+    setState(() {
+      isSigningIn = true; // Set the flag when sign-in starts
+    });
+
+    try {
+      final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount!.authentication;
+
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      final User? user = userCredential.user;
+
+      if (user != null) {
+        // Navigate to the next screen or perform further actions
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => Roles()),
+          (Route<dynamic> route) => false,
         );
-      },
-    );
-  }
+      }
+    } catch (e) {
+      print(e.toString());
+    } finally {
+      setState(() {
+        isSigningIn = false; // Reset the flag when sign-in is complete
+      });
+    }
 
-  @override
-  void dispose() {
-    audioPlayer?.stop();
-    audioPlayer?.dispose();
-    super.dispose();
-  }
-
-  Future<void> checkLoginStatus() async {
-  final isLoggedIn = await login.isLoggedIn(); // Use the login class to check the login status
-  if (isLoggedIn) {
-    // If the user is already logged in, navigate to the HomeDisa page
-    _navigateToHomeDisa(context);
-  }
-  else{
-    audioPlayer = AudioPlayer();
-    playAudio();
-  }
-}
-
-
-  void _navigateToHomeDisa(BuildContext context) {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => Roles()),
-      (Route<dynamic> route) => false,
-    );
+    return null;
   }
 
   @override
@@ -93,9 +95,8 @@ class _LoginState extends State<LoginView> {
                 padding: const EdgeInsets.all(10),
                 textStyle: const TextStyle(fontSize: 14, color: Colors.white),
               ),
-              onPressed: () {
-                audioPlayer?.stop();
-                showAccountDialog(context);
+              onPressed: isSigningIn ? null : () async {
+                await signInWithGoogle();
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
