@@ -50,7 +50,7 @@ class _CommunityVoluState extends State<CommunityVolu> {
     }).toList();
     final jsonData = json.encode(dataToSave);
     final response = await http.post(
-      Uri.parse('http://192.168.100.12:8000/data.json'), //harus pakai ip sendiri lewat ipconfig!!
+      Uri.parse('https://juliannlee.github.io/Eyes-Up/assets/server/data.json'), //harus pakai ip sendiri lewat ipconfig!!
       body: jsonData,
       headers: {'Content-Type': 'application/json'},
     );
@@ -108,7 +108,7 @@ class _CommunityVoluState extends State<CommunityVolu> {
 
   Future<void> updatePostData(Map<String, dynamic> updatedData) async {
     final response = await http.put(
-      Uri.parse('http://192.168.100.12:8000/data.json/${updatedData['id']}'),
+      Uri.parse('https://juliannlee.github.io/Eyes-Up/assets/server/data.json/${updatedData['id']}'),
       body: json.encode(updatedData), // Wrap updatedData in a List
       headers: {'Content-Type': 'application/json'},
     );
@@ -125,7 +125,7 @@ class _CommunityVoluState extends State<CommunityVolu> {
 
     final response = await http.delete(
       Uri.parse(
-          'http://192.168.100.12:8000/data.json/${deletedata['id']}'), // Use the post's ID in the URL
+          'https://juliannlee.github.io/Eyes-Up/assets/server/data.json/${deletedata['id']}'), // Use the post's ID in the URL
     );
 
     if (response.statusCode == 200) {
