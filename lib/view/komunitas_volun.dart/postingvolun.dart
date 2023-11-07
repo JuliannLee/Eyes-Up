@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 class Posting extends StatefulWidget {
   const Posting({Key? key}) : super(key: key);
 
@@ -10,6 +11,7 @@ class Posting extends StatefulWidget {
 }
 
 class _PostingState extends State<Posting> {
+  MyAnalyticsHelper fbAnalytics = MyAnalyticsHelper();
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   List<File> selectedImages = [];
@@ -88,6 +90,7 @@ class _PostingState extends State<Posting> {
                     'isLoved': false,
                     'loveCount': 0,
                   };
+                  fbAnalytics.testEventLog('Postingan baru berhasil ditambahkan!');
                   Navigator.pop(context, postMap);
                 } else {
                   showDialog(
@@ -116,5 +119,12 @@ class _PostingState extends State<Posting> {
         ),
       ),
     );
+  }
+}
+class MyAnalyticsHelper {
+  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  // Log a custom event
+  Future<void> testEventLog(String value) async {
+    await analytics.logEvent(name: '${value}_click', parameters: {'Value': value});
   }
 }

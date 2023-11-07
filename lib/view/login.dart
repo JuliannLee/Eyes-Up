@@ -4,6 +4,8 @@ import 'package:p01/view/pickroles.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
+import '../providers/prov.dart';
 import 'auth/auth.dart';
 
 class LoginView extends StatefulWidget {
@@ -52,6 +54,12 @@ class _LoginState extends State<LoginView> {
       final User? user = userCredential.user;
 
       if (user != null) {
+        final userEmail = user.email ?? "Unknown"; 
+        final firstName = user.displayName?.split(" ")[0];
+        final lastName = user.displayName?.split(" ").sublist(1).join(" ");
+        Provider.of<Prov>(context, listen: false).setUserEmail(userEmail);
+        Provider.of<Prov>(context, listen: false).setUserFirstName(firstName!);
+        Provider.of<Prov>(context, listen: false).setUserLastName(lastName!);
         // Navigate to the next screen or perform further actions
         Navigator.pushAndRemoveUntil(
           context,

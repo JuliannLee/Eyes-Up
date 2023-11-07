@@ -1,12 +1,15 @@
-// ignore: unnecessary_import
 import 'package:flutter/material.dart';
 import 'package:p01/view/widgets/button.global.dart';
 import 'package:p01/utils/global.colors.dart';
+import 'package:provider/provider.dart';
+import '../providers/prov.dart';
 
-// ignore: use_key_in_widget_constructors
 class HomeVolun extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final userFirstName = Provider.of<Prov>(context).userFirstName;
+    final userLastName = Provider.of<Prov>(context).userLastName;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF0EFF4),
       appBar: AppBar(
@@ -41,13 +44,16 @@ class HomeVolun extends StatelessWidget {
               ),
             ),
           ),
-          const Positioned(
+          Positioned(
             left: 140,
             top: 20,
             child: Text(
-              'Albert Suhargo',
+              '  $userFirstName $userLastName',
               style: TextStyle(
-                  fontSize: 18, color: Colors.black, fontWeight: FontWeight.w500),
+                fontSize: 18,
+                color: Colors.black,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
           const Positioned(
@@ -64,9 +70,10 @@ class HomeVolun extends StatelessWidget {
             child: Text(
               'Indonesia',
               style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.white,
-                  backgroundColor: Color(0xFF0E4189)),
+                fontSize: 14,
+                color: Colors.white,
+                backgroundColor: Color(0xFF0E4189),
+              ),
             ),
           ),
           const Positioned(
@@ -76,9 +83,10 @@ class HomeVolun extends StatelessWidget {
               'You will receive a notification \nwhen someone needs your help.',
               textAlign: TextAlign.center,
               style: TextStyle(
-                  fontSize: 14,
-                  color: Color(0xFF0E4189),
-                  fontWeight: FontWeight.w500),
+                fontSize: 14,
+                color: Color(0xFF0E4189),
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
           Center(
@@ -91,9 +99,10 @@ class HomeVolun extends StatelessWidget {
                 Text(
                   'Click the button to start helping!',
                   style: TextStyle(
-                      color: Color(0xFF707D93),
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600),
+                    color: Color(0xFF707D93),
+                    fontSize: 17,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ],
             ),

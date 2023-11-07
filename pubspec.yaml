@@ -59,6 +59,7 @@ dependencies:
   audioplayers: ^4.1.0
   shared_preferences: ^2.2.0
   firebase_core: ^2.21.0
+  firebase_analytics:
   firebase_auth:
   flutter_login: ^4.0.0
   google_sign_in:

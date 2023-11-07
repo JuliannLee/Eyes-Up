@@ -5,7 +5,6 @@ import 'postingvolun.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:http/http.dart' as http;
 import 'editvolun.dart';
-
 class CommunityVolu extends StatefulWidget {
   const CommunityVolu({Key? key}) : super(key: key);
 
@@ -65,7 +64,7 @@ class _CommunityVoluState extends State<CommunityVolu> {
 
   Future<void> loadPostData() async {
     final response =
-        await http.get(Uri.parse('http://192.168.100.12:8000/data.json')); //harus pakai ip sendiri lewat ipconfig!!
+        await http.get(Uri.parse('https://juliannlee.github.io/Eyes-Up/assets/server/data.json')); //harus pakai ip sendiri lewat ipconfig!!
     if (response.statusCode == 200) {
       final List<dynamic> dataList = json.decode(response.body);
       setState(() {

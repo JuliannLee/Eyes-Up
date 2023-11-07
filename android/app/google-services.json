@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "369037690588",
+    "firebase_url": "https://eyes-up-6509a-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "eyes-up-6509a",
     "storage_bucket": "eyes-up-6509a.appspot.com"
   },
@@ -19,6 +20,14 @@
           "android_info": {
             "package_name": "com.example.p01",
             "certificate_hash": "6f80d109424f32043d741c949c2e63374618a46f"
+          }
+        },
+        {
+          "client_id": "369037690588-hnheuel1qm41lbf6ufente5g9sdk2u9e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.p01",
+            "certificate_hash": "2a803ec1d239ef38a95101cde0a92facdb713623"
           }
         },
         {
