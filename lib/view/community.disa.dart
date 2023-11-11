@@ -15,7 +15,7 @@ class _CommunityDisaState extends State<CommunityDisa> {
   List<Map<String, dynamic>> posts = [];
   List<Map<String, dynamic>> postsDataList = [];
   Map<int, int> currentIndexMap = {};
-
+  var serverIP = "192.168.0.102";
   void toggleLove(int postIndex) {
     setState(() {
       final postingan = postsDataList[postIndex];
@@ -50,7 +50,7 @@ class _CommunityDisaState extends State<CommunityDisa> {
     final jsonData = json.encode(dataToSave);
     final response = await http.post(
       Uri.parse(
-          'http://192.168.100.12:8000/data.json'), //harus pakai ip sendiri lewat ipconfig!!
+          'http://$serverIP:8000/data.json'), //harus pakai ip sendiri lewat ipconfig!!
       body: jsonData,
       headers: {'Content-Type': 'application/json'},
     );
@@ -64,7 +64,7 @@ class _CommunityDisaState extends State<CommunityDisa> {
 
   Future<void> loadPostData() async {
     final response = await http.get(Uri.parse(
-        'http://192.168.100.12:8000/data.json')); //harus pakai ip sendiri lewat ipconfig!!
+        'http://$serverIP:8000/data.json')); //harus pakai ip sendiri lewat ipconfig!!
     if (response.statusCode == 200) {
       final List<dynamic> dataList = json.decode(response.body);
       setState(() {
@@ -86,7 +86,7 @@ class _CommunityDisaState extends State<CommunityDisa> {
 
   Future<void> updatePostData(Map<String, dynamic> updatedData) async {
     final response = await http.put(
-      Uri.parse('http://192.168.100.12:8000/data.json/${updatedData['id']}'),
+      Uri.parse('http://$serverIP:8000/data.json${updatedData['id']}'),
       body: json.encode(updatedData), // Wrap updatedData in a List
       headers: {'Content-Type': 'application/json'},
     );
@@ -103,7 +103,7 @@ class _CommunityDisaState extends State<CommunityDisa> {
 
     final response = await http.delete(
       Uri.parse(
-          'http://192.168.100.12:8000/data.json/${deletedata['id']}'), // Use the post's ID in the URL
+          'http://$serverIP:8000/data.json${deletedata['id']}'), // Use the post's ID in the URL
     );
 
     if (response.statusCode == 200) {
