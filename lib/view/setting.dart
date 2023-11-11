@@ -5,10 +5,9 @@ import 'package:language_picker/languages.dart';
 import 'package:p01/view/editprofile.dart';
 import 'package:p01/view/login.dart';
 import 'package:p01/view/about.dart';
-import 'package:p01/providers/shared.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 class Setting extends StatefulWidget {
   const Setting({super.key});
 
@@ -35,6 +34,9 @@ class _SettingState extends State<Setting> {
 
     await auth.signOut(); // Sign out from Firebase
     await googleSignIn.signOut(); // Sign out from Google Sign-In
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isLoggedIn', false);
 
     Navigator.pushAndRemoveUntil(
       context,
@@ -201,7 +203,7 @@ class _SettingState extends State<Setting> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      const Text('Version 1.0'),
+                      const Text('Version 1.5'),
                       ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             shadowColor: Colors.blueGrey,

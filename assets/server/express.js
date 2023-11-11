@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const fs = require('fs');
 const port = 8000;
+const ip = "192.168.0.102"; //SESUAIKAN IP DENGAN IPCONFIG DI CMD
 const dataFile = 'data.json'; // The file to store data
 
 app.use(express.json());
@@ -14,7 +15,7 @@ app.use(bodyParser.json());
 let data = loadStoredData();
 
 // To get the IP Address, go to CMD and type in IPCONFIG and copy the IPv4 IP Address and copy it to each GET, POST, PUT, DELETE protocols in each community page(VOLUNTEER AND DISABLED!!!
-app.listen(port, '192.168.100.12',() => {
+app.listen(port, ip,() => { 
   console.log(`Server is running on :${port}`);
 });
 

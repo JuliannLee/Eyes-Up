@@ -5,6 +5,7 @@ import 'postingvolun.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:http/http.dart' as http;
 import 'editvolun.dart';
+
 class CommunityVolu extends StatefulWidget {
   const CommunityVolu({Key? key}) : super(key: key);
 
@@ -16,7 +17,7 @@ class _CommunityVoluState extends State<CommunityVolu> {
   List<Map<String, dynamic>> posts = [];
   List<Map<String, dynamic>> postsDataList = [];
   Map<int, int> currentIndexMap = {};
-
+  var serverIP = "192.168.0.102";
   void toggleLove(int postIndex) {
     setState(() {
       final postingan = postsDataList[postIndex];
@@ -40,7 +41,7 @@ class _CommunityVoluState extends State<CommunityVolu> {
     super.initState();
     loadPostData();
   }
-
+  
   Future<void> savePostData() async {
     final List<Map<String, dynamic>> dataToSave = posts.map((post) {
       if (post['image'] != null && post['image'] is File) {
@@ -50,7 +51,7 @@ class _CommunityVoluState extends State<CommunityVolu> {
     }).toList();
     final jsonData = json.encode(dataToSave);
     final response = await http.post(
-      Uri.parse('https://juliannlee.github.io/Eyes-Up/assets/server/data.json'), //harus pakai ip sendiri lewat ipconfig!!
+      Uri.parse('http://$serverIP:8000/data.json'), //harus pakai ip sendiri lewat ipconfig!!
       body: jsonData,
       headers: {'Content-Type': 'application/json'},
     );
@@ -63,25 +64,24 @@ class _CommunityVoluState extends State<CommunityVolu> {
   }
 
   Future<void> loadPostData() async {
-    final response =
-        await http.get(Uri.parse('https://juliannlee.github.io/Eyes-Up/assets/server/data.json')); //harus pakai ip sendiri lewat ipconfig!!
-    if (response.statusCode == 200) {
-      final List<dynamic> dataList = json.decode(response.body);
-      setState(() {
-        postsDataList.clear();
-        for (var data in dataList) {
-          for (var datas in data) {
-            postsDataList.add(datas);
+    final response = await http.get(Uri.parse('http://$serverIP:8000/data.json'));
+      if (response.statusCode == 200) {
+        final List<dynamic> dataList = json.decode(response.body);
+        setState(() {
+          postsDataList.clear();
+          for (var data in dataList) {
+            for (var datas in data) {
+              postsDataList.add(datas);
+            }
           }
-        }
-        for (int i = 0; i < dataList.length; i++) {
-          currentIndexMap[i] = 0;
-        }
-      });
-    } else {
-      print("HTTP request failed with status code: ${response.statusCode}");
-      // Handle the error or show an error message
-    }
+          for (int i = 0; i < dataList.length; i++) {
+            currentIndexMap[i] = 0;
+          }
+        });
+      } else {
+        print("HTTP request failed with status code: ${response.statusCode}");
+        // Handle the error or show an error message
+      }
   }
 
   Future<void> editPost(int postIndex) async {
@@ -108,7 +108,7 @@ class _CommunityVoluState extends State<CommunityVolu> {
 
   Future<void> updatePostData(Map<String, dynamic> updatedData) async {
     final response = await http.put(
-      Uri.parse('https://juliannlee.github.io/Eyes-Up/assets/server/data.json/${updatedData['id']}'),
+      Uri.parse('http://$serverIP:8000/data.json/${updatedData['id']}'),
       body: json.encode(updatedData), // Wrap updatedData in a List
       headers: {'Content-Type': 'application/json'},
     );
@@ -125,7 +125,7 @@ class _CommunityVoluState extends State<CommunityVolu> {
 
     final response = await http.delete(
       Uri.parse(
-          'https://juliannlee.github.io/Eyes-Up/assets/server/data.json/${deletedata['id']}'), // Use the post's ID in the URL
+          'http://$serverIP:8000/data.json/${deletedata['id']}'), // Use the post's ID in the URL
     );
 
     if (response.statusCode == 200) {

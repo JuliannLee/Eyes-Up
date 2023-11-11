@@ -21,7 +21,11 @@ class SplashView extends StatelessWidget {
         // Jika pengguna pertama kali atau sudah logout, tampilkan halaman getstarted.dart
         await Future.delayed(const Duration(seconds: 2));
         prefs.setBool('isFirstTimeUser', false);
-        Get.to(const OnboardingScreen());
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => OnboardingScreen()),
+          (Route<dynamic> route) => false,
+        );
       } else {
         // Jika bukan pengguna pertama kali, arahkan ke halaman beranda atau yang sesuai
         // Misalnya: Get.to(const HomeScreen());

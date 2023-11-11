@@ -18,6 +18,7 @@ class LoginView extends StatefulWidget {
 class _LoginState extends State<LoginView> {
   AudioPlayer? audioPlayer;
   final GoogleSignIn googleSignIn = GoogleSignIn();
+  bool isAudioPlaying = true;
   String? userEmail;
   int? isTapped;
   late AuthFirebase auth;
@@ -26,14 +27,27 @@ class _LoginState extends State<LoginView> {
   @override
   void initState() {
     auth = AuthFirebase();
+    audioPlayer = AudioPlayer(); // Initialize the AudioPlayer
     super.initState();
     playAudio();
+    
   }
-
+  @override
+  void dispose() {
+    stopAudio();
+    super.dispose();
+  }
   Future<void> playAudio() async {
     await audioPlayer?.play(AssetSource("audio/login.mp3"));
   }
-
+  void stopAudio() {
+    if (isAudioPlaying) {
+      audioPlayer!.stop();
+      setState(() {
+        isAudioPlaying = false;
+      });
+    }
+  }
   Future<String?> signInWithGoogle() async {
     setState(() {
       isSigningIn = true; // Set the flag when sign-in starts
@@ -104,6 +118,7 @@ class _LoginState extends State<LoginView> {
                 textStyle: const TextStyle(fontSize: 14, color: Colors.white),
               ),
               onPressed: isSigningIn ? null : () async {
+                stopAudio();
                 await signInWithGoogle();
               },
               child: Row(

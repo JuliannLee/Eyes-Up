@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:p01/view/widgets/button.global.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:p01/providers/shared.dart';
 
 class Roles extends StatefulWidget {
   const Roles({Key? key}) : super(key: key);
@@ -18,7 +17,6 @@ class _RolesState extends State<Roles> {
 
   @override
   void initState() {
-    login.setLoggedIn(true);
     super.initState();
     playAudio();
   }

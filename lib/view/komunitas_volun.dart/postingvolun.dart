@@ -90,7 +90,7 @@ class _PostingState extends State<Posting> {
                     'isLoved': false,
                     'loveCount': 0,
                   };
-                  fbAnalytics.testEventLog('Postingan baru berhasil ditambahkan!');
+                  fbAnalytics.testEventLog('postingan_baru_ditambahkan');
                   Navigator.pop(context, postMap);
                 } else {
                   showDialog(
@@ -125,6 +125,7 @@ class MyAnalyticsHelper {
   FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   // Log a custom event
   Future<void> testEventLog(String value) async {
-    await analytics.logEvent(name: '${value}_click', parameters: {'Value': value});
+    await analytics.logEvent(name: "${value}");
+    print('Berhasil menambah postingan!');
   }
 }
