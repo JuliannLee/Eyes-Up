@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const fs = require('fs');
 const port = 8000;
-const ip = "192.168.0.102"; //SESUAIKAN IP DENGAN IPCONFIG DI CMD
+const ip = "192.168.100.83"; //GANTI IP PADA COMMAND PROMPT
 const dataFile = 'data.json'; // The file to store data
 
 app.use(express.json());

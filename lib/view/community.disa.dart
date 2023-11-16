@@ -15,7 +15,7 @@ class _CommunityDisaState extends State<CommunityDisa> {
   List<Map<String, dynamic>> posts = [];
   List<Map<String, dynamic>> postsDataList = [];
   Map<int, int> currentIndexMap = {};
-  var serverIP = "192.168.0.102";
+  var serverIP = "192.168.100.83";
   void toggleLove(int postIndex) {
     setState(() {
       final postingan = postsDataList[postIndex];

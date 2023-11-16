@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:p01/view/pickroles.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -29,8 +30,7 @@ class _LoginState extends State<LoginView> {
     auth = AuthFirebase();
     audioPlayer = AudioPlayer(); // Initialize the AudioPlayer
     super.initState();
-    playAudio();
-    
+    checkIfLoggedIn();
   }
   @override
   void dispose() {
@@ -40,11 +40,39 @@ class _LoginState extends State<LoginView> {
   Future<void> playAudio() async {
     await audioPlayer?.play(AssetSource("audio/login.mp3"));
   }
+  Future<void> playAudio2() async {
+    await audioPlayer?.play(AssetSource("audio/logging_in.mp3"));
+  }
   void stopAudio() {
     if (isAudioPlaying) {
       audioPlayer!.stop();
       setState(() {
         isAudioPlaying = false;
+      });
+    }
+  }
+   Future<void> checkIfLoggedIn() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+
+    if (!isLoggedIn) {
+      // Play audio if the user is not logged in
+      playAudio();
+    }
+    setState(() {
+      isSigningIn = isLoggedIn; // Set the flag when sign-in starts
+    });
+
+    try {
+      if (isLoggedIn) {
+        playAudio2();
+        await signInWithGoogle();
+      }
+    } catch (e) {
+      print(e.toString());
+    } finally {
+      setState(() {
+        isSigningIn = false; // Reset the flag when sign-in is complete
       });
     }
   }
@@ -74,6 +102,8 @@ class _LoginState extends State<LoginView> {
         Provider.of<Prov>(context, listen: false).setUserEmail(userEmail);
         Provider.of<Prov>(context, listen: false).setUserFirstName(firstName!);
         Provider.of<Prov>(context, listen: false).setUserLastName(lastName!);
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setBool('isLoggedIn', true);
         // Navigate to the next screen or perform further actions
         Navigator.pushAndRemoveUntil(
           context,
@@ -92,7 +122,7 @@ class _LoginState extends State<LoginView> {
     return null;
   }
 
-  @override
+   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
@@ -110,35 +140,40 @@ class _LoginState extends State<LoginView> {
             const SizedBox(
               height: 20,
             ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(300, 400),
-                backgroundColor: Colors.blue.shade800,
-                padding: const EdgeInsets.all(10),
-                textStyle: const TextStyle(fontSize: 14, color: Colors.white),
-              ),
-              onPressed: isSigningIn ? null : () async {
-                stopAudio();
-                await signInWithGoogle();
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const <Widget>[
-                  FaIcon(
-                    FontAwesomeIcons.envelope,
-                    size: 50,
-                  ),
-                  Text(" | ", style: TextStyle(fontSize: 60)),
-                  Text(
-                    "PRESS HERE",
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
+            isSigningIn
+                ? CircularProgressIndicator() // Show loading circle
+                : ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(300, 400),
+                      backgroundColor: Colors.blue.shade800,
+                      padding: const EdgeInsets.all(10),
+                      textStyle:
+                          const TextStyle(fontSize: 14, color: Colors.white),
+                    ),
+                    onPressed: isSigningIn
+                        ? null
+                        : () async {
+                            stopAudio();
+                            await signInWithGoogle();
+                          },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const <Widget>[
+                        FaIcon(
+                          FontAwesomeIcons.envelope,
+                          size: 50,
+                        ),
+                        Text(" | ", style: TextStyle(fontSize: 60)),
+                        Text(
+                          "PRESS HERE",
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ),
           ],
         ),
       ),
