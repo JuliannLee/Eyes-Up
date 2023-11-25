@@ -23,45 +23,57 @@ class _LoginState extends State<LoginView> {
   String? userEmail;
   int? isTapped;
   late AuthFirebase auth;
-  bool isSigningIn = false; // Add a flag to track sign-in progress
+  bool isSigningIn = false;
+  bool _isMounted = false;
 
   @override
   void initState() {
+    _isMounted = true;
     auth = AuthFirebase();
-    audioPlayer = AudioPlayer(); // Initialize the AudioPlayer
+    audioPlayer = AudioPlayer();
     super.initState();
     checkIfLoggedIn();
   }
+
   @override
   void dispose() {
+    _isMounted = false;
     stopAudio();
     super.dispose();
   }
+
   Future<void> playAudio() async {
     await audioPlayer?.play(AssetSource("audio/login.mp3"));
   }
+
   Future<void> playAudio2() async {
     await audioPlayer?.play(AssetSource("audio/logging_in.mp3"));
   }
+
   void stopAudio() {
     if (isAudioPlaying) {
       audioPlayer!.stop();
-      setState(() {
-        isAudioPlaying = false;
-      });
+      if (_isMounted) {
+        setState(() {
+          isAudioPlaying = false;
+        });
+      }
     }
   }
-   Future<void> checkIfLoggedIn() async {
+
+  Future<void> checkIfLoggedIn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
 
     if (!isLoggedIn) {
-      // Play audio if the user is not logged in
       playAudio();
     }
-    setState(() {
-      isSigningIn = isLoggedIn; // Set the flag when sign-in starts
-    });
+
+    if (_isMounted) {
+      setState(() {
+        isSigningIn = isLoggedIn;
+      });
+    }
 
     try {
       if (isLoggedIn) {
@@ -71,18 +83,24 @@ class _LoginState extends State<LoginView> {
     } catch (e) {
       print(e.toString());
     } finally {
-      setState(() {
-        isSigningIn = false; // Reset the flag when sign-in is complete
-      });
+      if (_isMounted) {
+        setState(() {
+          isSigningIn = false;
+        });
+      }
     }
   }
+
   Future<String?> signInWithGoogle() async {
-    setState(() {
-      isSigningIn = true; // Set the flag when sign-in starts
-    });
+    if (_isMounted) {
+      setState(() {
+        isSigningIn = true;
+      });
+    }
 
     try {
-      final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
+      final GoogleSignInAccount? googleSignInAccount =
+          await googleSignIn.signIn();
       final GoogleSignInAuthentication googleSignInAuthentication =
           await googleSignInAccount!.authentication;
 
@@ -96,15 +114,17 @@ class _LoginState extends State<LoginView> {
       final User? user = userCredential.user;
 
       if (user != null) {
-        final userEmail = user.email ?? "Unknown"; 
+        final userEmail = user.email ?? "Unknown";
         final firstName = user.displayName?.split(" ")[0];
-        final lastName = user.displayName?.split(" ").sublist(1).join(" ");
+        final lastName =
+            user.displayName?.split(" ").sublist(1).join(" ");
         Provider.of<Prov>(context, listen: false).setUserEmail(userEmail);
-        Provider.of<Prov>(context, listen: false).setUserFirstName(firstName!);
-        Provider.of<Prov>(context, listen: false).setUserLastName(lastName!);
+        Provider.of<Prov>(context, listen: false)
+            .setUserFirstName(firstName!);
+        Provider.of<Prov>(context, listen: false)
+            .setUserLastName(lastName!);
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setBool('isLoggedIn', true);
-        // Navigate to the next screen or perform further actions
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => Roles()),
@@ -114,15 +134,17 @@ class _LoginState extends State<LoginView> {
     } catch (e) {
       print(e.toString());
     } finally {
-      setState(() {
-        isSigningIn = false; // Reset the flag when sign-in is complete
-      });
+      if (_isMounted) {
+        setState(() {
+          isSigningIn = false;
+        });
+      }
     }
 
     return null;
   }
 
-   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
@@ -141,7 +163,7 @@ class _LoginState extends State<LoginView> {
               height: 20,
             ),
             isSigningIn
-                ? CircularProgressIndicator() // Show loading circle
+                ? CircularProgressIndicator()
                 : ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(300, 400),

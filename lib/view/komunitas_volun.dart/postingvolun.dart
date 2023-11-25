@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import '../model data/model_data.dart';
 class Posting extends StatefulWidget {
   const Posting({Key? key}) : super(key: key);
 
@@ -16,14 +20,35 @@ class _PostingState extends State<Posting> {
   TextEditingController descriptionController = TextEditingController();
   List<File> selectedImages = [];
   final uuid = Uuid();
+Future<String> uploadImage(File imageFile) async {
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    firebase_storage.Reference reference = firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child('images')
+        .child(fileName);
 
-  Future<void> _selectImages() async {
+    firebase_storage.UploadTask uploadTask = reference.putFile(imageFile);
+
+    await uploadTask.whenComplete(() => print('Image uploaded'));
+
+    return await reference.getDownloadURL();
+  }
+ Future<void> _selectImages() async {
     final imagePicker = ImagePicker();
-    final pickedImages = await imagePicker.pickMultiImage();
+    final pickedImages = await imagePicker.pickMultiImage(); // Allow multiple image selection
 
-    setState(() {
-      selectedImages.addAll(pickedImages.map((image) => File(image.path)));
-    });
+    if (pickedImages != null) {
+      setState(() {
+        selectedImages.addAll(pickedImages.map((image) => File(image.path)));
+      });
+    }
+  }
+
+  Future<void> savePostData(EventModel postModel) async {
+    await Firebase.initializeApp();
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    await db.collection('postingan').add(postModel.toMap());
+    // You can also handle success or error cases here
   }
 
   @override
@@ -77,29 +102,33 @@ class _PostingState extends State<Posting> {
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 final title = titleController.text;
                 final description = descriptionController.text;
                 if (selectedImages.isNotEmpty && title.isNotEmpty) {
-                  final postMap = {
-                    'id': uuid.v4(), // Generate a unique identifier
-                    'images':
-                        selectedImages.map((image) => image.path).toList(),
-                    'title': title,
-                    'description': description,
-                    'isLoved': false,
-                    'loveCount': 0,
-                  };
-                  fbAnalytics.testEventLog('postingan_baru_ditambahkan');
-                  Navigator.pop(context, postMap);
+                  final postModel = EventModel(
+                    gambar: selectedImages.map((image) => image.path).toList(),
+                    judul: title,
+                    keterangan: description,
+                    is_like: false, // Default value, change it according to your logic
+                    loveCount: 0,
+                  );
+
+                  // Now you can save the postModel to Firebase or perform any other actions
+                  await savePostData(postModel);
+
+                  // Close the posting screen
+                  Navigator.pop(context);
                 } else {
+                  // Show an error dialog if the form is incomplete
                   showDialog(
                     context: context,
                     builder: (context) {
                       return AlertDialog(
                         title: const Text('Error'),
                         content: const Text(
-                            'Please select at least one image and provide a title.'),
+                          'Please select at least one image and provide a title.',
+                        ),
                         actions: [
                           TextButton(
                             onPressed: () {
@@ -115,6 +144,7 @@ class _PostingState extends State<Posting> {
               },
               child: const Text('Create Post'),
             ),
+
           ],
         ),
       ),

@@ -1,11 +1,11 @@
-import 'dart:io';
-import 'dart:convert';
+import 'dart:io'; // Make sure this import is present
 import 'package:flutter/material.dart';
-import 'postingvolun.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:http/http.dart' as http;
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../model data/model_data.dart';
+import 'postingvolun.dart';
 import 'editvolun.dart';
-
 class CommunityVolu extends StatefulWidget {
   const CommunityVolu({Key? key}) : super(key: key);
 
@@ -14,142 +14,138 @@ class CommunityVolu extends StatefulWidget {
 }
 
 class _CommunityVoluState extends State<CommunityVolu> {
-  List<Map<String, dynamic>> posts = [];
-  List<Map<String, dynamic>> postsDataList = [];
-  Map<int, int> currentIndexMap = {};
-  var serverIP = "192.168.100.83";
-  void toggleLove(int postIndex) {
-    setState(() {
-      final postingan = postsDataList[postIndex];
-      if (postingan['isLoved'] == null || !postingan['isLoved']) {
-        // If not loved or null, mark as loved and increase the count
-        postingan['isLoved'] = true;
-        postingan['loveCount'] = (postingan['loveCount'] ?? 0) + 1;
-      } else {
-        // If loved, unmark and decrease the count
-        postingan['isLoved'] = false;
-        postingan['loveCount'] = (postingan['loveCount'] ?? 0) - 1;
-      }
-
-      // Call the function to update the data on the server
-      updatePostData(postingan);
-    });
-  }
-
+  List<EventModel> posts = [];
+  Map<int, int> currentIndexMap = {}; // Add this line
   @override
   void initState() {
     super.initState();
     loadPostData();
   }
-  
-  Future<void> savePostData() async {
-    final List<Map<String, dynamic>> dataToSave = posts.map((post) {
-      if (post['image'] != null && post['image'] is File) {
-        post['image'] = (post['image'] as File).path;
-      }
-      return post;
-    }).toList();
-    final jsonData = json.encode(dataToSave);
-    final response = await http.post(
-      Uri.parse('http://$serverIP:8000/data.json'), //harus pakai ip sendiri lewat ipconfig!!
-      body: jsonData,
-      headers: {'Content-Type': 'application/json'},
-    );
-    posts.clear();
-    if (response.statusCode == 200) {
-      print('Data saved successfully');
-    } else {
-      print('Error');
+  Future<void> toggleLove(int postIndex) async {
+    setState(() {
+      posts[postIndex].toggleLove();
+    });
+
+    bool isLoved = posts[postIndex].is_like;
+    int loveCount = posts[postIndex].loveCount;
+
+    await updateFirestoreLoveData(posts[postIndex].id!, isLoved, loveCount);
+  }
+  Future<void> updateFirestoreLoveData(String postId, bool isLoved, int loveCount) async {
+    try {
+      FirebaseFirestore db = FirebaseFirestore.instance;
+      await db.collection('postingan').doc(postId).update({
+        'is_like': isLoved,
+        'love_count': loveCount,
+      });
+      print('Firestore love data updated successfully!');
+    } catch (error) {
+      print('Error updating Firestore love data: $error');
     }
   }
 
   Future<void> loadPostData() async {
-    final response = await http.get(Uri.parse('http://$serverIP:8000/data.json'));
-      if (response.statusCode == 200) {
-        final List<dynamic> dataList = json.decode(response.body);
+    try {
+      await Firebase.initializeApp();
+      FirebaseFirestore db = FirebaseFirestore.instance;
+      var data = await db.collection('postingan').get();
+
+      if (mounted) {
         setState(() {
-          postsDataList.clear();
-          for (var data in dataList) {
-            for (var datas in data) {
-              postsDataList.add(datas);
-            }
-          }
-          for (int i = 0; i < dataList.length; i++) {
-            currentIndexMap[i] = 0;
-          }
+          posts = data.docs.map((doc) => EventModel.fromDocSnapshot(doc)).toList();
         });
-      } else {
-        print("HTTP request failed with status code: ${response.statusCode}");
-        // Handle the error or show an error message
       }
+    } catch (e) {
+      // Handle any exceptions that might occur during data retrieval
+      print("Error: $e");
+    }
   }
 
+
   Future<void> editPost(int postIndex) async {
-    final Map<String, dynamic>? editedPostData = await Navigator.push(
+    final result = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => EditPost(
-          initialTitle: postsDataList[postIndex]['title'],
-          initialDescription: postsDataList[postIndex]['description'],
+          initialTitle: posts[postIndex].judul,
+          initialDescription: posts[postIndex].keterangan,
         ),
       ),
     );
 
-    if (editedPostData != null) {
-      setState(() {
-        // Update the post data with edited values
-        postsDataList[postIndex]['title'] = editedPostData['title'];
-        postsDataList[postIndex]['description'] = editedPostData['description'];
-      });
-      final postingan = postsDataList[postIndex];
-      updatePostData(postingan); // Save the updated posts list
-    }
-  }
+    // Check if the result is not null and contains edited data
+    if (result != null) {
+      // Update the post data in your data structure
+      posts[postIndex].judul = result['title'];
+      posts[postIndex].keterangan = result['description'];
 
-  Future<void> updatePostData(Map<String, dynamic> updatedData) async {
-    final response = await http.put(
-      Uri.parse('http://$serverIP:8000/data.json/${updatedData['id']}'),
-      body: json.encode(updatedData), // Wrap updatedData in a List
-      headers: {'Content-Type': 'application/json'},
-    );
+      // Retrieve updated values from the result
+      String updatedTitle = result['title'];
+      String updatedDescription = result['description'];
+      String? postId = posts[postIndex].id; // Assuming postId is a field in your EventModel
 
-    if (response.statusCode == 200) {
-      // Data updated successfully
-    } else {
-      // Handle the error or show an error message
+      try {
+        FirebaseFirestore db = FirebaseFirestore.instance;
+        await db.collection('postingan').doc(postId).update({
+          'Judul': updatedTitle,
+          'Keterangan': updatedDescription,
+        });
+        print('Firestore data updated successfully!');
+      } catch (error) {
+        print('Error updating Firestore data: $error');
+        // Handle the error as needed
+      }
     }
   }
 
   Future<void> deletePost(int postIndex) async {
-    final deletedata = postsDataList[postIndex];
-
-    final response = await http.delete(
-      Uri.parse(
-          'http://$serverIP:8000/data.json/${deletedata['id']}'), // Use the post's ID in the URL
+    // Show a confirmation dialog
+    bool confirmDelete = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Delete'),
+          content: Text('Are you sure you want to delete this post?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text('Delete'),
+            ),
+          ],
+        );
+      },
     );
 
-    if (response.statusCode == 200) {
-      setState(() {
-        postsDataList.removeAt(postIndex);
-      });
-      // You might want to show a success message or update the UI accordingly.
-    } else {
-      // Handle the error or show an error message
+    if (confirmDelete == true) {
+      try {
+        FirebaseFirestore db = FirebaseFirestore.instance;
+        // Assuming 'postingan' is your collection
+        await db.collection('postingan').doc(posts[postIndex].id).delete();
+
+        // Update the UI by removing the post from the list
+        setState(() {
+          posts.removeAt(postIndex);
+        });
+      } catch (e) {
+        print('Error deleting post: $e');
+        // Handle error if needed
+      }
     }
   }
 
   List<Widget> _buildImageBubbles(int currentIndex, int totalImages) {
     List<Widget> bubbles = [];
-
     for (int i = 0; i < totalImages; i++) {
       bubbles.add(
-        Container(
-          width: 10,
-          height: 10,
-          margin: const EdgeInsets.symmetric(horizontal: 4),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: i == currentIndex ? Colors.blue : Colors.grey,
+        Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: CircleAvatar(
+            radius: 4.0,
+            backgroundColor: i == currentIndex ? Colors.blue : Colors.grey,
           ),
         ),
       );
@@ -157,6 +153,11 @@ class _CommunityVoluState extends State<CommunityVolu> {
     return bubbles;
   }
 
+  @override
+  void dispose() {
+    // Dispose of any resources here
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -167,27 +168,20 @@ class _CommunityVoluState extends State<CommunityVolu> {
         actions: [
           IconButton(
             onPressed: () async {
-              final Map<String, dynamic>? returnedPostData =
-                  await Navigator.push(
+               await Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const Posting(),
-                ),
+                MaterialPageRoute(builder: (context) => Posting()),
               );
 
-              if (returnedPostData != null) {
-                setState(() {
-                  posts.add(returnedPostData);
-                });
-                savePostData(); // Save the updated posts list
-                loadPostData(); // Refresh the data
-              }
+              // When the Posting screen is popped (closed), you can perform any necessary actions here
+              // For example, you might want to refresh the data after a new post is added
+              loadPostData();
             },
             icon: const Icon(Icons.add),
           ),
         ],
       ),
-      body: postsDataList.isEmpty
+      body: posts.isEmpty
           ? const Center(
               child: Text(
                 'No posts to display',
@@ -198,14 +192,14 @@ class _CommunityVoluState extends State<CommunityVolu> {
               ),
             )
           : ListView.builder(
-              itemCount: postsDataList.length,
+              itemCount: (posts != null) ? posts.length : 0,
               itemBuilder: (context, index) {
-                final postingan = postsDataList[index];
-                final images = postingan['images'];
-                final title = postingan['title'];
-                final description = postingan['description'];
-                final bool isLoved = postingan['isLoved'] ?? false;
-                final int loveCount = postingan['loveCount'] ?? 0;
+                final images = posts[index].gambar;
+                final title = posts[index].judul;
+                final description = posts[index].keterangan;
+                final bool isLoved = posts[index].is_like;
+                final int loveCount = posts[index].loveCount;
+
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Card(
@@ -240,25 +234,29 @@ class _CommunityVoluState extends State<CommunityVolu> {
                             height: 200.0,
                             viewportFraction: 1.0,
                             enableInfiniteScroll: false,
-                            initialPage: currentIndexMap[index] ??
-                                0, // Use a default value of 0 if currentIndexMap[index] is null
-                            onPageChanged: (int imageIndex,
-                                CarouselPageChangedReason reason) {
+                            initialPage: currentIndexMap[index] ?? 0,
+                            onPageChanged: (int imageIndex, CarouselPageChangedReason reason) {
                               setState(() {
-                                // Update the current index for the specific set of images
                                 currentIndexMap[index] = imageIndex;
                               });
                             },
                           ),
-                          items: images.map<Widget>((imagePath) {
+                          items: posts[index].gambar.map<Widget>((imagePath) {
+                          try {
                             return Image.file(File(imagePath));
-                          }).toList(),
+                          } catch (e) {
+                            print("Error loading image: $e");
+                            return Container(); // Return an empty container or placeholder image
+                          }
+                        }).toList(),
+
                         ),
+
                         const SizedBox(height: 8.0),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: _buildImageBubbles(
-                              currentIndexMap[index] ?? 0, images.length),
+                            currentIndexMap[index] ?? 0, posts[index].gambar?.length ?? 0),
                         ),
                         Row(
                           children: [
