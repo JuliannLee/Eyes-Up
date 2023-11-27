@@ -1,4 +1,3 @@
-import 'dart:io'; // Make sure this import is present
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -91,6 +90,7 @@ class _CommunityVoluState extends State<CommunityVolu> {
           'Keterangan': updatedDescription,
         });
         print('Firestore data updated successfully!');
+        loadPostData();
       } catch (error) {
         print('Error updating Firestore data: $error');
         // Handle the error as needed
@@ -136,6 +136,33 @@ class _CommunityVoluState extends State<CommunityVolu> {
       }
     }
   }
+  Widget _buildImageWidget(String imagePath) {
+    try {
+      return Image.network(
+        imagePath,
+        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+          if (loadingProgress == null) {
+            return child;
+          } else {
+            return Center(
+              child: CircularProgressIndicator(
+                value: loadingProgress.expectedTotalBytes != null
+                    ? loadingProgress.cumulativeBytesLoaded / (loadingProgress.expectedTotalBytes ?? 1)
+                    : null,
+              ),
+            );
+          }
+        },
+        errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+          print("Error loading image: $error");
+          return Image.asset('assets/placeholder_image.png'); // Replace with the actual path to your placeholder image asset
+        },
+      );
+    } catch (e) {
+      print("Error loading image: $e");
+      return Image.asset('assets/placeholder_image.png'); // Replace with the actual path to your placeholder image asset
+    }
+  }
 
   List<Widget> _buildImageBubbles(int currentIndex, int totalImages) {
     List<Widget> bubbles = [];
@@ -168,14 +195,15 @@ class _CommunityVoluState extends State<CommunityVolu> {
         actions: [
           IconButton(
             onPressed: () async {
-               await Navigator.push(
+               bool result = await Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => Posting()),
               );
 
-              // When the Posting screen is popped (closed), you can perform any necessary actions here
-              // For example, you might want to refresh the data after a new post is added
-              loadPostData();
+              if (result == true) {
+                // Refresh data after coming back from the Posting screen
+                loadPostData();
+              }
             },
             icon: const Icon(Icons.add),
           ),
@@ -230,27 +258,21 @@ class _CommunityVoluState extends State<CommunityVolu> {
                           ),
                         ),
                         CarouselSlider(
-                          options: CarouselOptions(
-                            height: 200.0,
-                            viewportFraction: 1.0,
-                            enableInfiniteScroll: false,
-                            initialPage: currentIndexMap[index] ?? 0,
-                            onPageChanged: (int imageIndex, CarouselPageChangedReason reason) {
-                              setState(() {
-                                currentIndexMap[index] = imageIndex;
-                              });
-                            },
-                          ),
-                          items: posts[index].gambar.map<Widget>((imagePath) {
-                          try {
-                            return Image.file(File(imagePath));
-                          } catch (e) {
-                            print("Error loading image: $e");
-                            return Container(); // Return an empty container or placeholder image
-                          }
-                        }).toList(),
-
-                        ),
+  options: CarouselOptions(
+    height: 200.0,
+    viewportFraction: 1.0,
+    enableInfiniteScroll: false,
+    initialPage: currentIndexMap[index] ?? 0,
+    onPageChanged: (int imageIndex, CarouselPageChangedReason reason) {
+      setState(() {
+        currentIndexMap[index] = imageIndex;
+      });
+    },
+  ),
+  items: posts[index].gambar.map<Widget>((imagePath) {
+    return _buildImageWidget(imagePath);
+  }).toList(),
+),
 
                         const SizedBox(height: 8.0),
                         Row(

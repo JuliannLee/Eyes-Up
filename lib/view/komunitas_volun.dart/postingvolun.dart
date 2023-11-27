@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import '../model data/model_data.dart';
@@ -20,37 +19,70 @@ class _PostingState extends State<Posting> {
   TextEditingController descriptionController = TextEditingController();
   List<File> selectedImages = [];
   final uuid = Uuid();
-Future<String> uploadImage(File imageFile) async {
-    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-    firebase_storage.Reference reference = firebase_storage.FirebaseStorage.instance
-        .ref()
-        .child('images')
-        .child(fileName);
+  Future<String> uploadImage(File imageFile) async {
+    try {
+      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      firebase_storage.Reference reference = firebase_storage.FirebaseStorage.instance
+          .ref()
+          .child('images')
+          .child(fileName);
 
-    firebase_storage.UploadTask uploadTask = reference.putFile(imageFile);
+      // Specify content type as 'image/jpeg'
+      firebase_storage.SettableMetadata metadata =
+          firebase_storage.SettableMetadata(contentType: 'image/jpeg');
 
-    await uploadTask.whenComplete(() => print('Image uploaded'));
+      firebase_storage.UploadTask uploadTask =
+          reference.putFile(imageFile, metadata);
 
-    return await reference.getDownloadURL();
+      await uploadTask.whenComplete(() => print('Image uploaded'));
+
+      String imageUrl = await reference.getDownloadURL();
+      return imageUrl;
+    } catch (e) {
+      // Handle error
+      print('Error uploading image: $e');
+      throw e; // Propagate the error to the caller
+    }
   }
- Future<void> _selectImages() async {
-    final imagePicker = ImagePicker();
-    final pickedImages = await imagePicker.pickMultiImage(); // Allow multiple image selection
 
+
+
+  Future<void> _selectImages() async {
+    final imagePicker = ImagePicker();
+    final pickedImages = await imagePicker.pickMultiImage();
+    
     if (pickedImages != null) {
       setState(() {
         selectedImages.addAll(pickedImages.map((image) => File(image.path)));
       });
-    }
+    } 
   }
+
 
   Future<void> savePostData(EventModel postModel) async {
-    await Firebase.initializeApp();
-    FirebaseFirestore db = FirebaseFirestore.instance;
-    await db.collection('postingan').add(postModel.toMap());
-    // You can also handle success or error cases here
-  }
+    try {
+      List<String> imageUrls = [];
 
+      // Upload images to Firebase Storage
+      for (File imageFile in selectedImages) {
+        String imageUrl = await uploadImage(imageFile);
+        imageUrls.add(imageUrl);
+      }
+
+      // Save post data to Cloud Firestore
+      postModel.gambar = imageUrls; // Replace local paths with Firebase Storage URLs
+      await FirebaseFirestore.instance.collection('postingan').add(postModel.toMap());
+
+      // Analytics event
+      await fbAnalytics.testEventLog('post_created');
+
+      // Close the posting screen
+      Navigator.pop(context);
+    } catch (e) {
+      print('Error saving post: $e');
+      // Handle error
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,17 +95,17 @@ Future<String> uploadImage(File imageFile) async {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
-            Row(
+             Row(
               children: selectedImages
                   .map(
-                    (image) => Container(
+                    (imageFile) => Container(
                       width: 100.0,
                       height: 100.0,
                       margin: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.black),
                       ),
-                      child: Image.file(image, fit: BoxFit.cover),
+                      child: Image.file(imageFile, fit: BoxFit.cover),
                     ),
                   )
                   .toList(),
@@ -116,7 +148,6 @@ Future<String> uploadImage(File imageFile) async {
 
                   // Now you can save the postModel to Firebase or perform any other actions
                   await savePostData(postModel);
-
                   // Close the posting screen
                   Navigator.pop(context);
                 } else {

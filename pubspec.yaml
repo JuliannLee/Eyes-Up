@@ -44,7 +44,7 @@ dependencies:
   material_design_icons_flutter: ^7.0.7296
   random_string: ^2.3.1
   google_fonts: ^4.0.4
-  image_picker: ^0.8.5+3
+  image_picker: 
   carousel_slider: ^4.0.0
   http: 
   uuid: ^3.0.5
@@ -56,12 +56,12 @@ dependencies:
   provider: ^6.0.5
   flutter_svg: ^1.1.6
   random_avatar: ^0.0.7
-  audioplayers: ^4.1.0
-  shared_preferences: ^2.2.0
-  firebase_core: ^2.21.0
+  audioplayers:
+  shared_preferences: 
+  firebase_core: 
   firebase_analytics:
   firebase_auth:
-  flutter_login: ^4.0.0
+  flutter_login:
   google_sign_in:
   cloud_firestore:
   firebase_storage:
