@@ -7,7 +7,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import '../model data/model_data.dart';
 class Posting extends StatefulWidget {
-  const Posting({Key? key}) : super(key: key);
+  final Function() onPostCreated;
+
+  const Posting({Key? key, required this.onPostCreated}) : super(key: key);
+
 
   @override
   State<Posting> createState() => _PostingState();
@@ -48,16 +51,15 @@ class _PostingState extends State<Posting> {
 
 
   Future<void> _selectImages() async {
+
     final imagePicker = ImagePicker();
     final pickedImages = await imagePicker.pickMultiImage();
-    
-    if (pickedImages != null) {
+
       setState(() {
         selectedImages.addAll(pickedImages.map((image) => File(image.path)));
       });
-    } 
-  }
 
+}
 
   Future<void> savePostData(EventModel postModel) async {
     try {
@@ -75,14 +77,18 @@ class _PostingState extends State<Posting> {
 
       // Analytics event
       await fbAnalytics.testEventLog('post_created');
-
-      // Close the posting screen
-      Navigator.pop(context);
     } catch (e) {
       print('Error saving post: $e');
       // Handle error
     }
   }
+  @override
+  void dispose() {
+    titleController.dispose();
+    descriptionController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -148,6 +154,7 @@ class _PostingState extends State<Posting> {
 
                   // Now you can save the postModel to Firebase or perform any other actions
                   await savePostData(postModel);
+                  widget.onPostCreated();
                   // Close the posting screen
                   Navigator.pop(context);
                 } else {

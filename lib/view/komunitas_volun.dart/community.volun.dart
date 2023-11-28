@@ -155,12 +155,12 @@ class _CommunityVoluState extends State<CommunityVolu> {
         },
         errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
           print("Error loading image: $error");
-          return Image.asset('assets/placeholder_image.png'); // Replace with the actual path to your placeholder image asset
+          return Image.asset('assets/images/logo.png'); // Replace with the actual path to your placeholder image asset
         },
       );
     } catch (e) {
       print("Error loading image: $e");
-      return Image.asset('assets/placeholder_image.png'); // Replace with the actual path to your placeholder image asset
+      return Image.asset('assets/images/logo.png'); // Replace with the actual path to your placeholder image asset
     }
   }
 
@@ -195,15 +195,17 @@ class _CommunityVoluState extends State<CommunityVolu> {
         actions: [
           IconButton(
             onPressed: () async {
-               bool result = await Navigator.push(
+               await Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Posting()),
+                MaterialPageRoute(
+                  builder: (context) => Posting(
+                    onPostCreated: () async{
+                      // Refresh data after coming back from the Posting screen
+                      await loadPostData();
+                    },
+                  ),
+                ),
               );
-
-              if (result == true) {
-                // Refresh data after coming back from the Posting screen
-                loadPostData();
-              }
             },
             icon: const Icon(Icons.add),
           ),
@@ -258,22 +260,21 @@ class _CommunityVoluState extends State<CommunityVolu> {
                           ),
                         ),
                         CarouselSlider(
-  options: CarouselOptions(
-    height: 200.0,
-    viewportFraction: 1.0,
-    enableInfiniteScroll: false,
-    initialPage: currentIndexMap[index] ?? 0,
-    onPageChanged: (int imageIndex, CarouselPageChangedReason reason) {
-      setState(() {
-        currentIndexMap[index] = imageIndex;
-      });
-    },
-  ),
-  items: posts[index].gambar.map<Widget>((imagePath) {
-    return _buildImageWidget(imagePath);
-  }).toList(),
-),
-
+                          options: CarouselOptions(
+                            height: 200.0,
+                            viewportFraction: 1.0,
+                            enableInfiniteScroll: false,
+                            initialPage: currentIndexMap[index] ?? 0,
+                            onPageChanged: (int imageIndex, CarouselPageChangedReason reason) {
+                              setState(() {
+                                currentIndexMap[index] = imageIndex;
+                              });
+                            },
+                          ),
+                          items: posts[index].gambar.map<Widget>((imagePath) {
+                            return _buildImageWidget(imagePath);
+                          }).toList(),
+                        ),
                         const SizedBox(height: 8.0),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
