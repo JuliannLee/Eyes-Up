@@ -1,8 +1,8 @@
-import 'dart:io';
-import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:http/http.dart' as http;
+import 'package:p01/view/model%20data/model_data.dart';
 
 class CommunityDisa extends StatefulWidget {
   const CommunityDisa({Key? key}) : super(key: key);
@@ -12,26 +12,32 @@ class CommunityDisa extends StatefulWidget {
 }
 
 class _CommunityDisaState extends State<CommunityDisa> {
-  List<Map<String, dynamic>> posts = [];
-  List<Map<String, dynamic>> postsDataList = [];
+  List<EventModel> posts = [];
   Map<int, int> currentIndexMap = {};
-  var serverIP = "192.168.100.83";
-  void toggleLove(int postIndex) {
-    setState(() {
-      final postingan = postsDataList[postIndex];
-      if (postingan['isLoved'] == null || !postingan['isLoved']) {
-        // If not loved or null, mark as loved and increase the count
-        postingan['isLoved'] = true;
-        postingan['loveCount'] = (postingan['loveCount'] ?? 0) + 1;
-      } else {
-        // If loved, unmark and decrease the count
-        postingan['isLoved'] = false;
-        postingan['loveCount'] = (postingan['loveCount'] ?? 0) - 1;
-      }
 
-      // Call the function to update the data on the server
-      updatePostData(postingan);
+  Future<void> toggleLove(int postIndex) async {
+    setState(() {
+      posts[postIndex].toggleLove();
     });
+
+    bool isLoved = posts[postIndex].is_like;
+    int loveCount = posts[postIndex].loveCount;
+
+    await updateFirestoreLoveData(posts[postIndex].id!, isLoved, loveCount);
+  }
+
+  Future<void> updateFirestoreLoveData(
+      String postId, bool isLoved, int loveCount) async {
+    try {
+      FirebaseFirestore db = FirebaseFirestore.instance;
+      await db.collection('postingan').doc(postId).update({
+        'is_like': isLoved,
+        'love_count': loveCount,
+      });
+      print('Firestore love data updated successfully!');
+    } catch (error) {
+      print('Error updating Firestore love data: $error');
+    }
   }
 
   @override
@@ -40,99 +46,71 @@ class _CommunityDisaState extends State<CommunityDisa> {
     loadPostData();
   }
 
-  Future<void> savePostData() async {
-    final List<Map<String, dynamic>> dataToSave = posts.map((post) {
-      if (post['image'] != null && post['image'] is File) {
-        post['image'] = (post['image'] as File).path;
-      }
-      return post;
-    }).toList();
-    final jsonData = json.encode(dataToSave);
-    final response = await http.post(
-      Uri.parse(
-          'http://$serverIP:8000/data.json'), //harus pakai ip sendiri lewat ipconfig!!
-      body: jsonData,
-      headers: {'Content-Type': 'application/json'},
-    );
-    posts.clear();
-    if (response.statusCode == 200) {
-      print('Data saved successfully');
-    } else {
-      print('Error');
-    }
-  }
-
   Future<void> loadPostData() async {
-    final response = await http.get(Uri.parse(
-        'http://$serverIP:8000/data.json')); //harus pakai ip sendiri lewat ipconfig!!
-    if (response.statusCode == 200) {
-      final List<dynamic> dataList = json.decode(response.body);
-      setState(() {
-        postsDataList.clear();
-        for (var data in dataList) {
-          for (var datas in data) {
-            postsDataList.add(datas);
-          }
-        }
-        for (int i = 0; i < dataList.length; i++) {
-          currentIndexMap[i] = 0;
-        }
-      });
-    } else {
-      print("HTTP request failed with status code: ${response.statusCode}");
-      // Handle the error or show an error message
-    }
-  }
+    try {
+      await Firebase.initializeApp();
+      FirebaseFirestore db = FirebaseFirestore.instance;
+      var data = await db.collection('postingan').get();
 
-  Future<void> updatePostData(Map<String, dynamic> updatedData) async {
-    final response = await http.put(
-      Uri.parse('http://$serverIP:8000/data.json${updatedData['id']}'),
-      body: json.encode(updatedData), // Wrap updatedData in a List
-      headers: {'Content-Type': 'application/json'},
-    );
-
-    if (response.statusCode == 200) {
-      // Data updated successfully
-    } else {
-      // Handle the error or show an error message
-    }
-  }
-
-  Future<void> deletePost(int postIndex) async {
-    final deletedata = postsDataList[postIndex];
-
-    final response = await http.delete(
-      Uri.parse(
-          'http://$serverIP:8000/data.json${deletedata['id']}'), // Use the post's ID in the URL
-    );
-
-    if (response.statusCode == 200) {
-      setState(() {
-        postsDataList.removeAt(postIndex);
-      });
-      // You might want to show a success message or update the UI accordingly.
-    } else {
-      // Handle the error or show an error message
+      if (mounted) {
+        setState(() {
+          posts =
+              data.docs.map((doc) => EventModel.fromDocSnapshot(doc)).toList();
+        });
+      }
+    } catch (e) {
+      // Handle any exceptions that might occur during data retrieval
+      print("Error: $e");
     }
   }
 
   List<Widget> _buildImageBubbles(int currentIndex, int totalImages) {
     List<Widget> bubbles = [];
-
     for (int i = 0; i < totalImages; i++) {
       bubbles.add(
-        Container(
-          width: 10,
-          height: 10,
-          margin: const EdgeInsets.symmetric(horizontal: 4),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: i == currentIndex ? Colors.blue : Colors.grey,
+        Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: CircleAvatar(
+            radius: 4.0,
+            backgroundColor: i == currentIndex ? Colors.blue : Colors.grey,
           ),
         ),
       );
     }
     return bubbles;
+  }
+
+  Widget _buildImageWidget(String imagePath) {
+    try {
+      return Image.network(
+        imagePath,
+        loadingBuilder: (BuildContext context, Widget child,
+            ImageChunkEvent? loadingProgress) {
+          if (loadingProgress == null) {
+            return child;
+          } else {
+            return Center(
+              child: CircularProgressIndicator(
+                value: loadingProgress.expectedTotalBytes != null
+                    ? loadingProgress.cumulativeBytesLoaded /
+                        (loadingProgress.expectedTotalBytes ?? 1)
+                    : null,
+              ),
+            );
+          }
+        },
+        errorBuilder:
+            (BuildContext context, Object error, StackTrace? stackTrace) {
+          print("Error loading image: $error");
+          return Image.asset(
+              'assets/images/logo.png'); // Replace with the actual path to your placeholder image asset
+        },
+      );
+    } catch (e) {
+      print("Error loading image: $e");
+      return Image.asset(
+          'assets/images/logo.png'); // Replace with the actual path to your placeholder image asset
+    }
   }
 
   @override
@@ -143,7 +121,7 @@ class _CommunityDisaState extends State<CommunityDisa> {
         title: const Text('Community'),
         backgroundColor: Colors.blue,
       ),
-      body: postsDataList.isEmpty
+      body: posts.isEmpty
           ? const Center(
               child: Text(
                 'No posts to display',
@@ -154,14 +132,14 @@ class _CommunityDisaState extends State<CommunityDisa> {
               ),
             )
           : ListView.builder(
-              itemCount: postsDataList.length,
+              itemCount: (posts != null) ? posts.length : 0,
               itemBuilder: (context, index) {
-                final postingan = postsDataList[index];
-                final images = postingan['images'];
-                final title = postingan['title'];
-                final description = postingan['description'];
-                final bool isLoved = postingan['isLoved'] ?? false;
-                final int loveCount = postingan['loveCount'] ?? 0;
+                final images = posts[index].gambar;
+                final title = posts[index].judul;
+                final description = posts[index].keterangan;
+                final bool isLoved = posts[index].is_like;
+                final int loveCount = posts[index].loveCount;
+
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Card(
@@ -172,25 +150,24 @@ class _CommunityDisaState extends State<CommunityDisa> {
                             height: 200.0,
                             viewportFraction: 1.0,
                             enableInfiniteScroll: false,
-                            initialPage: currentIndexMap[index] ??
-                                0, // Use a default value of 0 if currentIndexMap[index] is null
+                            initialPage: currentIndexMap[index] ?? 0,
                             onPageChanged: (int imageIndex,
                                 CarouselPageChangedReason reason) {
                               setState(() {
-                                // Update the current index for the specific set of images
                                 currentIndexMap[index] = imageIndex;
                               });
                             },
                           ),
-                          items: images.map<Widget>((imagePath) {
-                            return Image.file(File(imagePath));
+                          items: posts[index].gambar.map<Widget>((imagePath) {
+                            return _buildImageWidget(imagePath);
                           }).toList(),
                         ),
                         const SizedBox(height: 8.0),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: _buildImageBubbles(
-                              currentIndexMap[index] ?? 0, images.length),
+                              currentIndexMap[index] ?? 0,
+                              posts[index].gambar?.length ?? 0),
                         ),
                         Row(
                           children: [
