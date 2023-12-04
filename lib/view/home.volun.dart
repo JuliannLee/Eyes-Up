@@ -1,10 +1,24 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:p01/view/widgets/button.global.dart';
 import 'package:p01/utils/global.colors.dart';
 import 'package:provider/provider.dart';
 import '../providers/prov.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
-class HomeVolun extends StatelessWidget {
+class HomeVolun extends StatefulWidget {
+  const HomeVolun({Key? key}) : super(key: key);
+
+  @override
+  _HomeVolunState createState() => _HomeVolunState();
+}
+
+class _HomeVolunState extends State<HomeVolun> {
+  String currentLocation = ''; // Default location text
+
   @override
   Widget build(BuildContext context) {
     final userFirstName = Provider.of<Prov>(context).userFirstName;
@@ -25,15 +39,15 @@ class HomeVolun extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(8),
               child: const Text('Eyes Up'),
-            )
+            ),
           ],
         ),
       ),
       body: Stack(
         children: <Widget>[
           Positioned(
-            left: 75,
-            top: 10,
+            left: 85,
+            top: 20,
             width: 250,
             height: 90,
             child: Container(
@@ -45,11 +59,11 @@ class HomeVolun extends StatelessWidget {
             ),
           ),
           Positioned(
-            left: 140,
-            top: 20,
+            left: 145,
+            top: 40,
             child: Text(
               '  $userFirstName $userLastName',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
                 color: Colors.black,
                 fontWeight: FontWeight.w500,
@@ -57,28 +71,16 @@ class HomeVolun extends StatelessWidget {
             ),
           ),
           const Positioned(
-            left: 125,
-            top: 45,
+            left: 140,
+            top: 70,
             child: Text(
               'member since Apr 2023',
               style: TextStyle(fontSize: 14, color: Colors.black),
             ),
           ),
           const Positioned(
-            left: 170,
-            top: 70,
-            child: Text(
-              'Indonesia',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.white,
-                backgroundColor: Color(0xFF0E4189),
-              ),
-            ),
-          ),
-          const Positioned(
             left: 100,
-            top: 105,
+            top: 185,
             child: Text(
               'You will receive a notification \nwhen someone needs your help.',
               textAlign: TextAlign.center,
@@ -87,6 +89,41 @@ class HomeVolun extends StatelessWidget {
                 color: Color(0xFF0E4189),
                 fontWeight: FontWeight.w500,
               ),
+            ),
+          ),
+          Positioned(
+            left: 80,
+            top: 125,
+            child: ElevatedButton(
+              onPressed: () async {
+                // Memeriksa izin lokasi
+                var status = await Permission.location.status;
+                if (status.isDenied || status.isRestricted) {
+                  // Meminta izin lokasi jika belum diizinkan
+                  await Permission.location.request();
+                } else {
+                  // Izin lokasi sudah diberikan, dapatkan lokasi dan perbarui teks
+                  Position position = await Geolocator.getCurrentPosition();
+
+                  // Use geocoding to get the country from the coordinates
+                  List<Placemark> placemarks = await placemarkFromCoordinates(
+                    position.latitude,
+                    position.longitude,
+                  );
+
+                  if (placemarks.isNotEmpty) {
+                    setState(() {
+                      currentLocation =
+                          placemarks[0].country ?? 'Unknown Country';
+                    });
+                  }
+                }
+              },
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(const Color(0xFF0E4189)),
+              ),
+              child: Text('Your current location: $currentLocation'),
             ),
           ),
           Center(

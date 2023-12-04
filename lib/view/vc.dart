@@ -2,6 +2,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:p01/view/bottomnav.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class VCscreenDisa extends StatefulWidget {
   const VCscreenDisa({Key? key}) : super(key: key);
@@ -24,6 +25,13 @@ class _VCscreenDisaState extends State<VCscreenDisa> {
   }
 
   Future<void> initializeCamera() async {
+    bool hasPermission = await requestCameraPermission();
+
+    if (!hasPermission) {
+      // Handle the case where the user denied camera permission
+      return;
+    }
+
     cameras = await availableCameras();
 
     cameraController = CameraController(
@@ -36,6 +44,22 @@ class _VCscreenDisaState extends State<VCscreenDisa> {
       await cameraController.initialize();
       // ignore: empty_catches
     } catch (e) {}
+  }
+
+  Future<bool> requestCameraPermission() async {
+    var status = await Permission.camera.status;
+
+    if (status.isGranted) {
+      return true; // Permission already granted
+    }
+
+    if (status.isPermanentlyDenied) {
+      openAppSettings();
+      return false; // Permission permanently denied, navigate to settings
+    }
+
+    var result = await Permission.camera.request();
+    return result.isGranted;
   }
 
   @override

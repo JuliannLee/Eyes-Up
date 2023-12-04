@@ -44,10 +44,13 @@ dependencies:
   material_design_icons_flutter: ^7.0.7296
   random_string: ^2.3.1
   google_fonts: ^4.0.4
-  image_picker: ^1.0.4
+  image_picker: 
   carousel_slider: ^4.0.0
   http: 
   uuid: ^3.0.5
+  permission_handler:
+  geolocator:
+  geocoding:
   
   flutter_localizations:
     sdk: flutter

@@ -6,11 +6,12 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import '../model data/model_data.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 class Posting extends StatefulWidget {
   final Function() onPostCreated;
 
   const Posting({Key? key, required this.onPostCreated}) : super(key: key);
-
 
   @override
   State<Posting> createState() => _PostingState();
@@ -22,10 +23,12 @@ class _PostingState extends State<Posting> {
   TextEditingController descriptionController = TextEditingController();
   List<File> selectedImages = [];
   final uuid = Uuid();
+
   Future<String> uploadImage(File imageFile) async {
     try {
       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-      firebase_storage.Reference reference = firebase_storage.FirebaseStorage.instance
+      firebase_storage.Reference reference = firebase_storage
+          .FirebaseStorage.instance
           .ref()
           .child('images')
           .child(fileName);
@@ -48,18 +51,31 @@ class _PostingState extends State<Posting> {
     }
   }
 
-
-
   Future<void> _selectImages() async {
+    // Check gallery permission
+    var status = await Permission.storage.status;
 
+    if (status.isDenied || status.isRestricted) {
+      // Request gallery permission
+      await Permission.storage.request();
+
+      // Check the updated permission status
+      status = await Permission.storage.status;
+
+      if (status.isDenied || status.isRestricted) {
+        // Permission still not granted, handle accordingly
+        return;
+      }
+    }
+
+    // Gallery permission is granted, proceed with image selection
     final imagePicker = ImagePicker();
     final pickedImages = await imagePicker.pickMultiImage();
 
-      setState(() {
-        selectedImages.addAll(pickedImages.map((image) => File(image.path)));
-      });
-
-}
+    setState(() {
+      selectedImages.addAll(pickedImages.map((image) => File(image.path)));
+    });
+  }
 
   Future<void> savePostData(EventModel postModel) async {
     try {
@@ -72,8 +88,11 @@ class _PostingState extends State<Posting> {
       }
 
       // Save post data to Cloud Firestore
-      postModel.gambar = imageUrls; // Replace local paths with Firebase Storage URLs
-      await FirebaseFirestore.instance.collection('postingan').add(postModel.toMap());
+      postModel.gambar =
+          imageUrls; // Replace local paths with Firebase Storage URLs
+      await FirebaseFirestore.instance
+          .collection('postingan')
+          .add(postModel.toMap());
 
       // Analytics event
       await fbAnalytics.testEventLog('post_created');
@@ -82,6 +101,7 @@ class _PostingState extends State<Posting> {
       // Handle error
     }
   }
+
   @override
   void dispose() {
     titleController.dispose();
@@ -101,7 +121,7 @@ class _PostingState extends State<Posting> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
-             Row(
+            Row(
               children: selectedImages
                   .map(
                     (imageFile) => Container(
@@ -148,7 +168,8 @@ class _PostingState extends State<Posting> {
                     gambar: selectedImages.map((image) => image.path).toList(),
                     judul: title,
                     keterangan: description,
-                    is_like: false, // Default value, change it according to your logic
+                    is_like:
+                        false, // Default value, change it according to your logic
                     loveCount: 0,
                   );
 
@@ -182,13 +203,13 @@ class _PostingState extends State<Posting> {
               },
               child: const Text('Create Post'),
             ),
-
           ],
         ),
       ),
     );
   }
 }
+
 class MyAnalyticsHelper {
   FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   // Log a custom event
