@@ -8,6 +8,7 @@ import '../providers/prov.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class HomeVolun extends StatefulWidget {
   const HomeVolun({Key? key}) : super(key: key);
@@ -18,12 +19,46 @@ class HomeVolun extends StatefulWidget {
 
 class _HomeVolunState extends State<HomeVolun> {
   String currentLocation = ''; // Default location text
-
+  late BannerAd _bannerAd;
+    bool _isBannerReady = false;
+    void initState() {
+      super.initState();
+      _initializeBannerAd();
+    }
+   @override
+  void dispose() {
+    _disposeBannerAd();
+    super.dispose();
+  }
+  void _disposeBannerAd() {
+    _bannerAd.dispose();
+    _isBannerReady = false;
+}
+  void _initializeBannerAd() {
+    _bannerAd = BannerAd(
+      size: AdSize.banner,
+      adUnitId: "ca-app-pub-3940256099942544/6300978111", // Replace with your ad unit ID
+      listener: BannerAdListener(
+        onAdLoaded: (_) {
+          if (mounted) {
+            setState(() {
+              _isBannerReady = true;
+            });
+          }
+        },
+        onAdFailedToLoad: (ad, err) {
+          _disposeBannerAd();
+        },
+      ),
+      request: AdRequest(),
+    );
+    _bannerAd.load();
+  }
   @override
   Widget build(BuildContext context) {
     final userFirstName = Provider.of<Prov>(context).userFirstName;
     final userLastName = Provider.of<Prov>(context).userLastName;
-
+    
     return Scaffold(
       backgroundColor: const Color(0xFFF0EFF4),
       appBar: AppBar(
@@ -144,6 +179,17 @@ class _HomeVolunState extends State<HomeVolun> {
               ],
             ),
           ),
+          Expanded(
+                child: _isBannerReady
+                    ? Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          width: _bannerAd.size.width.toDouble(),
+                          height: _bannerAd.size.height.toDouble(),
+                          child: AdWidget(ad: _bannerAd),
+                        ),
+                      )
+                    : Container())
         ],
       ),
     );
