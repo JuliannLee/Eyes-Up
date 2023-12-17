@@ -81,21 +81,21 @@ class _HomeVolunState extends State<HomeVolun> {
       body: Stack(
         children: <Widget>[
           Positioned(
-            left: 85,
-            top: 20,
+            left: 75,
+            top: 10,
             width: 250,
-            height: 90,
+            height: 70,
             child: Container(
               width: 250,
-              height: 90,
+              height: 70,
               decoration: const BoxDecoration(
                 color: Colors.white,
               ),
             ),
           ),
           Positioned(
-            left: 145,
-            top: 40,
+            left: 140,
+            top: 20,
             child: Text(
               '  $userFirstName $userLastName',
               style: const TextStyle(
@@ -106,8 +106,8 @@ class _HomeVolunState extends State<HomeVolun> {
             ),
           ),
           const Positioned(
-            left: 140,
-            top: 70,
+            left: 125,
+            top: 45,
             child: Text(
               'member since Apr 2023',
               style: TextStyle(fontSize: 14, color: Colors.black),
@@ -115,7 +115,7 @@ class _HomeVolunState extends State<HomeVolun> {
           ),
           const Positioned(
             left: 100,
-            top: 185,
+            top: 100,
             child: Text(
               'You will receive a notification \nwhen someone needs your help.',
               textAlign: TextAlign.center,
@@ -128,7 +128,7 @@ class _HomeVolunState extends State<HomeVolun> {
           ),
           Positioned(
             left: 80,
-            top: 125,
+            top: 145,
             child: ElevatedButton(
               onPressed: () async {
                 // Memeriksa izin lokasi
