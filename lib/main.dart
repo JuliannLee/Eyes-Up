@@ -6,14 +6,18 @@ import 'package:provider/provider.dart';
 import 'package:p01/providers/prov.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:p01/view/notif.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await NotifService.initializeNotification();
+
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
   runApp(MultiProvider(
     providers: [ChangeNotifierProvider(create: (context) => Prov())],
     child: const App(),

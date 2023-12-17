@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:p01/view/notif.dart';
 import 'package:uuid/uuid.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -22,7 +23,7 @@ class _PostingState extends State<Posting> {
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   List<File> selectedImages = [];
-  final uuid = Uuid();
+  final uuid = const Uuid();
 
   Future<String> uploadImage(File imageFile) async {
     try {
@@ -160,7 +161,25 @@ class _PostingState extends State<Posting> {
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  shadowColor: Theme.of(context).shadowColor,
+                  backgroundColor: Theme.of(context).primaryColor),
               onPressed: () async {
+                await NotifService.showNotification(
+                  title: 'New Post!',
+                  body: 'Ada yang baru posting nih!',
+                  scheduled: true,
+                  interval: 5,
+                  // payload: {
+                  //   'navigate':'true',
+                  // },
+                  // actionButtons: [
+                  //   NotificationActionButton(
+                  //       key: 'check',
+                  //       label: 'check it out',
+                  //       actionType: ActionType.Default)
+                  // ]
+                );
                 final title = titleController.text;
                 final description = descriptionController.text;
                 if (selectedImages.isNotEmpty && title.isNotEmpty) {
