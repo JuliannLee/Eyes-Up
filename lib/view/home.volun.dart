@@ -20,24 +20,28 @@ class HomeVolun extends StatefulWidget {
 class _HomeVolunState extends State<HomeVolun> {
   String currentLocation = ''; // Default location text
   late BannerAd _bannerAd;
-    bool _isBannerReady = false;
-    void initState() {
-      super.initState();
-      _initializeBannerAd();
-    }
-   @override
+  bool _isBannerReady = false;
+  void initState() {
+    super.initState();
+    _initializeBannerAd();
+  }
+
+  @override
   void dispose() {
     _disposeBannerAd();
     super.dispose();
   }
+
   void _disposeBannerAd() {
     _bannerAd.dispose();
     _isBannerReady = false;
-}
+  }
+
   void _initializeBannerAd() {
     _bannerAd = BannerAd(
       size: AdSize.banner,
-      adUnitId: "ca-app-pub-3940256099942544/6300978111", // Replace with your ad unit ID
+      adUnitId:
+          "ca-app-pub-3940256099942544/6300978111", // Replace with your ad unit ID
       listener: BannerAdListener(
         onAdLoaded: (_) {
           if (mounted) {
@@ -54,11 +58,12 @@ class _HomeVolunState extends State<HomeVolun> {
     );
     _bannerAd.load();
   }
+
   @override
   Widget build(BuildContext context) {
     final userFirstName = Provider.of<Prov>(context).userFirstName;
     final userLastName = Provider.of<Prov>(context).userLastName;
-    
+
     return Scaffold(
       backgroundColor: const Color(0xFFF0EFF4),
       appBar: AppBar(
@@ -180,16 +185,16 @@ class _HomeVolunState extends State<HomeVolun> {
             ),
           ),
           Expanded(
-                child: _isBannerReady
-                    ? Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Container(
-                          width: _bannerAd.size.width.toDouble(),
-                          height: _bannerAd.size.height.toDouble(),
-                          child: AdWidget(ad: _bannerAd),
-                        ),
-                      )
-                    : Container())
+              child: _isBannerReady
+                  ? Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        width: _bannerAd.size.width.toDouble(),
+                        height: _bannerAd.size.height.toDouble(),
+                        child: AdWidget(ad: _bannerAd),
+                      ),
+                    )
+                  : Container())
         ],
       ),
     );
