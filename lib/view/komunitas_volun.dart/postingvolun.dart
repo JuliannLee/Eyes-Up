@@ -8,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import '../model data/model_data.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class Posting extends StatefulWidget {
   final Function() onPostCreated;
@@ -22,6 +23,7 @@ class _PostingState extends State<Posting> {
   MyAnalyticsHelper fbAnalytics = MyAnalyticsHelper();
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+  late InterstitialAd _interstitialAd;
   List<File> selectedImages = [];
   final uuid = const Uuid();
 
@@ -103,6 +105,18 @@ class _PostingState extends State<Posting> {
     }
   }
 
+  void _removeImage(int index) {
+  setState(() {
+    selectedImages.removeAt(index);
+  });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadInterstitialAd();
+  }
+
   @override
   void dispose() {
     titleController.dispose();
@@ -122,21 +136,44 @@ class _PostingState extends State<Posting> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
-            Row(
-              children: selectedImages
-                  .map(
-                    (imageFile) => Container(
+            Container(
+            height: selectedImages.isNotEmpty ? 120.0 : 0.0,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: selectedImages.length,
+              itemBuilder: (context, index) {
+                return Stack(
+                  children: [
+                    Container(
                       width: 100.0,
                       height: 100.0,
                       margin: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.black),
                       ),
-                      child: Image.file(imageFile, fit: BoxFit.cover),
+                      child: Image.file(selectedImages[index], fit: BoxFit.cover),
                     ),
-                  )
-                  .toList(),
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: InkWell(
+                        onTap: () {
+                          _removeImage(index);
+                        },
+                        child: Container(
+                          color: Colors.red,
+                          child: Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
+          ),
             InkWell(
               onTap: _selectImages,
               child: Container(
@@ -197,6 +234,7 @@ class _PostingState extends State<Posting> {
                   widget.onPostCreated();
                   // Close the posting screen
                   Navigator.pop(context);
+                  _interstitialAd.show();
                 } else {
                   // Show an error dialog if the form is incomplete
                   showDialog(
@@ -226,6 +264,22 @@ class _PostingState extends State<Posting> {
         ),
       ),
     );
+  }
+  void _loadInterstitialAd() {
+    InterstitialAd.load(
+        adUnitId: "ca-app-pub-3940256099942544/1033173712",
+        request: AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(onAdLoaded: (ad) {
+          ad.fullScreenContentCallback =
+              FullScreenContentCallback(onAdDismissedFullScreenContent: (ad) {
+            print("Close Interstitial Ad");
+          });
+          setState(() {
+            _interstitialAd = ad;
+          });
+        }, onAdFailedToLoad: (err) {
+          _interstitialAd.dispose();
+        }));
   }
 }
 
