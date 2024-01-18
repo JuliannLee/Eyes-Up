@@ -271,6 +271,7 @@ class ButtonVCvolun extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RawMaterialButton(
+      key: const Key('buttonVCvolun'),
       onPressed: () async {
         bool hasPermission = await requestCameraPermission();
 
@@ -283,7 +284,9 @@ class ButtonVCvolun extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return const VCscreenVolun();
+              return const VCscreenVolun(
+                key: const Key('vcScreenVolunKey')
+              );
             },
           ),
         );

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:p01/view/widgets/button.global.dart';
 import 'package:p01/utils/global.colors.dart';
 import 'package:provider/provider.dart';
-import '../providers/prov.dart';
+import 'package:p01/providers/prov.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
@@ -171,7 +171,9 @@ class _HomeVolunState extends State<HomeVolun> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
                 SizedBox(height: 60),
-                ButtonVCvolun(),
+                ButtonVCvolun(
+                  key: const Key('buttonVCvolun1'),
+                ),
                 SizedBox(height: 20),
                 Text(
                   'Click the button to start helping!',
@@ -184,17 +186,30 @@ class _HomeVolunState extends State<HomeVolun> {
               ],
             ),
           ),
-          Expanded(
-              child: _isBannerReady
-                  ? Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Container(
-                        width: _bannerAd.size.width.toDouble(),
-                        height: _bannerAd.size.height.toDouble(),
-                        child: AdWidget(ad: _bannerAd),
-                      ),
-                    )
-                  : Container())
+          Positioned.fill(
+            bottom: _isBannerReady ? _bannerAd.size.height.toDouble() : 0,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  SizedBox(height: 60),
+                  ButtonVCvolun(
+                    key: const Key('buttonVCvolun2'),
+                  ),
+                  SizedBox(height: 20),
+                ],
+              ),
+            ),
+          ),
+          if (_isBannerReady)
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                width: _bannerAd.size.width.toDouble(),
+                height: _bannerAd.size.height.toDouble(),
+                child: AdWidget(ad: _bannerAd, key: Key('bannerAdKey')),
+              ),
+            ),
         ],
       ),
     );
