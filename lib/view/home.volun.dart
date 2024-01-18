@@ -189,16 +189,7 @@ class _HomeVolunState extends State<HomeVolun> {
           Positioned.fill(
             bottom: _isBannerReady ? _bannerAd.size.height.toDouble() : 0,
             child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  SizedBox(height: 60),
-                  ButtonVCvolun(
-                    key: const Key('buttonVCvolun2'),
-                  ),
-                  SizedBox(height: 20),
-                ],
-              ),
+              child: Column(),
             ),
           ),
           if (_isBannerReady)
