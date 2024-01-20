@@ -7,9 +7,12 @@ import 'package:p01/view/home.volun.dart';
 import 'package:p01/providers/prov.dart';
 import 'package:flutter/material.dart';
 import 'package:p01/view/vc.dart';
-
+import 'package:p01/view/editprofile.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 // Mock class for FirebaseAuth
 class MockFirebaseAuth extends Mock implements FirebaseAuth {}
+class MockFirebaseAnalytics extends Mock implements FirebaseAnalytics {}
+class MockAudioPlayer extends Mock implements AudioPlayer {}
 
 void main() {
   group('Authentication Test', () {
@@ -219,6 +222,50 @@ void main() {
       // Verify that the banner ad is now present.
       expect(adWidget, findsNothing);
     });
+    testWidgets('EditProfile widget test', (WidgetTester tester) async {
+    // Mock UserProvider
+    final prov = Prov();
+    prov.setUserFirstName("John");
+    prov.setUserLastName("Doe");
+
+    // Build our app and trigger a frame.
+    await tester.pumpWidget(
+      ChangeNotifierProvider(
+        create: (context) => prov,
+        child: MaterialApp(
+          home: EditProfile(),
+        ),
+      ),
+    );
+
+    // Verify that the initial values are displayed in text fields
+    expect(find.text('John'), findsOneWidget);
+    expect(find.text('Doe'), findsOneWidget);
+
+    // Simulate editing the first name
+    await tester.enterText(find.byKey(const Key("firstNameField")), 'Jane');
+
+    // Simulate editing the last name
+    await tester.enterText(find.byKey(const Key("lastNameField")), 'Smith');
+
+    // Tap the "Update Profile" button
+    await tester.tap(find.text('Update Profile'));
+    await tester.pump();
+
+    // Verify that UserProvider has been updated
+    expect(prov.userFirstName, 'Jane');
+    expect(prov.userLastName, 'Smith');
+  });
+    test('Track event test', () async {
+    final googleAnalytics = GoogleAnalytics();
+    await googleAnalytics.trackEvent('some_event');
+  });
+
+  test('Set user property test', () async {
+    final googleAnalytics = GoogleAnalytics();
+    await googleAnalytics.setUserProperty('property_key', 'property_value');
+  });
+
   });
 }
 
@@ -259,5 +306,22 @@ Future<UserCredential> registerWithEmailAndPassword({
     // Handle registration exceptions
     print('Registration Error: ${e.message}');
     rethrow;
+  }
+}
+class GoogleAnalytics {
+  Future<void> trackEvent(String eventName) async {
+    // Logika untuk tracking event (ganti dengan implementasi sebenarnya)
+    print('Event tracked: $eventName');
+  }
+
+  Future<void> setUserProperty(String key, String value) async {
+    // Logika untuk set user property (ganti dengan implementasi sebenarnya)
+    print('User property set - Key: $key, Value: $value');
+  }
+}
+class AudioPlayer {
+  Future<void> play() async {
+    // Simulasi pemutaran audio dengan menunggu sejenak
+    await Future.delayed(Duration(seconds: 2));
   }
 }

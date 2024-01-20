@@ -40,8 +40,11 @@ class SplashView extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Center(
-            child: Image.asset('assets/images/logo.png', height: 200, width: 200),
+          GestureDetector(
+            key: Key('navigateButton'),
+            child: Center(
+              child: Image.asset('assets/images/logo.png', height: 200, width: 200),
+            ),
           ),
           const SizedBox(height: 10),
           const Center(

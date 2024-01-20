@@ -48,6 +48,7 @@ class _EditProfileState extends State<EditProfile> {
                     height: 10,
                   ),
                   TextFormField(
+                    key: const Key("firstNameField"),
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
                       labelText: "First Name",
@@ -58,6 +59,7 @@ class _EditProfileState extends State<EditProfile> {
                     height: 10,
                   ),
                   TextFormField(
+                    key: const Key("lastNameField"),
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
                       labelText: "Last Name",

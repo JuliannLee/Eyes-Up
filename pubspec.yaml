@@ -51,8 +51,8 @@ dependencies:
   permission_handler:
   geolocator:
   geocoding:
-  awesome_notifications:
-  
+  awesome_notifications: ^0.8.2
+
   flutter_localizations:
     sdk: flutter
   intl: any
@@ -72,6 +72,7 @@ dependencies:
   google_mobile_ads: ^2.2.0
   mockito:
   mocktail:
+  test: ^1.16.0
 dev_dependencies:
   camera: ^0.10.5+2
   
